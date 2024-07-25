@@ -1,10 +1,9 @@
 import React from "react";
-import ConsumerRoutes from "./Components/Consumer/ConsumerRoutes/ConsumerRoutes";
-
+import AllRoutes from "./Components/AllRoutes/AllRoutes";
 const App = () => {
   return (
     <>
-      <ConsumerRoutes />
+      <AllRoutes />
     </>
   );
 };
