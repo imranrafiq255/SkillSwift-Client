@@ -5,7 +5,8 @@ import ConsumerSignUp from "../Consumer/ConsumerSignUp/ConsumerSignUp";
 import Welcome from "../Welcome/Welcome";
 import ServiceProviderHome from "../ServiceProvider/ServiceProviderHome/ServiceProviderHome";
 import AdminHome from "../Admin/AdminHome/AdminHome";
-import SignIn from "../Consumer/SignIn/SignIn";
+import SignIn from "../Consumer/ConsumerSignIn/ConsumerSignIn";
+import ConsumerSendEmail from "../Consumer/ConsumerSendEmail/ConsumerSendEmail";
 const AllRoutes = () => {
   return (
     <>
@@ -16,6 +17,7 @@ const AllRoutes = () => {
           <Route path="/consumer-home" element={<ConsumerHome />} />
           <Route path="/consumer-sign-up" element={<ConsumerSignUp />} />
           <Route path="/consumer-sign-in" element={<SignIn />} />
+          <Route path="/consumer-send-email" element={<ConsumerSendEmail />} />
           {/* Service Provider  */}
           <Route
             path="/service-provider-home"

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import "./SignIn.css";
+import "./ConsumerSignIn.css";
 const SignIn = () => {
   const passwordRef = useRef();
   const [eyeToggler, setEyeToggler] = useState(false);
@@ -37,7 +37,7 @@ const SignIn = () => {
                 <input
                   type="password"
                   ref={passwordRef}
-                  className="w-full border-b-[0.5px] border-slate-400 focus:border-b-[2px] focus:border-slate-800 focus:transition-colors focus:duration-700 ease-in-out outline-none mt-2 h-11 text-xl"
+                  className="w-full border-b-[0.5px] border-slate-400 focus:border-b-[2px] focus:border-slate-800 focus:transition-colors focus:duration-700 ease-in-out outline-none mt-2 h-11 text-xl pr-12"
                   placeholder="Enter your password"
                 />
                 <img
