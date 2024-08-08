@@ -6,7 +6,7 @@ const Welcome = () => {
   const navigate = useNavigate();
   const moduleNavigator = () => {
     if (navigator === "consumer") {
-      navigate("/consumer-home");
+      navigate("/consumer-sign-in");
     } else if (navigator === "serviceProvider") {
       navigate("/service-provider-home");
     } else if (navigator === "admin") {
@@ -51,7 +51,7 @@ const Welcome = () => {
               >
                 Continue as Service Provider
               </div>
-              <div
+              {/* <div
                 className={`btn3 mt-2 w-11/12 h-14 flex justify-center items-center text-sm rounded-md cursor-pointer  ${
                   navigator === "admin"
                     ? "bg-[#00f] text-white"
@@ -60,7 +60,7 @@ const Welcome = () => {
                 onClick={() => setNavigator("admin")}
               >
                 Continue as Admin
-              </div>
+              </div> */}
               <button
                 className="btn w-11/12 h-10 mt-10 bg-black text-white flex justify-center items-center text-sm rounded-3xl cursor-pointer hover:bg-[#00f] hover:text-white transition-colors ease-in-out duration-700"
                 onClick={moduleNavigator}

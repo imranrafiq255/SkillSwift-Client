@@ -9,7 +9,7 @@ const ConsumerSendEmail = ({ email }) => {
             alt=""
             className="w-[30%] h-[30%]"
           />
-        </div>
+        </div>  
         <div className="message">
           <h1 className="font-extralight text-center">
             We've sent an email to{" "}
