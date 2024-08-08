@@ -21,13 +21,12 @@ const Welcome = () => {
             <div className="line h-1 w-6 bg-slate-800"></div>
             <div className="mt-10">
               <h1 className="text-4xl font-serif text-[#441ed1] font-bold">
-                Let's get you <br /> set up
+              SkillSwift: Where Skills and Needs Click for Perfect Solutions!
               </h1>
             </div>
             <div className="mt-10">
               <h1 className="font-serif text-slate-600 font-light">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Facilis, nulla.
+              Bridging talented professionals with those seeking top-notch services for a perfect match.
               </h1>
             </div>
             <div className="mt-10">
@@ -51,16 +50,6 @@ const Welcome = () => {
               >
                 Continue as Service Provider
               </div>
-              {/* <div
-                className={`btn3 mt-2 w-11/12 h-14 flex justify-center items-center text-sm rounded-md cursor-pointer  ${
-                  navigator === "admin"
-                    ? "bg-[#00f] text-white"
-                    : "bg-slate-300 hover:bg-[#00f] hover:text-white transition-colors ease-in-out duration-700"
-                }`}
-                onClick={() => setNavigator("admin")}
-              >
-                Continue as Admin
-              </div> */}
               <button
                 className="btn w-11/12 h-10 mt-10 bg-black text-white flex justify-center items-center text-sm rounded-3xl cursor-pointer hover:bg-[#00f] hover:text-white transition-colors ease-in-out duration-700"
                 onClick={moduleNavigator}

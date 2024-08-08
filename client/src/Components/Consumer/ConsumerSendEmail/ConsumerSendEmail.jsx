@@ -5,7 +5,7 @@ const ConsumerSendEmail = ({ email }) => {
       <div className="consumer-send-email-container w-screen">
         <div className="image flex justify-center mt-40 lg:mt-20">
           <img
-            src={require("../../../Assets/sendEmailAvatar.png")}
+            src={require("../../../Assets/sendEmailAvatar.jpg")}
             alt=""
             className="w-[30%] h-[30%]"
           />

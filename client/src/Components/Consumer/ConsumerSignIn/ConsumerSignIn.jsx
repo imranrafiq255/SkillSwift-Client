@@ -1,17 +1,17 @@
 import React, { useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
-import * as Yup from 'yup';
+import * as Yup from "yup";
 import "./ConsumerSignIn.css";
 
 // Validation schema
 const validationSchema = Yup.object({
   email: Yup.string()
-    .email('Invalid email address')
-    .required('Email is required'),
+    .email("Invalid email address")
+    .required("Email is required"),
   password: Yup.string()
-    .min(8, 'Password must be at least 8 characters')
-    .required('Password is required'),
+    .min(8, "Password must be at least 8 characters")
+    .required("Password is required"),
 });
 
 const SignIn = () => {
@@ -31,6 +31,7 @@ const SignIn = () => {
 
   const handeleSubmit = async (values) => {
     console.log(values);
+    navigate("/consumer-send-email");
   };
 
   const formik = useFormik({
@@ -53,7 +54,10 @@ const SignIn = () => {
                 Sign in
               </h1>
             </div>
-            <form onSubmit={formik.handleSubmit} className="sign-in-form bg-white w-full h-full">
+            <form
+              onSubmit={formik.handleSubmit}
+              className="sign-in-form bg-white w-full h-full"
+            >
               <div className="email">
                 <label htmlFor="email">Your email</label> <br />
                 <input
@@ -64,12 +68,16 @@ const SignIn = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   className={`w-full border-b-[0.5px] border-slate-400 focus:border-b-[2px] focus:border-slate-800 focus:transition-colors focus:duration-700 ease-in-out outline-none mt-2 h-11 text-xl ${
-                    formik.touched.email && formik.errors.email ? 'border-red-500' : ''
+                    formik.touched.email && formik.errors.email
+                      ? "border-red-500"
+                      : ""
                   }`}
                   placeholder="Enter your email"
                 />
                 {formik.touched.email && formik.errors.email ? (
-                  <div className="text-red-500 text-sm">{formik.errors.email}</div>
+                  <div className="text-red-500 text-sm">
+                    {formik.errors.email}
+                  </div>
                 ) : null}
               </div>
               <div className="password mt-5 relative">
@@ -83,12 +91,16 @@ const SignIn = () => {
                   onBlur={formik.handleBlur}
                   ref={passwordRef}
                   className={`w-full border-b-[0.5px] border-slate-400 focus:border-b-[2px] focus:border-slate-800 focus:transition-colors focus:duration-700 ease-in-out outline-none mt-2 h-11 text-xl pr-12 ${
-                    formik.touched.password && formik.errors.password ? 'border-red-500' : ''
+                    formik.touched.password && formik.errors.password
+                      ? "border-red-500"
+                      : ""
                   }`}
                   placeholder="Enter your password"
                 />
                 {formik.touched.password && formik.errors.password ? (
-                  <div className="text-red-500 text-sm">{formik.errors.password}</div>
+                  <div className="text-red-500 text-sm">
+                    {formik.errors.password}
+                  </div>
                 ) : null}
                 <img
                   src={
@@ -106,7 +118,10 @@ const SignIn = () => {
                   <input type="checkbox" className="w-4 h-4" />
                   <h1 className="font-extralight">Remember me</h1>
                 </div>
-                <h1 className="cursor-pointer hover:underline">
+                <h1
+                  className="cursor-pointer hover:underline"
+                  onClick={() => navigate("/consumer-forgot-paasword")}
+                >
                   Forgot password?
                 </h1>
               </div>

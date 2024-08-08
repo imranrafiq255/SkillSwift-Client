@@ -234,7 +234,7 @@ const ConsumerSignUp = () => {
         </div>
         <div className="right-side hidden lg:w-6/12 h-full lg:flex justify-center items-center">
           <img
-            src={require("../../../Assets/SignInIllustrator.jpg")}
+            src={require("../../../Assets/SignUpIllustrator.jpg")}
             alt=""
             className="w-[80%] h-[80%]"
           />
