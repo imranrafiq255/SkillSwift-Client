@@ -8,9 +8,7 @@ const Welcome = () => {
     if (navigator === "consumer") {
       navigate("/consumer-sign-in");
     } else if (navigator === "serviceProvider") {
-      navigate("/service-provider-home");
-    } else if (navigator === "admin") {
-      navigate("/admin-home");
+      navigate("/service-provider-sign-in");
     }
   };
   return (

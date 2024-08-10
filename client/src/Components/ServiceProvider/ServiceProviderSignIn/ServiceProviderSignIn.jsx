@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import "./ConsumerSignIn.css";
+import "./ServiceProviderSignIn.css";
 
 // Validation schema
 const validationSchema = Yup.object({
@@ -31,7 +31,7 @@ const SignIn = () => {
 
   const handeleSubmit = async (values) => {
     console.log(values);
-    navigate("/consumer-home");
+    navigate("/service-provider-home");
   };
 
   const formik = useFormik({
@@ -138,7 +138,7 @@ const SignIn = () => {
                   New user?{" "}
                   <span
                     className="font-semibold ml-2 hover:underline cursor-pointer"
-                    onClick={() => navigate("/consumer-sign-up")}
+                    onClick={() => navigate("/service-provider-sign-up")}
                   >
                     {" "}
                     Create an account
