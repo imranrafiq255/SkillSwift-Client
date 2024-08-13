@@ -11,6 +11,8 @@ import SignIn from "../Consumer/ConsumerSignIn/ConsumerSignIn";
 import ForgotPassword from "../Consumer/ConsumerForgetPassword/ConsumerForgetPassword";
 import ResetPassword from "../Consumer/ConsumerResetPassword/ConsumerResetPassword";
 import ConsumerSendEmail from "../Consumer/ConsumerSendEmail/ConsumerSendEmail";
+import ConsumerUploadInfo from "../Consumer/ConsumerUploadInfo/ConsumerUploadInfo";
+import TempComponent from "../MyTemps/TempComponent";
 import NotFound from "../NotFound/NotFound";
 const AllRoutes = () => {
   return (
@@ -21,6 +23,7 @@ const AllRoutes = () => {
           <Route path="/" element={<Welcome />} />
           <Route path="/consumer-home" element={<ConsumerHome />} />
           <Route path="/consumer-sign-up" element={<ConsumerSignUp />} />
+          <Route path="/consumer-upload-info" element={<ConsumerUploadInfo />} />
           <Route path="/consumer-sign-in" element={<SignIn />} />
           <Route path="/consumer-send-email" element={<ConsumerSendEmail />} />
           <Route
@@ -45,6 +48,7 @@ const AllRoutes = () => {
 
           {/* Admin  */}
           <Route path="/admin-home" element={<AdminHome />} />
+          <Route path="/temp" element={<TempComponent />} />
 
           {/* 404 Page */}
           <Route path="*" element={<NotFound />} />

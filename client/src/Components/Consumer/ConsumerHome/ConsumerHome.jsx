@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ConsumerSideBar from "../ConsumerSideBar/ConsumerSideBar";
+import AdCard from "../ConsumerAdCard/AdCard";
 
 const ConsumerHome = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
@@ -19,7 +20,98 @@ const ConsumerHome = () => {
           {isSidebarVisible ? 'Hide Sidebar' : 'Show Sidebar'}
         </button>
         {/* Rest of your ConsumerHome content */}
-        <div className="p-4">Rest of your ConsumerHome content</div>
+        <div className="p-4 w-full flex flex-wrap gap-[1.25rem] justify-start">
+        <AdCard
+          img={require("../../../Assets/HelpCentre.jpg")}
+          name="David Bombal"
+          title="I will Do House Cleaning"
+          time="3 hours"
+        />
+        <AdCard
+          img={require("../../../Assets/HelpCentre.jpg")}
+          name="David Bombal"
+          title="I will Do House Cleaning"
+          time="3 hours"
+        />
+        <AdCard
+          img={require("../../../Assets/HelpCentre.jpg")}
+          name="David Bombal"
+          title="I will Do House Cleaning"
+          time="3 hours"
+        />
+        <AdCard
+          img={require("../../../Assets/HelpCentre.jpg")}
+          name="David Bombal"
+          title="I will Do House Cleaning"
+          time="3 hours"
+        />
+        <AdCard
+          img={require("../../../Assets/HelpCentre.jpg")}
+          name="David Bombal"
+          title="I will Do House Cleaning"
+          time="3 hours"
+        />
+        <AdCard
+          img={require("../../../Assets/HelpCentre.jpg")}
+          name="David Bombal"
+          title="I will Do House Cleaning"
+          time="3 hours"
+        />
+        <AdCard
+          img={require("../../../Assets/HelpCentre.jpg")}
+          name="David Bombal"
+          title="I will Do House Cleaning"
+          time="3 hours"
+        />
+        <AdCard
+          img={require("../../../Assets/HelpCentre.jpg")}
+          name="David Bombal"
+          title="I will Do House Cleaning"
+          time="3 hours"
+        />
+        <AdCard
+          img={require("../../../Assets/HelpCentre.jpg")}
+          name="David Bombal"
+          title="I will Do House Cleaning"
+          time="3 hours"
+        />
+        <AdCard
+          img={require("../../../Assets/HelpCentre.jpg")}
+          name="David Bombal"
+          title="I will Do House Cleaning"
+          time="3 hours"
+        />
+        <AdCard
+          img={require("../../../Assets/HelpCentre.jpg")}
+          name="David Bombal"
+          title="I will Do House Cleaning"
+          time="3 hours"
+        />
+        <AdCard
+          img={require("../../../Assets/HelpCentre.jpg")}
+          name="David Bombal"
+          title="I will Do House Cleaning"
+          time="3 hours"
+        />
+        <AdCard
+          img={require("../../../Assets/HelpCentre.jpg")}
+          name="David Bombal"
+          title="I will Do House Cleaning"
+          time="3 hours"
+        />
+        <AdCard
+          img={require("../../../Assets/HelpCentre.jpg")}
+          name="David Bombal"
+          title="I will Do House Cleaning"
+          time="3 hours"
+        />
+        <AdCard
+          img={require("../../../Assets/HelpCentre.jpg")}
+          name="David Bombal"
+          title="I will Do House Cleaning"
+          time="3 hours"
+        />
+        </div>
       </div>
     </div>
   );

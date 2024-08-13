@@ -57,9 +57,12 @@ const Welcome = () => {
             </div>
           </div>
         </div>
-        <div
-          className={`right-side hidden xl:flex xl:w-6/12 h-screen bg-no-repeat bg-cover custom-bg`}
-        ></div>
+        <div className="right-side hidden lg:w-6/12 h-full lg:flex justify-center items-center">
+          <img
+            src={require("../../Assets/WelcomeScreenIllustrator.jpg")}
+            alt=""
+          />
+        </div>
       </div>
     </>
   );

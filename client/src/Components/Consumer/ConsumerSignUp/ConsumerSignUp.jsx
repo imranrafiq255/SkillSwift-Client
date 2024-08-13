@@ -60,6 +60,7 @@ const ConsumerSignUp = () => {
 
       // Handle form submission
       console.log(values);
+      navigate("/consumer-upload-info");
     },
   });
 
