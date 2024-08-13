@@ -1,15 +1,19 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import "./ConsumerSignIn.css";
-
+import { useDispatch, useSelector } from "react-redux";
+import consumerLoginAction from "../../Redux/Consumer/Actions/Login.Consumer.Action";
+import LoaderCircles from "../../Loader/LoaderCircles";
+import { Toaster } from "react-hot-toast";
+import { handleShowFailureToast } from "../../ToastMessages/ToastMessage";
 // Validation schema
 const validationSchema = Yup.object({
-  email: Yup.string()
+  consumerEmail: Yup.string()
     .email("Invalid email address")
     .required("Email is required"),
-  password: Yup.string()
+  consumerPassword: Yup.string()
     .min(8, "Password must be at least 8 characters")
     .required("Password is required"),
 });
@@ -18,7 +22,10 @@ const SignIn = () => {
   const navigate = useNavigate();
   const passwordRef = useRef();
   const [eyeToggler, setEyeToggler] = useState(false);
-
+  const dispatch = useDispatch();
+  const { loading, message, error } = useSelector(
+    (state) => state.consumerLoginReducer
+  );
   const eyeTogglerHandler = () => {
     if (!eyeToggler) {
       passwordRef.current.type = "text";
@@ -31,20 +38,32 @@ const SignIn = () => {
 
   const handeleSubmit = async (values) => {
     console.log(values);
-    navigate("/consumer-home");
+    dispatch(consumerLoginAction(values));
   };
 
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      consumerEmail: "",
+      consumerPassword: "",
     },
     validationSchema: validationSchema,
     onSubmit: handeleSubmit,
   });
+  useEffect(() => {
+    if (!loading) {
+      if (error) {
+        console.log(error);
+        handleShowFailureToast(error);
+      } else if (message) {
+        console.log(message);
+        navigate("/consumer-home");
+      }
+    }
+  }, [loading, message, error, navigate]);
 
   return (
     <>
+      <Toaster />
       <div className="sign-in-container w-screen h-screen flex">
         <div className="left-side w-full lg:w-6/12 h-full flex justify-center items-center flex-col">
           <div className="sign-in-container w-10/12 sm:w-8/12 lg:w-6/12 h-2/4">
@@ -63,20 +82,20 @@ const SignIn = () => {
                 <input
                   type="email"
                   id="email"
-                  name="email"
-                  value={formik.values.email}
+                  name="consumerEmail"
+                  value={formik.values.consumerEmail}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   className={`w-full border-b-[0.5px] border-slate-400 focus:border-b-[2px] focus:border-slate-800 focus:transition-colors focus:duration-700 ease-in-out outline-none mt-2 h-11 text-xl ${
-                    formik.touched.email && formik.errors.email
+                    formik.touched.consumerEmail && formik.errors.consumerEmail
                       ? "border-red-500"
                       : ""
                   }`}
                   placeholder="Enter your email"
                 />
-                {formik.touched.email && formik.errors.email ? (
+                {formik.touched.consumerEmail && formik.errors.consumerEmail ? (
                   <div className="text-red-500 text-sm">
-                    {formik.errors.email}
+                    {formik.errors.consumerEmail}
                   </div>
                 ) : null}
               </div>
@@ -85,21 +104,22 @@ const SignIn = () => {
                 <input
                   type={eyeToggler ? "text" : "password"}
                   id="password"
-                  name="password"
-                  value={formik.values.password}
+                  name="consumerPassword"
+                  value={formik.values.consumerPassword}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   ref={passwordRef}
                   className={`w-full border-b-[0.5px] border-slate-400 focus:border-b-[2px] focus:border-slate-800 focus:transition-colors focus:duration-700 ease-in-out outline-none mt-2 h-11 text-xl pr-12 ${
-                    formik.touched.password && formik.errors.password
+                    formik.touched.password && formik.errors.consumerPassword
                       ? "border-red-500"
                       : ""
                   }`}
                   placeholder="Enter your password"
                 />
-                {formik.touched.password && formik.errors.password ? (
+                {formik.touched.consumerPassword &&
+                formik.errors.consumerPassword ? (
                   <div className="text-red-500 text-sm">
-                    {formik.errors.password}
+                    {formik.errors.consumerPassword}
                   </div>
                 ) : null}
                 <img
@@ -126,12 +146,18 @@ const SignIn = () => {
                 </h1>
               </div>
               <div className="mt-8">
-                <button
-                  type="submit"
-                  className="w-full bg-black h-12 border-none rounded-[30px] text-white bg-gradient-to-r from-[#020024] via-[#090979] to-[#4e97fd]"
-                >
-                  Sign in
-                </button>
+                {loading ? (
+                  <div className="w-full bg-black h-12 border-none rounded-[30px] text-white bg-gradient-to-r from-[#020024] via-[#090979] to-[#4e97fd] flex justify-center items-center">
+                    <LoaderCircles />
+                  </div>
+                ) : (
+                  <button
+                    type="submit"
+                    className="w-full bg-black h-12 border-none rounded-[30px] text-white bg-gradient-to-r from-[#020024] via-[#090979] to-[#4e97fd]"
+                  >
+                    Sign in
+                  </button>
+                )}
               </div>
               <div className="mt-5">
                 <h1>
