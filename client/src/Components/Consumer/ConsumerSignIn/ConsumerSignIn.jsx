@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import "./ConsumerSignIn.css";
 import { useDispatch, useSelector } from "react-redux";
-import consumerLoginAction from "../../Redux/Consumer/Actions/Login.Consumer.Action";
+import { consumerLoginAction } from "../../Redux/Consumer/Actions/ConsumerActions";
 import LoaderCircles from "../../Loader/LoaderCircles";
 import { Toaster } from "react-hot-toast";
 import { handleShowFailureToast } from "../../ToastMessages/ToastMessage";
@@ -56,7 +56,7 @@ const SignIn = () => {
         handleShowFailureToast(error);
       } else if (message) {
         console.log(message);
-        navigate("/consumer-home");
+        navigate("/consumer-home", { state: { message: message } });
       }
     }
   }, [loading, message, error, navigate]);

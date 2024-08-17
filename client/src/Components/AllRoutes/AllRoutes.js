@@ -30,7 +30,10 @@ const AllRoutes = () => {
             path="/consumer-forgot-paasword"
             element={<ForgotPassword />}
           />
-          <Route path="/consumer-reset-paasword" element={<ResetPassword />} />
+          <Route
+            path="/consumer-reset-password/:token"
+            element={<ResetPassword />}
+          />
 
           {/* Service Provider  */}
           <Route

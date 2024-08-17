@@ -1,11 +1,14 @@
-import React, { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { handleShowFailureToast } from "../../ToastMessages/ToastMessage";
+import { consumerResetPasswordAction } from "../../Redux/Consumer/Actions/ConsumerActions";
+import LoaderCircles from "../../Loader/LoaderCircles";
 // Validation Schema
 const validationSchema = Yup.object({
-  password: Yup.string()
+  consumerPassword: Yup.string()
     .min(8, "Password must be at least 8 characters")
     .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
     .matches(/[a-z]/, "Password must contain at least one lowercase letter")
@@ -13,7 +16,7 @@ const validationSchema = Yup.object({
     .matches(/[\W_]/, "Password must contain at least one special character")
     .required("Password is required"),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password"), null], "Passwords must match")
+    .oneOf([Yup.ref("consumerPassword"), null], "Passwords must match")
     .required("Confirm Password is required"),
 });
 
@@ -23,7 +26,11 @@ const ConsumerResetPassword = () => {
   const [eyeToggler1, setEyeToggler1] = useState(false);
   const passwordRef2 = useRef();
   const [eyeToggler2, setEyeToggler2] = useState(false);
-
+  const dispatch = useDispatch();
+  const { token } = useParams();
+  const { loading, message, error } = useSelector(
+    (state) => state.consumerResetPasswordReducer
+  );
   const eyeTogglerHandler1 = () => {
     setEyeToggler1((prev) => !prev);
     passwordRef1.current.type = eyeToggler1 ? "password" : "text";
@@ -36,17 +43,25 @@ const ConsumerResetPassword = () => {
 
   const formik = useFormik({
     initialValues: {
-      password: "",
+      consumerPassword: "",
       confirmPassword: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      // Handle form submission
-      console.log(values);
-      navigate("/consumer-home");
+    onSubmit: async (values) => {
+      dispatch(consumerResetPasswordAction(values, token));
     },
   });
-
+  useEffect(() => {
+    if (!loading) {
+      if (error) {
+        console.log(error);
+        handleShowFailureToast(error);
+      } else if (message) {
+        console.log(message);
+        navigate("/consumer-home", { state: { message } });
+      }
+    }
+  }, [message, error, navigate, loading]);
   return (
     <>
       <div className="sign-up-container w-screen h-screen flex">
@@ -67,21 +82,23 @@ const ConsumerResetPassword = () => {
                 <input
                   type={eyeToggler1 ? "text" : "password"}
                   id="password"
-                  name="password"
+                  name="consumerPassword"
                   value={formik.values.password}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   ref={passwordRef1}
                   className={`w-full border-b-[0.5px] border-slate-400 focus:border-b-[2px] focus:border-slate-800 focus:transition-colors focus:duration-700 ease-in-out outline-none mt-2 h-11 text-xl pr-12 ${
-                    formik.touched.password && formik.errors.password
+                    formik.touched.consumerPassword &&
+                    formik.errors.consumerPassword
                       ? "border-red-500"
                       : ""
                   }`}
                   placeholder="Enter your new password"
                 />
-                {formik.touched.password && formik.errors.password ? (
+                {formik.touched.consumerPassword &&
+                formik.errors.consumerPassword ? (
                   <div className="text-red-500 text-sm">
-                    {formik.errors.password}
+                    {formik.errors.consumerPassword}
                   </div>
                 ) : null}
                 <img
@@ -132,12 +149,18 @@ const ConsumerResetPassword = () => {
                 />
               </div>
               <div className="mt-8">
-                <button
-                  type="submit"
-                  className="w-full bg-black h-12 border-none rounded-[30px] text-white bg-gradient-to-r from-[#020024] via-[#090979] to-[#4e97fd]"
-                >
-                  Create Account
-                </button>
+                {loading ? (
+                  <div className="w-full bg-black h-12 border-none rounded-[30px] text-white bg-gradient-to-r from-[#020024] via-[#090979] to-[#4e97fd] flex justify-center items-center">
+                    <LoaderCircles />
+                  </div>
+                ) : (
+                  <button
+                    type="submit"
+                    className="w-full bg-black h-12 border-none rounded-[30px] text-white bg-gradient-to-r from-[#020024] via-[#090979] to-[#4e97fd]"
+                  >
+                    Reset Password
+                  </button>
+                )}
               </div>
             </form>
           </div>
