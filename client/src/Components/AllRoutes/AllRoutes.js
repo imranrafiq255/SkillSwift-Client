@@ -1,5 +1,11 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import ConsumerHome from "../Consumer/ConsumerHome/ConsumerHome";
 import ConsumerSignUp from "../Consumer/ConsumerSignUp/ConsumerSignUp";
 import Welcome from "../Welcome/Welcome";
@@ -12,52 +18,112 @@ import ForgotPassword from "../Consumer/ConsumerForgetPassword/ConsumerForgetPas
 import ResetPassword from "../Consumer/ConsumerResetPassword/ConsumerResetPassword";
 import ConsumerSendEmail from "../Consumer/ConsumerSendEmail/ConsumerSendEmail";
 import ConsumerUploadInfo from "../Consumer/ConsumerUploadInfo/ConsumerUploadInfo";
-import TempComponent from "../MyTemps/TempComponent";
 import NotFound from "../NotFound/NotFound";
-const AllRoutes = () => {
+import ConsumerVerifyEmail from "../Consumer/ConsumerVerifyEmail/ConsumerVerifyEmail";
+import LoaderBars from "../Loader/LoaderBars";
+import axios from "axios";
+
+const AuthenticatedRoutes = () => {
+  const location = useLocation();
+
+  const [isLoading, setLoading] = useState(true);
+  const [isConsumerAuthenticated, setConsumerAuthenticated] = useState(false);
+  useEffect(() => {
+    const loadCurrentUser = async () => {
+      try {
+        const response = await axios.get(
+          "/api/v1/consumer/load-current-consumer"
+        );
+        if (response.data) {
+          setConsumerAuthenticated(true);
+        }
+      } catch (error) {
+        console.log(error?.response?.data?.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadCurrentUser();
+  }, []);
+
+  if (isLoading && location.pathname === "/consumer-upload-info") {
+    return (
+      <div className="w-screen h-screen flex justify-center items-center">
+        <LoaderBars />
+      </div>
+    );
+  }
+
   return (
-    <>
-      <Router>
-        <Routes>
-          {/* Consumer  */}
-          <Route path="/" element={<Welcome />} />
-          <Route path="/consumer-home" element={<ConsumerHome />} />
-          <Route path="/consumer-sign-up" element={<ConsumerSignUp />} />
-          <Route path="/consumer-upload-info" element={<ConsumerUploadInfo />} />
-          <Route path="/consumer-sign-in" element={<SignIn />} />
-          <Route path="/consumer-send-email" element={<ConsumerSendEmail />} />
-          <Route
-            path="/consumer-forgot-paasword"
-            element={<ForgotPassword />}
-          />
-          <Route
-            path="/consumer-reset-password/:token"
-            element={<ResetPassword />}
-          />
+    <Routes>
+      <Route path="/" element={<Welcome />} />
+      <Route path="/consumer-home" element={<ConsumerHome />} />
+      <Route path="/consumer-sign-up" element={<ConsumerSignUp />} />
+      <Route
+        path="/consumer-upload-info"
+        element={
+          isConsumerAuthenticated ? (
+            <ConsumerUploadInfo />
+          ) : (
+            <Navigate to={"/consumer-sign-in"} />
+          )
+        }
+      />
+      <Route path="/consumer-sign-in" element={<SignIn />} />
+      <Route path="/consumer-send-email" element={<ConsumerSendEmail />} />
+      <Route path="/consumer-forgot-password" element={<ForgotPassword />} />
+      <Route
+        path="/consumer-reset-password/:token"
+        element={<ResetPassword />}
+      />
+      <Route
+        path="/consumer-confirm-email/:token"
+        element={<ConsumerVerifyEmail />}
+      />
+      <Route path="/service-provider-home" element={<ServiceProviderHome />} />
+      <Route
+        path="/service-provider-sign-in"
+        element={<ServiceProviderSignIn />}
+      />
+      <Route
+        path="/service-provider-sign-up"
+        element={<ServiceProviderSignUp />}
+      />
+      <Route path="/admin-home" element={<AdminHome />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
 
-          {/* Service Provider  */}
-          <Route
-            path="/service-provider-home"
-            element={<ServiceProviderHome />}
-          />
-          <Route
-            path="//service-provider-sign-in"
-            element={<ServiceProviderSignIn />}
-          />
-          <Route
-            path="//service-provider-sign-up"
-            element={<ServiceProviderSignUp />}
-          />
+const AllRoutes = () => {
+  const [isConsumerAuthenticated, setConsumerAuthenticated] = useState(false);
+  const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
 
-          {/* Admin  */}
-          <Route path="/admin-home" element={<AdminHome />} />
-          <Route path="/temp" element={<TempComponent />} />
+  useEffect(() => {
+    const loadCurrentUser = async () => {
+      try {
+        const response = await axios.get(
+          "/api/v1/consumer/load-current-consumer"
+        );
+        if (response.data) {
+          setConsumerAuthenticated(true);
+        }
+      } catch (error) {
+        console.log(error?.response?.data?.message);
+      } finally {
+        setHasCheckedAuth(true);
+      }
+    };
 
-          {/* 404 Page */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Router>
-    </>
+    if (!hasCheckedAuth) {
+      loadCurrentUser();
+    }
+  }, [hasCheckedAuth]);
+
+  return (
+    <Router>
+      <AuthenticatedRoutes isConsumerAuthenticated={isConsumerAuthenticated} />
+    </Router>
   );
 };
 

@@ -57,8 +57,70 @@ const consumerResetPasswordAction =
       });
     }
   };
+const consumerSignUpAction = (consumerData) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "CONSUMER_SIGN_UP_REQUEST",
+    });
+    const response = await axios.post("/api/v1/consumer/sign-up", consumerData);
+    dispatch({
+      type: "CONSUMER_SIGN_UP_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "CONSUMER_SIGN_UP_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
+const loadCurrentConsumerAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LOAD_CURRENT_CONSUMER_REQUEST",
+    });
+    const response = await axios.get("/api/v1/consumer/load-current-consumer");
+    dispatch({
+      type: "LOAD_CURRENT_CONSUMER_SUCCESS",
+      payload: response?.data?.consumer,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_CURRENT_CONSUMER_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
+const consumerUploadInfoAction = (consumerData) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "CONSUMER_UPLOAD_INFO_REQUEST",
+    });
+    const response = await axios.post(
+      "/api/v1/consumer/avatar-phone-upload",
+      consumerData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    dispatch({
+      type: "CONSUMER_UPLOAD_INFO_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "CONSUMER_UPLOAD_INFO_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
 export {
   consumerLoginAction,
   consumerForgotPasswordLinkAction,
   consumerResetPasswordAction,
+  consumerSignUpAction,
+  loadCurrentConsumerAction,
+  consumerUploadInfoAction,
 };

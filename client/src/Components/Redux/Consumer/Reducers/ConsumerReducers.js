@@ -73,8 +73,79 @@ const consumerResetPasswordReducer = createReducer(
     });
   }
 );
+const consumerSignUpInitialValues = {
+  loading: false,
+  message: "",
+  error: null,
+};
+const consumerSignUpReducer = createReducer(
+  consumerSignUpInitialValues,
+  (builder) => {
+    builder
+      .addCase("CONSUMER_SIGN_UP_REQUEST", (state) => {
+        state.loading = true;
+      })
+      .addCase("CONSUMER_SIGN_UP_SUCCESS", (state, action) => {
+        state.loading = false;
+        state.message = action.payload;
+      })
+      .addCase("CONSUMER_SIGN_UP_FAILURE", (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  }
+);
+const loadCurrentConsumerInitialState = {
+  loading: false,
+  consumer: null,
+  isAuthenticated: false,
+  error: null,
+};
+const loadCurrentConsumerReducer = createReducer(
+  loadCurrentConsumerInitialState,
+  (builder) => {
+    builder
+      .addCase("LOAD_CURRENT_CONSUMER_REQUEST", (state) => {
+        state.loading = true;
+      })
+      .addCase("LOAD_CURRENT_CONSUMER_SUCCESS", (state, action) => {
+        state.loading = false;
+        state.consumer = action.payload;
+        state.isAuthenticated = true;
+      })
+      .addCase("LOAD_CURRENT_CONSUMER_FAILURE", (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  }
+);
+const consumerUploadInfoInitialState = {
+  loading: false,
+  message: "",
+  error: null,
+};
+const consumerUploadInfoReducer = createReducer(
+  consumerUploadInfoInitialState,
+  (builder) => {
+    builder
+      .addCase("CONSUMER_UPLOAD_INFO_REQUEST", (state) => {
+        state.loading = true;
+      })
+      .addCase("CONSUMER_UPLOAD_INFO_SUCCESS", (state, action) => {
+        state.loading = false;
+        state.message = action.payload;
+      })
+      .addCase("CONSUMER_UPLOAD_INFO_FAILURE", (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  }
+);
 export {
   consumerLoginReducer,
   consumerForgotPasswordLinkReducer,
   consumerResetPasswordReducer,
+  consumerSignUpReducer,
+  loadCurrentConsumerReducer,
+  consumerUploadInfoReducer,
 };

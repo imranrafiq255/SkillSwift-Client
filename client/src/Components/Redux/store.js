@@ -3,6 +3,9 @@ import {
   consumerForgotPasswordLinkReducer,
   consumerLoginReducer,
   consumerResetPasswordReducer,
+  consumerSignUpReducer,
+  consumerUploadInfoReducer,
+  loadCurrentConsumerReducer,
 } from "./Consumer/Reducers/ConsumerReducers";
 
 const store = configureStore({
@@ -10,6 +13,9 @@ const store = configureStore({
     consumerLoginReducer: consumerLoginReducer,
     consumerForgotPasswordLinkReducer: consumerForgotPasswordLinkReducer,
     consumerResetPasswordReducer: consumerResetPasswordReducer,
+    consumerSignUpReducer: consumerSignUpReducer,
+    loadCurrentConsumerReducer: loadCurrentConsumerReducer,
+    consumerUploadInfoReducer: consumerUploadInfoReducer,
   },
 });
 
