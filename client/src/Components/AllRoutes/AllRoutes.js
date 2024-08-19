@@ -22,6 +22,7 @@ import NotFound from "../NotFound/NotFound";
 import ConsumerVerifyEmail from "../Consumer/ConsumerVerifyEmail/ConsumerVerifyEmail";
 import LoaderBars from "../Loader/LoaderBars";
 import axios from "axios";
+import TempComponent from "../MyTemps/TempComponent";
 
 const AuthenticatedRoutes = () => {
   const location = useLocation();
@@ -57,6 +58,7 @@ const AuthenticatedRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Welcome />} />
+      <Route path="/temp" element={<TempComponent />} />
       <Route path="/consumer-home" element={<ConsumerHome />} />
       <Route path="/consumer-sign-up" element={<ConsumerSignUp />} />
       <Route

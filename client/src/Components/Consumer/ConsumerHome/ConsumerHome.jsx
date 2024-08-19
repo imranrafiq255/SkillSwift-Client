@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import ConsumerSideBar from "../ConsumerSideBar/ConsumerSideBar";
-import AdCard from "../ConsumerAdCard/AdCard";
+import Navbar from '../ConsumerCommon/Navbar';
+import FAQsSection from '../ConsumerCommon/FAQsSection';
+import ContactSection from '../ConsumerCommon/ContactSection';
+import Footer from '../ConsumerCommon/Footer';
+import HeroSection from './HeroSection';
+import ServicesSection from './ServicesSection';
+import PopularServicesSection from './PopularServicesSection';
 import { useLocation, useNavigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { handleShowSuccessToast } from "../../ToastMessages/ToastMessage";
@@ -26,111 +31,16 @@ const ConsumerHome = () => {
   };
 
   return (
-    <div className="flex">
+    <>
       <Toaster />
-      <ConsumerSideBar isVisible={isSidebarVisible} />
-      <div className="flex-1">
-        <button
-          onClick={toggleSidebar}
-          className="p-2 m-4 bg-blue-500 text-white rounded"
-        >
-          {isSidebarVisible ? "Hide Sidebar" : "Show Sidebar"}
-        </button>
-        {/* Rest of your ConsumerHome content */}
-        <div className="p-4 w-full flex flex-wrap gap-[1.25rem] justify-start">
-          <AdCard
-            img={require("../../../Assets/HelpCentre.jpg")}
-            name="David Bombal"
-            title="I will Do House Cleaning"
-            time="3 hours"
-          />
-          <AdCard
-            img={require("../../../Assets/HelpCentre.jpg")}
-            name="David Bombal"
-            title="I will Do House Cleaning"
-            time="3 hours"
-          />
-          <AdCard
-            img={require("../../../Assets/HelpCentre.jpg")}
-            name="David Bombal"
-            title="I will Do House Cleaning"
-            time="3 hours"
-          />
-          <AdCard
-            img={require("../../../Assets/HelpCentre.jpg")}
-            name="David Bombal"
-            title="I will Do House Cleaning"
-            time="3 hours"
-          />
-          <AdCard
-            img={require("../../../Assets/HelpCentre.jpg")}
-            name="David Bombal"
-            title="I will Do House Cleaning"
-            time="3 hours"
-          />
-          <AdCard
-            img={require("../../../Assets/HelpCentre.jpg")}
-            name="David Bombal"
-            title="I will Do House Cleaning"
-            time="3 hours"
-          />
-          <AdCard
-            img={require("../../../Assets/HelpCentre.jpg")}
-            name="David Bombal"
-            title="I will Do House Cleaning"
-            time="3 hours"
-          />
-          <AdCard
-            img={require("../../../Assets/HelpCentre.jpg")}
-            name="David Bombal"
-            title="I will Do House Cleaning"
-            time="3 hours"
-          />
-          <AdCard
-            img={require("../../../Assets/HelpCentre.jpg")}
-            name="David Bombal"
-            title="I will Do House Cleaning"
-            time="3 hours"
-          />
-          <AdCard
-            img={require("../../../Assets/HelpCentre.jpg")}
-            name="David Bombal"
-            title="I will Do House Cleaning"
-            time="3 hours"
-          />
-          <AdCard
-            img={require("../../../Assets/HelpCentre.jpg")}
-            name="David Bombal"
-            title="I will Do House Cleaning"
-            time="3 hours"
-          />
-          <AdCard
-            img={require("../../../Assets/HelpCentre.jpg")}
-            name="David Bombal"
-            title="I will Do House Cleaning"
-            time="3 hours"
-          />
-          <AdCard
-            img={require("../../../Assets/HelpCentre.jpg")}
-            name="David Bombal"
-            title="I will Do House Cleaning"
-            time="3 hours"
-          />
-          <AdCard
-            img={require("../../../Assets/HelpCentre.jpg")}
-            name="David Bombal"
-            title="I will Do House Cleaning"
-            time="3 hours"
-          />
-          <AdCard
-            img={require("../../../Assets/HelpCentre.jpg")}
-            name="David Bombal"
-            title="I will Do House Cleaning"
-            time="3 hours"
-          />
-        </div>
-      </div>
-    </div>
+      <Navbar />
+      <HeroSection />
+      <ServicesSection />
+      <PopularServicesSection />
+      <FAQsSection />
+      <ContactSection />
+      <Footer />
+    </>
   );
 };
 
