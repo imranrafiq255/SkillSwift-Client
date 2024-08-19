@@ -7,6 +7,7 @@ import {
   consumerUploadInfoReducer,
   loadCurrentConsumerReducer,
 } from "./Consumer/Reducers/ConsumerReducers";
+import { serviceProviderSignInReducer } from "./ServiceProvider/Reducers/ServiceProviderReducers";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,9 @@ const store = configureStore({
     consumerSignUpReducer: consumerSignUpReducer,
     loadCurrentConsumerReducer: loadCurrentConsumerReducer,
     consumerUploadInfoReducer: consumerUploadInfoReducer,
+
+    // service provider reducers
+    serviceProviderSignInReducer: serviceProviderSignInReducer,
   },
 });
 
