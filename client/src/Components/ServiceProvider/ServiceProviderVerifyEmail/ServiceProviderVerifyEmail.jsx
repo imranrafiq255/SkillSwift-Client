@@ -7,7 +7,7 @@ import {
 } from "../../ToastMessages/ToastMessage";
 import LoaderBars from "../../Loader/LoaderBars";
 import { Toaster } from "react-hot-toast";
-const ConsumerVerifyEmail = () => {
+const ServiceProviderVerifyEmail = () => {
   const { token } = useParams();
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -77,4 +77,4 @@ const ConsumerVerifyEmail = () => {
   );
 };
 
-export default ConsumerVerifyEmail;
+export default ServiceProviderVerifyEmail;

@@ -140,7 +140,7 @@ const SignIn = () => {
                 </div>
                 <h1
                   className="cursor-pointer hover:underline"
-                  onClick={() => navigate("/consumer-forgot-paasword")}
+                  onClick={() => navigate("/consumer-forgot-password")}
                 >
                   Forgot password?
                 </h1>

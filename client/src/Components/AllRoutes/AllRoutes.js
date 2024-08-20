@@ -22,8 +22,10 @@ import NotFound from "../NotFound/NotFound";
 import ConsumerVerifyEmail from "../Consumer/ConsumerVerifyEmail/ConsumerVerifyEmail";
 import LoaderBars from "../Loader/LoaderBars";
 import axios from "axios";
-import TempComponent from "../MyTemps/TempComponent";
-
+// import TempComponent from "../MyTemps/TempComponent";
+import ServiceProviderResetPassword from "../ServiceProvider/ServiceProviderResetPassword/ServiceProviderResetPassword";
+import ServiceProviderSendEmail from "../ServiceProvider/ServiceProviderSendEmail/ServiceProviderSendEmail";
+import ServiceProviderForgotPassword from "../ServiceProvider/ServiceProviderForgotPassword/ServiceProviderFrogotPassword";
 const AuthenticatedRoutes = () => {
   const location = useLocation();
 
@@ -58,7 +60,7 @@ const AuthenticatedRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Welcome />} />
-      <Route path="/temp" element={<TempComponent />} />
+      {/* <Route path="/temp" element={<TempComponent />} /> */}
       <Route path="/consumer-home" element={<ConsumerHome />} />
       <Route path="/consumer-sign-up" element={<ConsumerSignUp />} />
       <Route
@@ -88,8 +90,20 @@ const AuthenticatedRoutes = () => {
         element={<ServiceProviderSignIn />}
       />
       <Route
+        path="/service-provider-send-email"
+        element={<ServiceProviderSendEmail />}
+      />
+      <Route
         path="/service-provider-sign-up"
         element={<ServiceProviderSignUp />}
+      />
+      <Route
+        path="/service-provider-forgot-password"
+        element={<ServiceProviderForgotPassword />}
+      />
+      <Route
+        path="/service-provider-reset-password/:token"
+        element={<ServiceProviderResetPassword />}
       />
       <Route path="/admin-home" element={<AdminHome />} />
       <Route path="*" element={<NotFound />} />

@@ -59,6 +59,9 @@ const SignIn = () => {
       }
     }
   }, [loading, message, error, navigate]);
+  console.log(message);
+  console.log(error);
+
   return (
     <>
       <Toaster />
@@ -141,7 +144,7 @@ const SignIn = () => {
                 </div>
                 <h1
                   className="cursor-pointer hover:underline"
-                  onClick={() => navigate("/consumer-forgot-paasword")}
+                  onClick={() => navigate("/service-provider-forgot-password")}
                 >
                   Forgot password?
                 </h1>

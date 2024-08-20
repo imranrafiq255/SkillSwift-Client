@@ -7,7 +7,11 @@ import {
   consumerUploadInfoReducer,
   loadCurrentConsumerReducer,
 } from "./Consumer/Reducers/ConsumerReducers";
-import { serviceProviderSignInReducer } from "./ServiceProvider/Reducers/ServiceProviderReducers";
+import {
+  serviceProviderForgotPasswordReducer,
+  serviceProviderResetPasswordReducer,
+  serviceProviderSignInReducer,
+} from "./ServiceProvider/Reducers/ServiceProviderReducers";
 
 const store = configureStore({
   reducer: {
@@ -20,6 +24,8 @@ const store = configureStore({
 
     // service provider reducers
     serviceProviderSignInReducer: serviceProviderSignInReducer,
+    serviceProviderForgotPasswordReducer: serviceProviderForgotPasswordReducer,
+    serviceProviderResetPasswordReducer: serviceProviderResetPasswordReducer,
   },
 });
 
