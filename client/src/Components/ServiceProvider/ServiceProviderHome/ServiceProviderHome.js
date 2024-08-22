@@ -6,7 +6,7 @@ const ServiceProviderHome = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const hasShownToast = useRef(false);
-  const myMessage = location.state.message || null;
+  const myMessage = location?.state?.message || null;
   useEffect(() => {
     if (myMessage && !hasShownToast.current) {
       handleShowSuccessToast(myMessage);

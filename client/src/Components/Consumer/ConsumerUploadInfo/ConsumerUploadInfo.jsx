@@ -8,8 +8,8 @@ import {
 } from "../../ToastMessages/ToastMessage";
 import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { consumerUploadInfoAction } from "../../Redux/Consumer/Actions/ConsumerActions";
 import LoaderCircles from "../../Loader/LoaderCircles";
+import { serviceProviderUploadInfoAction } from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
 // Validation Schema
 const validationSchema = Yup.object({
   phoneNumber: Yup.string()
@@ -38,7 +38,7 @@ const ConsumerUploadInfo = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      dispatch(consumerUploadInfoAction(values));
+      dispatch(serviceProviderUploadInfoAction(values));
     },
   });
 
@@ -58,7 +58,7 @@ const ConsumerUploadInfo = () => {
   useEffect(() => {
     if (myMessage) {
       handleShowSuccessToast(myMessage);
-      navigate("/consumer-home", { replace: true, state: {} });
+      navigate("/consumer-upload-info", { replace: true, state: {} });
     }
   }, [myMessage, navigate]);
   useEffect(() => {

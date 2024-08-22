@@ -83,8 +83,47 @@ const serviceProviderResetPasswordReducer = createReducer(
     );
   }
 );
+const serviceProviderSignUpInitialValues = {
+  loading: false,
+  message: null,
+  error: null,
+};
+const serviceProviderSignUpReducer = createReducer(
+  serviceProviderSignUpInitialValues,
+  (builder) => {
+    builder.addCase("SERVICE_PROVIDER_SIGN_UP_REQUEST", (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase("SERVICE_PROVIDER_SIGN_UP_SUCCESS", (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    });
+    builder.addCase("SERVICE_PROVIDER_SIGN_UP_FAILURE", (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+  }
+);
+const serviceProviderUploadInfoReducer = createReducer(
+  { loading: false, message: null, error: null },
+  (builder) => {
+    builder.addCase("SERVICE_PROVIDER_UPLOAD_INFO_REQUEST", (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase("SERVICE_PROVIDER_UPLOAD_INFO_SUCCESS", (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    });
+    builder.addCase("SERVICE_PROVIDER_UPLOAD_INFO_FAILURE", (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+  }
+);
 export {
   serviceProviderSignInReducer,
   serviceProviderForgotPasswordReducer,
   serviceProviderResetPasswordReducer,
+  serviceProviderSignUpReducer,
+  serviceProviderUploadInfoReducer,
 };

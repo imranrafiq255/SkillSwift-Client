@@ -5,6 +5,7 @@ import {
   Route,
   Navigate,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 import ConsumerHome from "../Consumer/ConsumerHome/ConsumerHome";
 import ConsumerSignUp from "../Consumer/ConsumerSignUp/ConsumerSignUp";
@@ -26,13 +27,25 @@ import axios from "axios";
 import ServiceProviderResetPassword from "../ServiceProvider/ServiceProviderResetPassword/ServiceProviderResetPassword";
 import ServiceProviderSendEmail from "../ServiceProvider/ServiceProviderSendEmail/ServiceProviderSendEmail";
 import ServiceProviderForgotPassword from "../ServiceProvider/ServiceProviderForgotPassword/ServiceProviderFrogotPassword";
+import ServiceProviderUploadInfo from "../ServiceProvider/ServiceProviderUploadInfo/ServiceProviderUploadInfo";
+import ServiceProviderConfirmEmail from "../ServiceProvider/ServiceProviderVerifyEmail/ServiceProviderVerifyEmail";
+import ServiceProviderAccountVerification from "../ServiceProvider/ServiceProviderAccountVerification/ServiceProviderAccountVerification";
 const AuthenticatedRoutes = () => {
   const location = useLocation();
 
-  const [isLoading, setLoading] = useState(true);
+  const [isConsumerLoading, setConsumerLoading] = useState(true);
   const [isConsumerAuthenticated, setConsumerAuthenticated] = useState(false);
+  const [isServiceProviderLoading, setServiceProviderLoading] = useState(true);
+  const [isServiceProviderAuthenticated, setServiceProviderAuthenticated] =
+    useState(false);
+  const navigate = useNavigate(false);
+  const [serviceProvider, setServiceProvider] = useState(null);
+  const serviceProviderVerifiedRoutes = [
+    "/consumer-upload-info",
+    "/service-provider-home",
+  ];
   useEffect(() => {
-    const loadCurrentUser = async () => {
+    const loadCurrentConsumer = async () => {
       try {
         const response = await axios.get(
           "/api/v1/consumer/load-current-consumer"
@@ -43,17 +56,58 @@ const AuthenticatedRoutes = () => {
       } catch (error) {
         console.log(error?.response?.data?.message);
       } finally {
-        setLoading(false);
+        setConsumerLoading(false);
       }
     };
-    loadCurrentUser();
+    loadCurrentConsumer();
+    const loadCurrentServiceProvider = async () => {
+      try {
+        const response = await axios.get(
+          "/api/v1/service-provider/load-current-service-provider"
+        );
+        if (response.data) {
+          setServiceProviderAuthenticated(true);
+        }
+        setServiceProvider(response.data.serviceProvider);
+      } catch (error) {
+        console.log(error?.response?.data?.message);
+      } finally {
+        setServiceProviderLoading(false);
+      }
+    };
+    loadCurrentServiceProvider();
   }, []);
 
-  if (isLoading && location.pathname === "/consumer-upload-info") {
+  if (isConsumerLoading && location.pathname === "/consumer-upload-info") {
     return (
       <div className="w-screen h-screen flex justify-center items-center">
         <LoaderBars />
       </div>
+    );
+  }
+  if (
+    isServiceProviderLoading &&
+    serviceProviderVerifiedRoutes.includes(location.pathname)
+  ) {
+    return (
+      <div className="w-screen h-screen flex justify-center items-center">
+        <LoaderBars />
+      </div>
+    );
+  }
+
+  if (
+    !isServiceProviderLoading &&
+    location.pathname === "/service-provider-home" &&
+    !serviceProvider?.isAccountVerified
+  ) {
+    return navigate(
+      "/service-provider-account-verification/please wait for your account verification",
+      {
+        state: {
+          message: "You can't access this page until your account is verified.",
+        },
+      }
     );
   }
 
@@ -84,13 +138,22 @@ const AuthenticatedRoutes = () => {
         path="/consumer-confirm-email/:token"
         element={<ConsumerVerifyEmail />}
       />
-      <Route path="/service-provider-home" element={<ServiceProviderHome />} />
+      <Route
+        path="/service-provider-home"
+        element={
+          isServiceProviderAuthenticated ? (
+            <ServiceProviderHome />
+          ) : (
+            <Navigate to={"/service-provider-sign-in"} />
+          )
+        }
+      />
       <Route
         path="/service-provider-sign-in"
         element={<ServiceProviderSignIn />}
       />
       <Route
-        path="/service-provider-send-email"
+        path="/service-provider-send-email/:message"
         element={<ServiceProviderSendEmail />}
       />
       <Route
@@ -104,6 +167,24 @@ const AuthenticatedRoutes = () => {
       <Route
         path="/service-provider-reset-password/:token"
         element={<ServiceProviderResetPassword />}
+      />
+      <Route
+        path="/service-provider-upload-info"
+        element={
+          isServiceProviderAuthenticated ? (
+            <ServiceProviderUploadInfo />
+          ) : (
+            <Navigate to={"/service-provider-upload-info"} />
+          )
+        }
+      />
+      <Route
+        path="/service-provider-confirm-email/:token"
+        element={<ServiceProviderConfirmEmail />}
+      />
+      <Route
+        path="/service-provider-account-verification/:message"
+        element={<ServiceProviderAccountVerification />}
       />
       <Route path="/admin-home" element={<AdminHome />} />
       <Route path="*" element={<NotFound />} />

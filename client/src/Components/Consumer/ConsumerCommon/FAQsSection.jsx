@@ -1,25 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const faqs = [
   {
     question: "What is the deipute policy?",
-    answer: "You can return any item within 30 days of purchase for a full refund. The item must be in its original condition and packaging."
+    answer:
+      "You can return any item within 30 days of purchase for a full refund. The item must be in its original condition and packaging.",
   },
   {
     question: "How do I track my order?",
-    answer: "After placing your order, you will receive an email with a tracking number. You can use this number to track your order on our website."
+    answer:
+      "After placing your order, you will receive an email with a tracking number. You can use this number to track your order on our website.",
   },
   {
     question: "How can I contact customer service?",
-    answer: "You can contact our customer service team via email at support@example.com or call us at 1-800-123-4567."
+    answer:
+      "You can contact our customer service team via email at support@example.com or call us at 1-800-123-4567.",
   },
   {
     question: "What payment methods do you accept?",
-    answer: "We accept all major credit cards, PayPal, and Apple Pay. Payments are processed securely through our payment gateway."
+    answer:
+      "We accept all major credit cards, PayPal, and Apple Pay. Payments are processed securely through our payment gateway.",
   },
   {
     question: "Can I change my order after it's been placed?",
-    answer: "Once an order has been placed, we cannot make changes. If you need to update your order, please contact us as soon as possible."
+    answer:
+      "Once an order has been placed, we cannot make changes. If you need to update your order, please contact us as soon as possible.",
   },
 ];
 
@@ -43,9 +48,7 @@ const FAQsSection = () => {
               {faq.question}
             </button>
             {activeIndex === index && (
-              <div className="mt-2 text-gray-700">
-                {faq.answer}
-              </div>
+              <div className="mt-2 text-gray-700">{faq.answer}</div>
             )}
           </div>
         ))}

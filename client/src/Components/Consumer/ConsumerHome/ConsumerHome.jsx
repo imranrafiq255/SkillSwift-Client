@@ -1,22 +1,22 @@
-import React, { useEffect, useRef, useState } from "react";
-import Navbar from '../ConsumerCommon/Navbar';
-import FAQsSection from '../ConsumerCommon/FAQsSection';
-import ContactSection from '../ConsumerCommon/ContactSection';
-import Footer from '../ConsumerCommon/Footer';
-import HeroSection from './HeroSection';
-import ServicesSection from './ServicesSection';
-import PopularServicesSection from './PopularServicesSection';
+import React, { useEffect, useRef } from "react";
+import Navbar from "../ConsumerCommon/Navbar";
+import FAQsSection from "../ConsumerCommon/FAQsSection";
+import ContactSection from "../ConsumerCommon/ContactSection";
+import Footer from "../ConsumerCommon/Footer";
+import HeroSection from "./HeroSection";
+import ServicesSection from "./ServicesSection";
+import PopularServicesSection from "./PopularServicesSection";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { handleShowSuccessToast } from "../../ToastMessages/ToastMessage";
 
 const ConsumerHome = () => {
-  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  // const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
   const hasShownToast = useRef(false);
 
-  const message = location.state?.message || null;
+  const message = location?.state?.message || null;
 
   useEffect(() => {
     if (message && !hasShownToast.current) {
@@ -26,9 +26,9 @@ const ConsumerHome = () => {
     }
   }, [message, navigate, location.pathname]);
 
-  const toggleSidebar = () => {
-    setIsSidebarVisible((prevState) => !prevState);
-  };
+  // const toggleSidebar = () => {
+  //   setIsSidebarVisible((prevState) => !prevState);
+  // };
 
   return (
     <>

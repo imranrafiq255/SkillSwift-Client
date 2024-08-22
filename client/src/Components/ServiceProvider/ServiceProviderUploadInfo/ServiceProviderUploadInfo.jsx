@@ -8,17 +8,17 @@ import {
 } from "../../ToastMessages/ToastMessage";
 import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { consumerUploadInfoAction } from "../../Redux/Consumer/Actions/ConsumerActions";
 import LoaderCircles from "../../Loader/LoaderCircles";
+import { serviceProviderUploadInfoAction } from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
 // Validation Schema
 const validationSchema = Yup.object({
-  phoneNumber: Yup.string()
+  serviceProviderPhoneNumber: Yup.string()
     .matches(
       /^\+92\d{10}$/,
       "Phone number must start with +92 followed by 10 digits"
     )
     .required("Phone number is required"),
-  consumerAvatar: Yup.mixed().required("Profile picture is required"),
+  serviceProviderAvatar: Yup.mixed().required("Profile picture is required"),
 });
 
 const ServiceProviderUploadInfo = () => {
@@ -27,18 +27,19 @@ const ServiceProviderUploadInfo = () => {
   const [imagePreview, setImagePreview] = useState(null); // State for image preview
   const location = useLocation();
   const myMessage = location.state?.message || null;
+  const myMessageRef = useRef(false);
   const dispatch = useDispatch();
   const { loading, error, message } = useSelector(
-    (state) => state.consumerUploadInfoReducer
+    (state) => state.serviceProviderUploadInfoReducer
   );
   const formik = useFormik({
     initialValues: {
-      phoneNumber: "",
-      consumerAvatar: null,
+      serviceProviderPhoneNumber: "",
+      serviceProviderAvatar: null,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      dispatch(consumerUploadInfoAction(values));
+      dispatch(serviceProviderUploadInfoAction(values));
     },
   });
 
@@ -51,14 +52,15 @@ const ServiceProviderUploadInfo = () => {
         setImagePreview(reader.result);
       };
       reader.readAsDataURL(file);
-      formik.setFieldValue("consumerAvatar", file);
+      formik.setFieldValue("serviceProviderAvatar", file);
     }
   };
 
   useEffect(() => {
-    if (myMessage) {
+    if (myMessage && !myMessageRef.current) {
       handleShowSuccessToast(myMessage);
-      navigate("/consumer-home", { replace: true, state: {} });
+      myMessageRef.current = true;
+      navigate("/service-provider-upload-info", { replace: true, state: {} });
     }
   }, [myMessage, navigate]);
   useEffect(() => {
@@ -68,7 +70,12 @@ const ServiceProviderUploadInfo = () => {
         handleShowFailureToast(error);
       } else if (message) {
         console.log(message);
-        navigate("/consumer-home", { state: { message: message } });
+        navigate(
+          "/service-provider-account-verification/please wait for your account verification",
+          {
+            state: { message: message },
+          }
+        );
       }
     }
   }, [loading, message, error, navigate]);
@@ -113,10 +120,10 @@ const ServiceProviderUploadInfo = () => {
                     onChange={handleFileChange}
                   />
                 </div>
-                {formik.touched.consumerAvatar &&
-                formik.errors.consumerAvatar ? (
+                {formik.touched.serviceProviderAvatar &&
+                formik.errors.serviceProviderAvatar ? (
                   <div className="text-red-500 text-sm text-center mt-2">
-                    {formik.errors.consumerAvatar}
+                    {formik.errors.serviceProviderAvatar}
                   </div>
                 ) : null}
               </div>
@@ -125,21 +132,23 @@ const ServiceProviderUploadInfo = () => {
                 <label htmlFor="phoneNumber">Your Phone</label> <br />
                 <input
                   type="text"
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  value={formik.values.phoneNumber}
+                  id="serviceProviderPhoneNumber"
+                  name="serviceProviderPhoneNumber"
+                  value={formik.values.serviceProviderPhoneNumber}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   className={`w-full border-b-[0.5px] border-slate-400 focus:border-b-[2px] focus:border-slate-800 focus:transition-colors focus:duration-700 ease-in-out outline-none mt-2 h-11 text-xl ${
-                    formik.touched.phoneNumber && formik.errors.phoneNumber
+                    formik.touched.serviceProviderPhoneNumber &&
+                    formik.errors.serviceProviderPhoneNumber
                       ? "border-red-500"
                       : ""
                   }`}
                   placeholder="+923001234567"
                 />
-                {formik.touched.phoneNumber && formik.errors.phoneNumber ? (
+                {formik.touched.serviceProviderPhoneNumber &&
+                formik.errors.serviceProviderPhoneNumber ? (
                   <div className="text-red-500 text-sm">
-                    {formik.errors.phoneNumber}
+                    {formik.errors.serviceProviderPhoneNumber}
                   </div>
                 ) : null}
               </div>

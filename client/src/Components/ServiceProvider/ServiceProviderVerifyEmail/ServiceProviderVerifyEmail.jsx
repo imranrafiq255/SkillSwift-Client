@@ -17,13 +17,13 @@ const ServiceProviderVerifyEmail = () => {
       try {
         setLoading(true);
         const response = await axios.post(
-          `/api/v1/consumer/confirm-email/${token}`
+          `/api/v1/service-provider/verify-email/${token}`
         );
         setLoading(false);
         handleShowSuccessToast(response.data.message);
         setVerified(true);
         setTimeout(() => {
-          navigate("/consumer-upload-info");
+          navigate("/service-provider-upload-info");
         }, 2000);
       } catch (error) {
         console.log(error?.response?.data?.message);

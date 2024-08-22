@@ -5,19 +5,19 @@ const Navbar = () => {
     <nav className="bg-white shadow-md p-4 flex items-center justify-between">
       <ul className="flex space-x-6 text-gray-700 font-semibold">
         <li>
-          <a href="#">All Services</a>
+          <a href="/facebook.com">All Services</a>
         </li>
         <li>
-          <a href="#">Messages</a>
+          <a href="/facebook.com">Messages</a>
         </li>
         <li>
-          <a href="#">Service Requests</a>
+          <a href="/facebook.com">Service Requests</a>
         </li>
         <li>
-          <a href="#">Service History</a>
+          <a href="/facebook.com">Service History</a>
         </li>
         <li>
-          <a href="#">Contact Us</a>
+          <a href="/facebook.com">Contact Us</a>
         </li>
       </ul>
       <div className="flex items-center space-x-4">
