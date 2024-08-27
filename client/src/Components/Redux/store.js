@@ -9,6 +9,7 @@ import {
 } from "./Consumer/Reducers/ConsumerReducers";
 import {
   serviceProviderForgotPasswordReducer,
+  serviceProviderListedServicesReducer,
   serviceProviderResetPasswordReducer,
   serviceProviderSignInReducer,
   serviceProviderSignUpReducer,
@@ -30,6 +31,7 @@ const store = configureStore({
     serviceProviderResetPasswordReducer: serviceProviderResetPasswordReducer,
     serviceProviderSignUpReducer: serviceProviderSignUpReducer,
     serviceProviderUploadInfoReducer: serviceProviderUploadInfoReducer,
+    serviceProviderListedServicesReducer: serviceProviderListedServicesReducer,
   },
 });
 

@@ -4,10 +4,15 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import "./ServiceProviderSignIn.css";
 import { useDispatch, useSelector } from "react-redux";
-import { serviceProviderSignInAction } from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
+import {
+  serviceProviderSignInAction,
+  clearErrors,
+} from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
 import { handleShowFailureToast } from "../../ToastMessages/ToastMessage";
 import { Toaster } from "react-hot-toast";
 import LoaderCircles from "../../Loader/LoaderCircles";
+import axios from "axios";
+
 // Validation schema
 const validationSchema = Yup.object({
   serviceProviderEmail: Yup.string()
@@ -26,18 +31,19 @@ const SignIn = () => {
     (state) => state.serviceProviderSignInReducer
   );
   const dispatch = useDispatch();
+
   const eyeTogglerHandler = () => {
-    if (!eyeToggler) {
-      passwordRef.current.type = "text";
-      setEyeToggler(true);
-    } else {
-      passwordRef.current.type = "password";
-      setEyeToggler(false);
-    }
+    setEyeToggler((prevState) => !prevState);
+    passwordRef.current.type = eyeToggler ? "password" : "text";
   };
 
   const handleSubmit = async (values) => {
-    dispatch(serviceProviderSignInAction(values));
+    try {
+      dispatch(clearErrors());
+      dispatch(serviceProviderSignInAction(values));
+    } catch (err) {
+      console.log("Sign-in error: ", err);
+    }
   };
 
   const formik = useFormik({
@@ -48,6 +54,7 @@ const SignIn = () => {
     validationSchema: validationSchema,
     onSubmit: handleSubmit,
   });
+
   useEffect(() => {
     if (!loading) {
       if (error) {
@@ -55,12 +62,25 @@ const SignIn = () => {
         handleShowFailureToast(error);
       } else if (message) {
         console.log(message);
-        navigate("/service-provider-home", { state: { message } });
+        const loadServiceProvider = async () => {
+          const response = await axios.get(
+            "/api/v1/service-provider/load-current-service-provider"
+          );
+          if (response.data) {
+            if (response.data.serviceProvider.isAccountVerified) {
+              navigate("/service-provider-home", { state: { message } });
+            } else {
+              navigate(
+                "/service-provider-account-verification/your account is not verified",
+                { state: { message: "Your account is not verified" } }
+              );
+            }
+          }
+        };
+        loadServiceProvider();
       }
     }
   }, [loading, message, error, navigate]);
-  console.log(message);
-  console.log(error);
 
   return (
     <>

@@ -19,12 +19,13 @@ const validationSchema = Yup.object({
     )
     .required("Phone number is required"),
   serviceProviderAvatar: Yup.mixed().required("Profile picture is required"),
+  serviceProviderAddress: Yup.string().required("Address is required"),
 });
 
 const ServiceProviderUploadInfo = () => {
   const navigate = useNavigate();
-  const fileInputRef = useRef(null); // Ref for the file input
-  const [imagePreview, setImagePreview] = useState(null); // State for image preview
+  const fileInputRef = useRef(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const location = useLocation();
   const myMessage = location.state?.message || null;
   const myMessageRef = useRef(false);
@@ -36,6 +37,7 @@ const ServiceProviderUploadInfo = () => {
     initialValues: {
       serviceProviderPhoneNumber: "",
       serviceProviderAvatar: null,
+      serviceProviderAddress: "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -70,12 +72,9 @@ const ServiceProviderUploadInfo = () => {
         handleShowFailureToast(error);
       } else if (message) {
         console.log(message);
-        navigate(
-          "/service-provider-account-verification/please wait for your account verification",
-          {
-            state: { message: message },
-          }
-        );
+        navigate("/service-provider-home", {
+          state: { message: message },
+        });
       }
     }
   }, [loading, message, error, navigate]);
@@ -149,6 +148,30 @@ const ServiceProviderUploadInfo = () => {
                 formik.errors.serviceProviderPhoneNumber ? (
                   <div className="text-red-500 text-sm">
                     {formik.errors.serviceProviderPhoneNumber}
+                  </div>
+                ) : null}
+              </div>
+              <div className="address">
+                <label htmlFor="address">Your Address</label> <br />
+                <input
+                  type="text"
+                  id="address"
+                  name="serviceProviderAddress"
+                  value={formik.values.serviceProviderAddress}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={`w-full border-b-[0.5px] border-slate-400 focus:border-b-[2px] focus:border-slate-800 focus:transition-colors focus:duration-700 ease-in-out outline-none mt-2 h-11 text-xl ${
+                    formik.touched.serviceProviderAddress &&
+                    formik.errors.serviceProviderAddress
+                      ? "border-red-500"
+                      : ""
+                  }`}
+                  placeholder="Near noor mahel, Bhawalpur"
+                />
+                {formik.touched.serviceProviderAddress &&
+                formik.errors.serviceProviderAddress ? (
+                  <div className="text-red-500 text-sm">
+                    {formik.errors.serviceProviderAddress}
                   </div>
                 ) : null}
               </div>

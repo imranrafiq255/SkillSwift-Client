@@ -7,6 +7,10 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
+import LoaderBars from "../Loader/LoaderBars";
+import axios from "axios";
+
+// Import your components here
 import ConsumerHome from "../Consumer/ConsumerHome/ConsumerHome";
 import ConsumerSignUp from "../Consumer/ConsumerSignUp/ConsumerSignUp";
 import Welcome from "../Welcome/Welcome";
@@ -21,29 +25,32 @@ import ConsumerSendEmail from "../Consumer/ConsumerSendEmail/ConsumerSendEmail";
 import ConsumerUploadInfo from "../Consumer/ConsumerUploadInfo/ConsumerUploadInfo";
 import NotFound from "../NotFound/NotFound";
 import ConsumerVerifyEmail from "../Consumer/ConsumerVerifyEmail/ConsumerVerifyEmail";
-import LoaderBars from "../Loader/LoaderBars";
-import axios from "axios";
-// import TempComponent from "../MyTemps/TempComponent";
 import ServiceProviderResetPassword from "../ServiceProvider/ServiceProviderResetPassword/ServiceProviderResetPassword";
 import ServiceProviderSendEmail from "../ServiceProvider/ServiceProviderSendEmail/ServiceProviderSendEmail";
 import ServiceProviderForgotPassword from "../ServiceProvider/ServiceProviderForgotPassword/ServiceProviderFrogotPassword";
 import ServiceProviderUploadInfo from "../ServiceProvider/ServiceProviderUploadInfo/ServiceProviderUploadInfo";
 import ServiceProviderConfirmEmail from "../ServiceProvider/ServiceProviderVerifyEmail/ServiceProviderVerifyEmail";
 import ServiceProviderAccountVerification from "../ServiceProvider/ServiceProviderAccountVerification/ServiceProviderAccountVerification";
+import ServiceProviderAddService from "../ServiceProvider/ServiceProviderAddServices/ServiceProviderAddServices";
+import ServiceProviderTimeSlot from "../ServiceProvider/ServiceProviderTimeSlot/ServiceProviderTimeSlot";
+
 const AuthenticatedRoutes = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [isConsumerLoading, setConsumerLoading] = useState(true);
   const [isConsumerAuthenticated, setConsumerAuthenticated] = useState(false);
+
   const [isServiceProviderLoading, setServiceProviderLoading] = useState(true);
   const [isServiceProviderAuthenticated, setServiceProviderAuthenticated] =
     useState(false);
-  const navigate = useNavigate(false);
-  const [serviceProvider, setServiceProvider] = useState(null);
-  const serviceProviderVerifiedRoutes = [
-    "/consumer-upload-info",
+  const serviceProviderAuthenticatedRoutes = [
     "/service-provider-home",
+    "/service-provider-upload-info",
+    "/service-provider-add-services",
+    "/service-provider-add-time",
   ];
+  const consumerAuthenticatedRoutes = ["consumer-upload-info"];
   useEffect(() => {
     const loadCurrentConsumer = async () => {
       try {
@@ -60,6 +67,9 @@ const AuthenticatedRoutes = () => {
       }
     };
     loadCurrentConsumer();
+  }, []);
+
+  useEffect(() => {
     const loadCurrentServiceProvider = async () => {
       try {
         const response = await axios.get(
@@ -67,8 +77,25 @@ const AuthenticatedRoutes = () => {
         );
         if (response.data) {
           setServiceProviderAuthenticated(true);
+
+          if (
+            serviceProviderAuthenticatedRoutes.includes(location.pathname) &&
+            !response?.data?.serviceProvider?.isAccountVerified
+          ) {
+            navigate(
+              "/service-provider-account-verification/your account is not verified"
+            );
+          } else if (
+            location.pathname.startsWith(
+              "/service-provider-account-verification"
+            ) &&
+            response?.data?.serviceProvider?.isAccountVerified
+          ) {
+            navigate("/service-provider-home", {
+              state: { message: "Account is verified now" },
+            });
+          }
         }
-        setServiceProvider(response.data.serviceProvider);
       } catch (error) {
         console.log(error?.response?.data?.message);
       } finally {
@@ -76,57 +103,26 @@ const AuthenticatedRoutes = () => {
       }
     };
     loadCurrentServiceProvider();
-  }, []);
+  });
 
-  if (isConsumerLoading && location.pathname === "/consumer-upload-info") {
-    return (
-      <div className="w-screen h-screen flex justify-center items-center">
-        <LoaderBars />
-      </div>
-    );
-  }
   if (
-    isServiceProviderLoading &&
-    serviceProviderVerifiedRoutes.includes(location.pathname)
+    (isConsumerLoading &&
+      consumerAuthenticatedRoutes.includes(location.pathname)) ||
+    (isServiceProviderLoading &&
+      serviceProviderAuthenticatedRoutes.includes(location.pathname))
   ) {
     return (
       <div className="w-screen h-screen flex justify-center items-center">
         <LoaderBars />
       </div>
-    );
-  }
-
-  if (
-    !isServiceProviderLoading &&
-    location.pathname === "/service-provider-home" &&
-    !serviceProvider?.isAccountVerified
-  ) {
-    return navigate(
-      "/service-provider-account-verification/please wait for your account verification",
-      {
-        state: {
-          message: "You can't access this page until your account is verified.",
-        },
-      }
     );
   }
 
   return (
     <Routes>
+      {/* Public Routes */}
       <Route path="/" element={<Welcome />} />
-      {/* <Route path="/temp" element={<TempComponent />} /> */}
-      <Route path="/consumer-home" element={<ConsumerHome />} />
       <Route path="/consumer-sign-up" element={<ConsumerSignUp />} />
-      <Route
-        path="/consumer-upload-info"
-        element={
-          isConsumerAuthenticated ? (
-            <ConsumerUploadInfo />
-          ) : (
-            <Navigate to={"/consumer-sign-in"} />
-          )
-        }
-      />
       <Route path="/consumer-sign-in" element={<SignIn />} />
       <Route path="/consumer-send-email" element={<ConsumerSendEmail />} />
       <Route path="/consumer-forgot-password" element={<ForgotPassword />} />
@@ -139,14 +135,8 @@ const AuthenticatedRoutes = () => {
         element={<ConsumerVerifyEmail />}
       />
       <Route
-        path="/service-provider-home"
-        element={
-          isServiceProviderAuthenticated ? (
-            <ServiceProviderHome />
-          ) : (
-            <Navigate to={"/service-provider-sign-in"} />
-          )
-        }
+        path="/service-provider-sign-up"
+        element={<ServiceProviderSignUp />}
       />
       <Route
         path="/service-provider-sign-in"
@@ -157,10 +147,6 @@ const AuthenticatedRoutes = () => {
         element={<ServiceProviderSendEmail />}
       />
       <Route
-        path="/service-provider-sign-up"
-        element={<ServiceProviderSignUp />}
-      />
-      <Route
         path="/service-provider-forgot-password"
         element={<ServiceProviderForgotPassword />}
       />
@@ -169,57 +155,102 @@ const AuthenticatedRoutes = () => {
         element={<ServiceProviderResetPassword />}
       />
       <Route
+        path="/service-provider-confirm-email/:token"
+        element={<ServiceProviderConfirmEmail />}
+      />
+
+      {/* Protected Consumer Routes */}
+      <Route
+        path="/consumer-home"
+        element={
+          isConsumerAuthenticated ? (
+            <ConsumerHome />
+          ) : (
+            <Navigate to="/consumer-sign-in" state={{ from: location }} />
+          )
+        }
+      />
+      <Route
+        path="/consumer-upload-info"
+        element={
+          isConsumerAuthenticated ? (
+            <ConsumerUploadInfo />
+          ) : (
+            <Navigate to="/consumer-sign-in" state={{ from: location }} />
+          )
+        }
+      />
+
+      {/* Protected Service Provider Routes */}
+      <Route
+        path="/service-provider-home"
+        element={
+          isServiceProviderAuthenticated ? (
+            <ServiceProviderHome />
+          ) : (
+            <Navigate
+              to="/service-provider-sign-in"
+              state={{ from: location }}
+            />
+          )
+        }
+      />
+      <Route
         path="/service-provider-upload-info"
         element={
           isServiceProviderAuthenticated ? (
             <ServiceProviderUploadInfo />
           ) : (
-            <Navigate to={"/service-provider-upload-info"} />
+            <Navigate to="/service-provider-sign-in" />
           )
         }
       />
       <Route
-        path="/service-provider-confirm-email/:token"
-        element={<ServiceProviderConfirmEmail />}
+        path="/service-provider-account-verification/:message"
+        element={
+          isServiceProviderAuthenticated ? (
+            <ServiceProviderAccountVerification />
+          ) : (
+            <Navigate
+              to="/service-provider-sign-in"
+              state={{ from: location }}
+            />
+          )
+        }
       />
       <Route
-        path="/service-provider-account-verification/:message"
-        element={<ServiceProviderAccountVerification />}
+        path="/service-provider-add-services"
+        element={
+          isServiceProviderAuthenticated ? (
+            <ServiceProviderAddService />
+          ) : (
+            <Navigate to={"/service-provider-sign-in"} />
+          )
+        }
       />
+      <Route
+        path="/service-provider-add-time"
+        element={
+          isServiceProviderAuthenticated ? (
+            <ServiceProviderTimeSlot />
+          ) : (
+            <Navigate to={"/service-provider-sign-in"} />
+          )
+        }
+      />
+      {/* Admin Route */}
       <Route path="/admin-home" element={<AdminHome />} />
+
+      {/* Fallback for Not Found */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
 
 const AllRoutes = () => {
-  const [isConsumerAuthenticated, setConsumerAuthenticated] = useState(false);
-  const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
-
-  useEffect(() => {
-    const loadCurrentUser = async () => {
-      try {
-        const response = await axios.get(
-          "/api/v1/consumer/load-current-consumer"
-        );
-        if (response.data) {
-          setConsumerAuthenticated(true);
-        }
-      } catch (error) {
-        console.log(error?.response?.data?.message);
-      } finally {
-        setHasCheckedAuth(true);
-      }
-    };
-
-    if (!hasCheckedAuth) {
-      loadCurrentUser();
-    }
-  }, [hasCheckedAuth]);
-
   return (
     <Router>
-      <AuthenticatedRoutes isConsumerAuthenticated={isConsumerAuthenticated} />
+      <AuthenticatedRoutes />
     </Router>
   );
 };
