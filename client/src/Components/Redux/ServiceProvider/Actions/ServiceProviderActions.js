@@ -150,6 +150,67 @@ const serviceProviderListedServicesAction =
       });
     }
   };
+const serviceProviderAddTimeSlotAction =
+  (serviceProviderData) => async (dispatch) => {
+    try {
+      dispatch({
+        type: "SERVICE_PROVIDER_ADD_TIME_SLOT_REQUEST",
+      });
+      const response = await axios.post(
+        "/api/v1/service-provider/set-working-hours",
+        { serviceProviderWorkingHours: serviceProviderData }
+      );
+      dispatch({
+        type: "SERVICE_PROVIDER_ADD_TIME_SLOT_SUCCESS",
+        payload: response?.data?.message,
+      });
+    } catch (error) {
+      dispatch({
+        type: "SERVICE_PROVIDER_ADD_TIME_SLOT_FAILURE",
+        payload: handleError(error),
+      });
+    }
+  };
+
+const serviceProviderAddCNICAction =
+  (serviceProviderData) => async (dispatch) => {
+    const formData = new FormData();
+    formData.append(
+      "serviceProviderCNICImages",
+      serviceProviderData.cnicPhoto1
+    );
+    formData.append(
+      "serviceProviderCNICImages",
+      serviceProviderData.cnicPhoto2
+    );
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ", " + pair[1]);
+    }
+
+    try {
+      dispatch({
+        type: "SERVICE_PROVIDER_ADD_CNIC_REQUEST",
+      });
+      const response = await axios.post(
+        "/api/v1/service-provider/add-cnic-details",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      dispatch({
+        type: "SERVICE_PROVIDER_ADD_CNIC_SUCCESS",
+        payload: response?.data?.message,
+      });
+    } catch (error) {
+      dispatch({
+        type: "SERVICE_PROVIDER_ADD_CNIC_FAILURE",
+        payload: handleError(error),
+      });
+    }
+  };
 export {
   clearErrors,
   serviceProviderSignInAction,
@@ -158,4 +219,6 @@ export {
   serviceProviderSignUpAction,
   serviceProviderUploadInfoAction,
   serviceProviderListedServicesAction,
+  serviceProviderAddTimeSlotAction,
+  serviceProviderAddCNICAction,
 };

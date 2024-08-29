@@ -8,6 +8,8 @@ import {
   loadCurrentConsumerReducer,
 } from "./Consumer/Reducers/ConsumerReducers";
 import {
+  serviceProviderAddCNICReducer,
+  serviceProviderAddTimeSlotReducer,
   serviceProviderForgotPasswordReducer,
   serviceProviderListedServicesReducer,
   serviceProviderResetPasswordReducer,
@@ -32,6 +34,8 @@ const store = configureStore({
     serviceProviderSignUpReducer: serviceProviderSignUpReducer,
     serviceProviderUploadInfoReducer: serviceProviderUploadInfoReducer,
     serviceProviderListedServicesReducer: serviceProviderListedServicesReducer,
+    serviceProviderAddTimeSlotReducer: serviceProviderAddTimeSlotReducer,
+    serviceProviderAddCNICReducer: serviceProviderAddCNICReducer,
   },
 });
 

@@ -33,6 +33,7 @@ import ServiceProviderConfirmEmail from "../ServiceProvider/ServiceProviderVerif
 import ServiceProviderAccountVerification from "../ServiceProvider/ServiceProviderAccountVerification/ServiceProviderAccountVerification";
 import ServiceProviderAddService from "../ServiceProvider/ServiceProviderAddServices/ServiceProviderAddServices";
 import ServiceProviderTimeSlot from "../ServiceProvider/ServiceProviderTimeSlot/ServiceProviderTimeSlot";
+import ServiceProviderAddCNIC from "../ServiceProvider/ServiceProviderAddCNIC/ServiceProviderAddCNIC";
 
 const AuthenticatedRoutes = () => {
   const location = useLocation();
@@ -49,6 +50,7 @@ const AuthenticatedRoutes = () => {
     "/service-provider-upload-info",
     "/service-provider-add-services",
     "/service-provider-add-time",
+    "/service-provider-add-cnic",
   ];
   const consumerAuthenticatedRoutes = ["consumer-upload-info"];
   useEffect(() => {
@@ -233,6 +235,16 @@ const AuthenticatedRoutes = () => {
         element={
           isServiceProviderAuthenticated ? (
             <ServiceProviderTimeSlot />
+          ) : (
+            <Navigate to={"/service-provider-sign-in"} />
+          )
+        }
+      />
+      <Route
+        path="/service-provider-add-cnic"
+        element={
+          isServiceProviderAuthenticated ? (
+            <ServiceProviderAddCNIC />
           ) : (
             <Navigate to={"/service-provider-sign-in"} />
           )

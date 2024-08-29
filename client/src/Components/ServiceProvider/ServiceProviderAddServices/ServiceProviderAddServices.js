@@ -20,9 +20,9 @@ const ServiceProviderServices = () => {
   const { loading, message, error } = useSelector(
     (state) => state.serviceProviderListedServicesReducer
   );
-  const hasShownToastShown = useRef(false);
   const location = useLocation();
   const toastMessage = location?.state?.message || null;
+  const toastMessageRef = useRef(false);
   useEffect(() => {
     const loadServices = async () => {
       try {
@@ -52,12 +52,11 @@ const ServiceProviderServices = () => {
     }
   };
   useEffect(() => {
-    if (toastMessage && !hasShownToastShown.current) {
+    if (toastMessage && !toastMessage.current) {
       handleShowSuccessToast(toastMessage);
-      hasShownToastShown.current = true;
-      navigate("/service-provider-add-service", { replace: true, state: {} });
+      toastMessageRef.current = true;
     }
-  }, [toastMessage, navigate]);
+  }, [toastMessage, toastMessageRef]);
   useEffect(() => {
     if (!loading) {
       if (error) {

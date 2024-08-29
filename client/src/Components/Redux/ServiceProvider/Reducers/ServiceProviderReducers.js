@@ -155,6 +155,48 @@ const serviceProviderListedServicesReducer = createReducer(
       });
   }
 );
+const serviceProviderAddTimeSlotReducer = createReducer(
+  { loading: false, error: null, message: null },
+  (builder) => {
+    builder
+      .addCase("SERVICE_PROVIDER_ADD_TIME_SLOT_REQUEST", (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase("SERVICE_PROVIDER_ADD_TIME_SLOT_SUCCESS", (state, action) => {
+        state.loading = false;
+        state.message = action.payload;
+      })
+      .addCase("SERVICE_PROVIDER_ADD_TIME_SLOT_FAILURE", (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.error = null;
+      });
+  }
+);
+const serviceProviderAddCNICReducer = createReducer(
+  { loading: false, message: null, error: null },
+  (builder) => {
+    builder
+      .addCase("SERVICE_PROVIDER_ADD_CNIC_REQUEST", (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase("SERVICE_PROVIDER_ADD_CNIC_SUCCESS", (state, action) => {
+        state.loading = false;
+        state.message = action.payload;
+      })
+      .addCase("SERVICE_PROVIDER_ADD_CNIC_FAILURE", (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.error = null;
+      });
+  }
+);
 export {
   serviceProviderSignInReducer,
   serviceProviderForgotPasswordReducer,
@@ -162,4 +204,6 @@ export {
   serviceProviderSignUpReducer,
   serviceProviderUploadInfoReducer,
   serviceProviderListedServicesReducer,
+  serviceProviderAddTimeSlotReducer,
+  serviceProviderAddCNICReducer,
 };
