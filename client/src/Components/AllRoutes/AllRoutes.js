@@ -34,6 +34,11 @@ import ServiceProviderAccountVerification from "../ServiceProvider/ServiceProvid
 import ServiceProviderAddService from "../ServiceProvider/ServiceProviderAddServices/ServiceProviderAddServices";
 import ServiceProviderTimeSlot from "../ServiceProvider/ServiceProviderTimeSlot/ServiceProviderTimeSlot";
 import ServiceProviderAddCNIC from "../ServiceProvider/ServiceProviderAddCNIC/ServiceProviderAddCNIC";
+import ServiceProviderPost from "../ServiceProvider/ServiceProviderPost/ServiceProviderPost";
+import ServiceProviderOrder from "../ServiceProvider/ServiceProviderOrder/ServiceProviderOrder";
+import ServiceProviderServices from "../ServiceProvider/ServiceProviderServices/ServiceProviderServices";
+import ServiceProviderSetting from "../ServiceProvider/ServiceProviderSetting/ServiceProviderSetting";
+import ServiceProviderChatSection from "../ServiceProvider/ServiceProviderChatSection/ServiceProviderChatSection";
 
 const AuthenticatedRoutes = () => {
   const location = useLocation();
@@ -51,6 +56,11 @@ const AuthenticatedRoutes = () => {
     "/service-provider-add-services",
     "/service-provider-add-time",
     "/service-provider-add-cnic",
+    "/service-provider-post",
+    "/service-provider-order",
+    "/service-provider-services",
+    "/service-provider-chat-section",
+    "/service-provider-setting",
   ];
   const consumerAuthenticatedRoutes = ["consumer-upload-info"];
   useEffect(() => {
@@ -184,19 +194,7 @@ const AuthenticatedRoutes = () => {
       />
 
       {/* Protected Service Provider Routes */}
-      <Route
-        path="/service-provider-home"
-        element={
-          isServiceProviderAuthenticated ? (
-            <ServiceProviderHome />
-          ) : (
-            <Navigate
-              to="/service-provider-sign-in"
-              state={{ from: location }}
-            />
-          )
-        }
-      />
+      <Route path="/service-provider-home" element={<ServiceProviderHome />} />
       <Route
         path="/service-provider-upload-info"
         element={
@@ -245,6 +243,56 @@ const AuthenticatedRoutes = () => {
         element={
           isServiceProviderAuthenticated ? (
             <ServiceProviderAddCNIC />
+          ) : (
+            <Navigate to={"/service-provider-sign-in"} />
+          )
+        }
+      />
+      <Route
+        path="/service-provider-post"
+        element={
+          isServiceProviderAuthenticated ? (
+            <ServiceProviderPost />
+          ) : (
+            <Navigate to={"/service-provider-sign-in"} />
+          )
+        }
+      />
+      <Route
+        path="/service-provider-order"
+        element={
+          isServiceProviderAuthenticated ? (
+            <ServiceProviderOrder />
+          ) : (
+            <Navigate to={"/service-provider-sign-in"} />
+          )
+        }
+      />
+      <Route
+        path="/service-provider-services"
+        element={
+          isServiceProviderAuthenticated ? (
+            <ServiceProviderServices />
+          ) : (
+            <Navigate to={"/service-provider-sign-in"} />
+          )
+        }
+      />
+      <Route
+        path="/service-provider-setting"
+        element={
+          isServiceProviderAuthenticated ? (
+            <ServiceProviderSetting />
+          ) : (
+            <Navigate to={"/service-provider-sign-in"} />
+          )
+        }
+      />
+      <Route
+        path="/service-provider-chat-section"
+        element={
+          isServiceProviderAuthenticated ? (
+            <ServiceProviderChatSection />
           ) : (
             <Navigate to={"/service-provider-sign-in"} />
           )

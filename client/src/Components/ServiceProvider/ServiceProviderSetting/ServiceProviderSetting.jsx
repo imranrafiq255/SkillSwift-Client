@@ -1,0 +1,165 @@
+import React from "react";
+import { Link } from "react-router-dom";
+
+const ServiceProviderSetting = () => {
+  return (
+    <>
+      <div className="setting-container">
+        <div className="top-border h-20 w-full bg-[#dadada] flex justify-center items-center">
+          <div className="lg:w-[80%] xl:w-[60%] flex items-center gap-14 xl:gap-5 lg:gap-10">
+            <img
+              src={require("../../../Assets/left-arrow.png")}
+              alt=""
+              className="w-6 h-6 lg:w-7 lg:h-7 xl:w-10 xl:h-10 cursor-pointer"
+            />
+            <h1 className="text-lg lg:text-lg xl:text-2xl font-bold text-[#4e97fd] uppercase">
+              Service Provider Setting
+            </h1>
+          </div>
+        </div>
+        <div className="setting flex justify-center">
+          <div className="w-11/12 lg:w-8/12 xl:w-6/12 flex flex-col items-center mt-5 bg-slate-200 rounded-2xl">
+            <div className="profile-pic h-[200px] w-[200px] rounded-full border-slate-700 border-2 flex justify-center items-center p-2 relative mt-4">
+              <img
+                src={require("../../../Assets/avatar.png")}
+                alt=""
+                className="w-full h-full rounded-full"
+              />
+              <div className="w-10 h-10 absolute bottom-5 right-3 p-2 bg-[#f904d4] rounded-full flex justify-center items-center cursor-pointer">
+                <img
+                  src={require("../../../Assets/photo-camera.png")}
+                  alt=""
+                  className="w-[80%] h-[80%] invert"
+                />
+              </div>
+            </div>
+            <div className="setting-options flex flex-col items-center w-full my-10 gap-5">
+              <Link className="w-[90%] lg:w-[70%] xl:w-[50%]">
+                <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
+                  <div className="basis-[80%]">
+                    <h1 className="text-black text-center">UPLOAD INFO</h1>
+                  </div>
+                  <div className="basis-[20%]">
+                    <img
+                      src={require("../../../Assets/next-arrow.png")}
+                      alt=""
+                      className="w-10 h-10"
+                    />
+                  </div>
+                </div>
+              </Link>
+              <Link className="w-[90%] lg:w-[70%] xl:w-[50%]">
+                <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
+                  <div className="basis-[80%]">
+                    <h1 className="text-black text-center">ADD SERVICES</h1>
+                  </div>
+                  <div className="basis-[20%]">
+                    <img
+                      src={require("../../../Assets/next-arrow.png")}
+                      alt=""
+                      className="w-10 h-10"
+                    />
+                  </div>
+                </div>
+              </Link>
+              <Link className="w-[90%] lg:w-[70%] xl:w-[50%]">
+                <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
+                  <div className="basis-[80%]">
+                    <h1 className="text-black text-center">
+                      ADD WORKING HOURS
+                    </h1>
+                  </div>
+                  <div className="basis-[20%]">
+                    <img
+                      src={require("../../../Assets/next-arrow.png")}
+                      alt=""
+                      className="w-10 h-10"
+                    />
+                  </div>
+                </div>
+              </Link>
+              <Link className="w-[90%] lg:w-[70%] xl:w-[50%]">
+                <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
+                  <div className="basis-[80%]">
+                    <h1 className="text-black text-center uppercase">
+                      Manage Posts
+                    </h1>
+                  </div>
+                  <div className="basis-[20%]">
+                    <img
+                      src={require("../../../Assets/next-arrow.png")}
+                      alt=""
+                      className="w-10 h-10"
+                    />
+                  </div>
+                </div>
+              </Link>
+              <Link className="w-[90%] lg:w-[70%] xl:w-[50%]">
+                <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
+                  <div className="basis-[80%]">
+                    <h1 className="text-black text-center uppercase">
+                      Manage Orders
+                    </h1>
+                  </div>
+                  <div className="basis-[20%]">
+                    <img
+                      src={require("../../../Assets/next-arrow.png")}
+                      alt=""
+                      className="w-10 h-10"
+                    />
+                  </div>
+                </div>
+              </Link>
+              <Link className="w-[90%] lg:w-[70%] xl:w-[50%]">
+                <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
+                  <div className="basis-[80%]">
+                    <h1 className="text-black text-center uppercase">
+                      Open Chat Section
+                    </h1>
+                  </div>
+                  <div className="basis-[20%]">
+                    <img
+                      src={require("../../../Assets/next-arrow.png")}
+                      alt=""
+                      className="w-10 h-10"
+                    />
+                  </div>
+                </div>
+              </Link>
+              <Link className="w-[90%] lg:w-[70%] xl:w-[50%]">
+                <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
+                  <div className="basis-[80%]">
+                    <h1 className="text-black text-center uppercase">LOGIN</h1>
+                  </div>
+                  <div className="basis-[20%]">
+                    <img
+                      src={require("../../../Assets/next-arrow.png")}
+                      alt=""
+                      className="w-10 h-10"
+                    />
+                  </div>
+                </div>
+              </Link>
+              <Link className="w-[90%] lg:w-[70%] xl:w-[50%]">
+                <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
+                  <div className="basis-[80%]">
+                    <h1 className="text-black text-center uppercase">LOGOUT</h1>
+                  </div>
+                  <div className="basis-[20%]">
+                    <img
+                      src={require("../../../Assets/logout.png")}
+                      alt=""
+                      className="w-10 h-10"
+                    />
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default ServiceProviderSetting;
