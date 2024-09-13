@@ -107,7 +107,7 @@ const serviceProviderSignUpReducer = createReducer(
         state.error = action.payload;
       })
       .addCase("CLEAR_ERRORS", (state) => {
-        state.error = null; // Handle error clearing
+        state.error = null;
       });
   }
 );
@@ -197,6 +197,263 @@ const serviceProviderAddCNICReducer = createReducer(
       });
   }
 );
+const serviceProviderAddServicePostReducer = createReducer(
+  {
+    loading: false,
+    message: null,
+    error: null,
+  },
+  (builder) => {
+    builder
+      .addCase("SERVICE_PROVIDER_ADD_SERVICE_POST_REQUEST", (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase("SERVICE_PROVIDER_ADD_SERVICE_POST_SUCCESS", (state, action) => {
+        state.loading = false;
+        state.message = action.payload;
+      })
+      .addCase("SERVICE_PROVIDER_ADD_SERVICE_POST_FAILURE", (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.error = null;
+      });
+  }
+);
+const loadCurrentServiceProviderReducer = createReducer(
+  {
+    serviceProvider: null,
+    serviceProviderLoading: false,
+    serviceProviderError: null,
+  },
+  (builder) => {
+    builder
+      .addCase("LOAD_CURRENT_SERVICE_PROVIDER_REQUEST", (state) => {
+        state.serviceProviderLoading = true;
+        state.serviceProviderError = null;
+      })
+      .addCase("LOAD_CURRENT_SERVICE_PROVIDER_SUCCESS", (state, action) => {
+        state.serviceProviderLoading = false;
+        state.serviceProvider = action.payload;
+      })
+      .addCase("LOAD_CURRENT_SERVICE_PROVIDER_FAILURE", (state, action) => {
+        state.serviceProviderLoading = false;
+        state.serviceProviderError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.serviceProviderError = null;
+      });
+  }
+);
+
+// Orders
+const loadPendingOrdersReducer = createReducer(
+  { pendingLoading: false, pendingOrders: null, pendingError: null },
+  (builder) => {
+    builder
+      .addCase("LOAD_PENDING_ORDERS_REQUEST", (state) => {
+        state.pendingLoading = true;
+        state.pendingError = null;
+      })
+      .addCase("LOAD_PENDING_ORDERS_SUCCESS", (state, action) => {
+        state.pendingLoading = false;
+        state.pendingOrders = action.payload;
+      })
+      .addCase("LOAD_PENDING_ORDERS_FAILURE", (state, action) => {
+        state.pendingLoading = false;
+        state.pendingError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.pendingError = null;
+      });
+  }
+);
+const loadCompletedOrdersReducer = createReducer(
+  { completedLoading: false, completedError: null, completedOrders: null },
+  (builder) => {
+    builder
+      .addCase("LOAD_COMPLETED_ORDERS_REQUEST", (state) => {
+        state.completedLoading = true;
+        state.completedError = null;
+      })
+      .addCase("LOAD_COMPLETED_ORDERS_SUCCESS", (state, action) => {
+        state.completedLoading = false;
+        state.completedOrders = action.payload;
+      })
+      .addCase("LOAD_COMPLETED_ORDERS_FAILURE", (state, action) => {
+        state.completedLoading = false;
+        state.completedError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.completedError = null;
+      });
+  }
+);
+const loadAcceptedOrdersReducer = createReducer(
+  { acceptedLoading: false, acceptedError: null, acceptedOrders: null },
+  (builder) => {
+    builder
+      .addCase("LOAD_ACCEPTED_ORDERS_REQUEST", (state) => {
+        state.acceptedLoading = true;
+        state.acceptedError = null;
+      })
+      .addCase("LOAD_ACCEPTED_ORDERS_SUCCESS", (state, action) => {
+        state.acceptedLoading = false;
+        state.acceptedOrders = action.payload;
+      })
+      .addCase("LOAD_ACCEPTED_ORDERS_FAILURE", (state, action) => {
+        state.acceptedLoading = false;
+        state.acceptedError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.acceptedError = null;
+      });
+  }
+);
+const loadRejectedOrdersReducer = createReducer(
+  { rejectedLoading: false, rejectedError: null, rejectedOrders: null },
+  (builder) => {
+    builder
+      .addCase("LOAD_REJECTED_ORDERS_REQUEST", (state) => {
+        state.rejectedLoading = true;
+        state.rejectedError = null;
+      })
+      .addCase("LOAD_REJECTED_ORDERS_SUCCESS", (state, action) => {
+        state.rejectedLoading = false;
+        state.rejectedOrders = action.payload;
+      })
+      .addCase("LOAD_REJECTED_ORDERS_FAILURE", (state, action) => {
+        state.rejectedLoading = false;
+        state.rejectedError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.rejectedError = null;
+      });
+  }
+);
+const loadCancelledOrdersReducer = createReducer(
+  { cancelledLoading: false, cancelledError: null, cancelledOrders: null },
+  (builder) => {
+    builder
+      .addCase("LOAD_CANCELLED_ORDERS_REQUEST", (state) => {
+        state.cancelledLoading = true;
+        state.cancelledError = null;
+      })
+      .addCase("LOAD_CANCELLED_ORDERS_SUCCESS", (state, action) => {
+        state.cancelledLoading = false;
+        state.cancelledOrders = action.payload;
+      })
+      .addCase("LOAD_CANCELLED_ORDERS_FAILURE", (state, action) => {
+        state.cancelledLoading = false;
+        state.cancelledError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.cancelledError = null;
+      });
+  }
+);
+const acceptOrderReducer = createReducer(
+  {
+    acceptOrderLoading: false,
+    acceptOrderError: null,
+    acceptOrderMessage: null,
+  },
+  (builder) => {
+    builder
+      .addCase("ACCEPT_ORDER_REQUEST", (state) => {
+        state.acceptOrderLoading = true;
+        state.acceptOrderError = null;
+      })
+      .addCase("ACCEPT_ORDER_SUCCESS", (state, action) => {
+        state.acceptOrderLoading = false;
+        state.acceptOrderMessage = action.payload;
+      })
+      .addCase("ACCEPT_ORDER_FAILURE", (state, action) => {
+        state.acceptOrderLoading = false;
+        state.acceptOrderError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.acceptOrderError = null;
+      });
+  }
+);
+const rejectOrderReducer = createReducer(
+  {
+    rejectOrderLoading: false,
+    rejectOrderError: null,
+    rejectOrderMessage: null,
+  },
+  (builder) => {
+    builder
+      .addCase("REJECT_ORDER_REQUEST", (state) => {
+        state.rejectOrderLoading = true;
+        state.rejectOrderError = null;
+      })
+      .addCase("REJECT_ORDER_SUCCESS", (state, action) => {
+        state.rejectOrderLoading = false;
+        state.rejectOrderMessage = action.payload;
+      })
+      .addCase("REJECT_ORDER_FAILURE", (state, action) => {
+        state.rejectOrderLoading = false;
+        state.rejectOrderError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.rejectOrderError = null;
+      });
+  }
+);
+const cancelOrderReducer = createReducer(
+  {
+    cancelOrderLoading: false,
+    cancelOrderError: null,
+    cancelOrderMessage: null,
+  },
+  (builder) => {
+    builder
+      .addCase("CANCEL_ORDER_REQUEST", (state) => {
+        state.cancelOrderLoading = true;
+        state.cancelOrderError = null;
+      })
+      .addCase("CANCEL_ORDER_SUCCESS", (state, action) => {
+        state.cancelOrderLoading = false;
+        state.cancelOrderMessage = action.payload;
+      })
+      .addCase("CANCEL_ORDER_FAILURE", (state, action) => {
+        state.cancelOrderLoading = false;
+        state.cancelOrderError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.cancelOrderError = null;
+      });
+  }
+);
+const completeOrderReducer = createReducer(
+  {
+    completeOrderLoading: false,
+    completeOrderError: null,
+    completeOrderMessage: null,
+  },
+  (builder) => {
+    builder
+      .addCase("COMPLETE_ORDER_REQUEST", (state) => {
+        state.completeOrderLoading = true;
+        state.completeOrderError = null;
+      })
+      .addCase("COMPLETE_ORDER_SUCCESS", (state, action) => {
+        state.completeOrderLoading = false;
+        state.completeOrderMessage = action.payload;
+      })
+      .addCase("COMPLETE_ORDER_FAILURE", (state, action) => {
+        state.completeOrderLoading = false;
+        state.completeOrderError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.completeOrderError = null;
+      });
+  }
+);
 export {
   serviceProviderSignInReducer,
   serviceProviderForgotPasswordReducer,
@@ -206,4 +463,15 @@ export {
   serviceProviderListedServicesReducer,
   serviceProviderAddTimeSlotReducer,
   serviceProviderAddCNICReducer,
+  serviceProviderAddServicePostReducer,
+  loadCurrentServiceProviderReducer,
+  loadPendingOrdersReducer,
+  loadCompletedOrdersReducer,
+  loadAcceptedOrdersReducer,
+  loadRejectedOrdersReducer,
+  loadCancelledOrdersReducer,
+  acceptOrderReducer,
+  rejectOrderReducer,
+  cancelOrderReducer,
+  completeOrderReducer,
 };

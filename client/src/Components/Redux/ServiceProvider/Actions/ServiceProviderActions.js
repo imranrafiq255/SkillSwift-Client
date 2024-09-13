@@ -211,6 +211,222 @@ const serviceProviderAddCNICAction =
       });
     }
   };
+const serviceProviderAddServicePostAction =
+  (serviceProviderData) => async (dispatch) => {
+    try {
+      dispatch({
+        type: "SERVICE_PROVIDER_ADD_SERVICE_POST_REQUEST",
+      });
+      const response = await axios.post(
+        "/api/v1/service-provider/add-service-post",
+        serviceProviderData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      dispatch({
+        type: "SERVICE_PROVIDER_ADD_SERVICE_POST_SUCCESS",
+        payload: response?.data?.message,
+      });
+    } catch (error) {
+      dispatch({
+        type: "SERVICE_PROVIDER_ADD_SERVICE_POST_FAILURE",
+        payload: handleError(error),
+      });
+    }
+  };
+const loadCurrentServiceProviderAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LOAD_CURRENT_SERVICE_PROVIDER_REQUEST",
+    });
+    const response = await axios.get(
+      "/api/v1/service-provider/load-current-service-provider"
+    );
+    dispatch({
+      type: "LOAD_CURRENT_SERVICE_PROVIDER_SUCCESS",
+      payload: response?.data?.serviceProvider,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_CURRENT_SERVICE_PROVIDER_FAILURE",
+      payload: handleError(error),
+    });
+  }
+};
+const loadPendingOrdersAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LOAD_PENDING_ORDERS_REQUEST",
+    });
+    const response = await axios.get(
+      "/api/v1/service-provider/load-pending-orders"
+    );
+    dispatch({
+      type: "LOAD_PENDING_ORDERS_SUCCESS",
+      payload: response?.data?.pendingOrders,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_PENDING_ORDERS_FAILURE",
+      payload: handleError(error),
+    });
+  }
+};
+const loadCompletedOrdersAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LOAD_COMPLETED_ORDERS_REQUEST",
+    });
+    const response = await axios.get(
+      "/api/v1/service-provider/load-completed-orders"
+    );
+    dispatch({
+      type: "LOAD_COMPLETED_ORDERS_SUCCESS",
+      payload: response?.data?.completedOrders,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_COMPLETED_ORDERS_FAILURE",
+      payload: handleError(error),
+    });
+  }
+};
+const loadRejectedOrdersAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LOAD_REJECTED_ORDERS_REQUEST",
+    });
+    const response = await axios.get(
+      "/api/v1/service-provider/load-rejected-orders"
+    );
+    dispatch({
+      type: "LOAD_REJECTED_ORDERS_SUCCESS",
+      payload: response?.data?.rejectedOrders,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_REJECTED_ORDERS_FAILURE",
+      payload: handleError(error),
+    });
+  }
+};
+const loadAcceptedOrdersAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LOAD_ACCEPTED_ORDERS_REQUEST",
+    });
+    const response = await axios.get(
+      "/api/v1/service-provider/load-accepted-orders"
+    );
+    dispatch({
+      type: "LOAD_ACCEPTED_ORDERS_SUCCESS",
+      payload: response?.data?.acceptedOrders,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_ACCEPTED_ORDERS_FAILURE",
+      payload: handleError(error),
+    });
+  }
+};
+const loadCancelledOrdersAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LOAD_CANCELLED_ORDERS_REQUEST",
+    });
+    const response = await axios.get(
+      "/api/v1/service-provider/load-cancelled-orders"
+    );
+    dispatch({
+      type: "LOAD_CANCELLED_ORDERS_SUCCESS",
+      payload: response?.data?.cancelledOrders,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_CANCELLED_ORDERS_FAILURE",
+      payload: handleError(error),
+    });
+  }
+};
+const acceptOrderAction = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "ACCEPT_ORDER_REQUEST",
+    });
+    const response = await axios.post(
+      `/api/v1/service-provider/accept-order/${id}`
+    );
+    dispatch({
+      type: "ACCEPT_ORDER_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "ACCEPT_ORDER_FAILURE",
+      payload: handleError(error),
+    });
+  }
+};
+const rejectOrderAction = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "REJECT_ORDER_REQUEST",
+    });
+    const response = await axios.delete(
+      `/api/v1/service-provider/reject-order/${id}`
+    );
+    dispatch({
+      type: "REJECT_ORDER_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "REJECT_ORDER_FAILURE",
+      payload: handleError(error),
+    });
+  }
+};
+const cancelOrderAction = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "CANCEL_ORDER_REQUEST",
+    });
+    const response = await axios.delete(
+      `/api/v1/service-provider/cancel-order/${id}`
+    );
+    dispatch({
+      type: "CANCEL_ORDER_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "CANCEL_ORDER_FAILURE",
+      payload: handleError(error),
+    });
+  }
+};
+const completeOrderAction = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "COMPLETE_ORDER_REQUEST",
+    });
+    const response = await axios.post(
+      `/api/v1/service-provider/complete-order/${id}`
+    );
+    dispatch({
+      type: "COMPLETE_ORDER_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "COMPLETE_ORDER_FAILURE",
+      payload: handleError(error),
+    });
+  }
+};
 export {
   clearErrors,
   serviceProviderSignInAction,
@@ -221,4 +437,15 @@ export {
   serviceProviderListedServicesAction,
   serviceProviderAddTimeSlotAction,
   serviceProviderAddCNICAction,
+  serviceProviderAddServicePostAction,
+  loadCurrentServiceProviderAction,
+  loadPendingOrdersAction,
+  loadCompletedOrdersAction,
+  loadRejectedOrdersAction,
+  loadAcceptedOrdersAction,
+  loadCancelledOrdersAction,
+  acceptOrderAction,
+  rejectOrderAction,
+  cancelOrderAction,
+  completeOrderAction,
 };

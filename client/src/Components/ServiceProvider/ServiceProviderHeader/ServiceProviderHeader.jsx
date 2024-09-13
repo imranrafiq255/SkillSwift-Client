@@ -43,11 +43,13 @@ const ServiceProviderHeader = () => {
           <div className="logo-left hidden lg:w-5/12 lg:flex justify-end">
             <div className="mr-10 gap-6 flex">
               <div className="relative hidden lg:block">
-                <img
-                  src={require("../../../Assets/message.png")}
-                  alt=""
-                  className="w-5 h-5 cursor-pointer"
-                />
+                <Link to={"/service-provider-chat-section"}>
+                  <img
+                    src={require("../../../Assets/message.png")}
+                    alt=""
+                    className="w-5 h-5 cursor-pointer"
+                  />
+                </Link>
                 {false ? (
                   <div className="dot w-2 h-2 bg-red-600 rounded-full absolute top-0 -right-1"></div>
                 ) : (
@@ -55,11 +57,13 @@ const ServiceProviderHeader = () => {
                 )}
               </div>
               <div className="relative hidden lg:block">
-                <img
-                  src={require("../../../Assets/notification.png")}
-                  alt=""
-                  className="w-5 h-5 cursor-pointer"
-                />
+                <Link to={"/service-provider-notification"}>
+                  <img
+                    src={require("../../../Assets/notification.png")}
+                    alt=""
+                    className="w-5 h-5 cursor-pointer"
+                  />
+                </Link>
                 {false ? (
                   <div className="dot w-2 h-2 bg-red-600 rounded-full absolute top-0 right-0"></div>
                 ) : (
@@ -117,7 +121,7 @@ const ServiceProviderHeader = () => {
       </div>
       {showing && (
         <div
-          className={`mobile-screen-container w-full h-screen bg-slate-800 absolute top-0 left-0 block lg:hidden ${
+          className={`mobile-screen-container w-full h-screen bg-slate-800 absolute top-0 left-0 block lg:hidden z-20 ${
             showing ? "showing" : ""
           }`}
         >
@@ -134,11 +138,13 @@ const ServiceProviderHeader = () => {
           <div className="icons-container w-full flex justify-center items-center bg-white h-20 mt-10">
             <div className="w-[70%] flex justify-between items-center">
               <div className="relative">
-                <img
-                  src={require("../../../Assets/message.png")}
-                  alt=""
-                  className="w-5 h-5 cursor-pointer"
-                />
+                <Link to={"/service-provider-chat-section"}>
+                  <img
+                    src={require("../../../Assets/message.png")}
+                    alt=""
+                    className="w-5 h-5 cursor-pointer"
+                  />
+                </Link>
                 {false ? (
                   <div className="dot w-2 h-2 bg-red-600 rounded-full absolute top-0 -right-1"></div>
                 ) : (
@@ -146,22 +152,26 @@ const ServiceProviderHeader = () => {
                 )}
               </div>
               <div className="relative">
-                <img
-                  src={require("../../../Assets/notification.png")}
-                  alt=""
-                  className="w-5 h-5 cursor-pointer"
-                />
+                <Link to={"/service-provider-notification"}>
+                  <img
+                    src={require("../../../Assets/notification.png")}
+                    alt=""
+                    className="w-5 h-5 cursor-pointer"
+                  />
+                </Link>
                 {false ? (
                   <div className="dot w-2 h-2 bg-red-600 rounded-full absolute top-0 right-0"></div>
                 ) : (
                   ""
                 )}
               </div>
-              <img
-                src={require("../../../Assets/settings.png")}
-                alt=""
-                className="w-5 h-5 cursor-pointer hover:rotate-[180deg] transition-transform ease-in-out duration-700"
-              />
+              <Link to={"/service-provider-setting"}>
+                <img
+                  src={require("../../../Assets/settings.png")}
+                  alt=""
+                  className="w-5 h-5 cursor-pointer hover:rotate-[180deg] transition-transform ease-in-out duration-700"
+                />
+              </Link>
             </div>
           </div>
           <div className="mobile-screen-navbar-container flex flex-col justify-evenly">

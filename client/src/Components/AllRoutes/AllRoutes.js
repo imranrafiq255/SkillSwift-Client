@@ -39,6 +39,7 @@ import ServiceProviderOrder from "../ServiceProvider/ServiceProviderOrder/Servic
 import ServiceProviderServices from "../ServiceProvider/ServiceProviderServices/ServiceProviderServices";
 import ServiceProviderSetting from "../ServiceProvider/ServiceProviderSetting/ServiceProviderSetting";
 import ServiceProviderChatSection from "../ServiceProvider/ServiceProviderChatSection/ServiceProviderChatSection";
+import ServiceProviderNotification from "../ServiceProvider/ServiceProviderNotification/ServiceProviderNotification";
 
 const AuthenticatedRoutes = () => {
   const location = useLocation();
@@ -293,6 +294,16 @@ const AuthenticatedRoutes = () => {
         element={
           isServiceProviderAuthenticated ? (
             <ServiceProviderChatSection />
+          ) : (
+            <Navigate to={"/service-provider-sign-in"} />
+          )
+        }
+      />
+      <Route
+        path="/service-provider-notification"
+        element={
+          isServiceProviderAuthenticated ? (
+            <ServiceProviderNotification />
           ) : (
             <Navigate to={"/service-provider-sign-in"} />
           )

@@ -11,8 +11,8 @@ const SkeletonPostLoader = () => {
             <h1 className="text-white p-4 font-bold lg:text-xl text-lg">
               <Skeleton width={150} />
             </h1>
-            <div className="bg-[#4e97fd] w-20 h-8 mr-5 flex justify-center items-center shadow-xl rounded-lg">
-              <Skeleton width={30} />
+            <div className="bg-[#dadada] w-20 h-8 mr-5 flex justify-center items-center shadow-xl rounded-lg">
+              <Skeleton width={130} />
             </div>
           </div>
           <div className="message px-4 py-1">

@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 const ServiceProviderSetting = () => {
+  const navigate = useNavigate();
   return (
     <>
       <div className="setting-container">
@@ -11,6 +12,7 @@ const ServiceProviderSetting = () => {
               src={require("../../../Assets/left-arrow.png")}
               alt=""
               className="w-6 h-6 lg:w-7 lg:h-7 xl:w-10 xl:h-10 cursor-pointer"
+              onClick={() => navigate(-1)}
             />
             <h1 className="text-lg lg:text-lg xl:text-2xl font-bold text-[#4e97fd] uppercase">
               Service Provider Setting
@@ -34,7 +36,10 @@ const ServiceProviderSetting = () => {
               </div>
             </div>
             <div className="setting-options flex flex-col items-center w-full my-10 gap-5">
-              <Link className="w-[90%] lg:w-[70%] xl:w-[50%]">
+              <Link
+                className="w-[90%] lg:w-[70%] xl:w-[50%]"
+                to={"/service-provider-upload-info"}
+              >
                 <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
                   <div className="basis-[80%]">
                     <h1 className="text-black text-center">UPLOAD INFO</h1>
@@ -48,7 +53,10 @@ const ServiceProviderSetting = () => {
                   </div>
                 </div>
               </Link>
-              <Link className="w-[90%] lg:w-[70%] xl:w-[50%]">
+              <Link
+                className="w-[90%] lg:w-[70%] xl:w-[50%]"
+                to={"/service-provider-add-services"}
+              >
                 <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
                   <div className="basis-[80%]">
                     <h1 className="text-black text-center">ADD SERVICES</h1>
@@ -62,7 +70,10 @@ const ServiceProviderSetting = () => {
                   </div>
                 </div>
               </Link>
-              <Link className="w-[90%] lg:w-[70%] xl:w-[50%]">
+              <Link
+                className="w-[90%] lg:w-[70%] xl:w-[50%]"
+                to={"/service-provider-add-time"}
+              >
                 <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
                   <div className="basis-[80%]">
                     <h1 className="text-black text-center">
@@ -78,7 +89,10 @@ const ServiceProviderSetting = () => {
                   </div>
                 </div>
               </Link>
-              <Link className="w-[90%] lg:w-[70%] xl:w-[50%]">
+              <Link
+                className="w-[90%] lg:w-[70%] xl:w-[50%]"
+                to={"/service-provider-post"}
+              >
                 <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
                   <div className="basis-[80%]">
                     <h1 className="text-black text-center uppercase">
@@ -94,7 +108,10 @@ const ServiceProviderSetting = () => {
                   </div>
                 </div>
               </Link>
-              <Link className="w-[90%] lg:w-[70%] xl:w-[50%]">
+              <Link
+                className="w-[90%] lg:w-[70%] xl:w-[50%]"
+                to={"/service-provider-order"}
+              >
                 <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
                   <div className="basis-[80%]">
                     <h1 className="text-black text-center uppercase">
@@ -110,7 +127,10 @@ const ServiceProviderSetting = () => {
                   </div>
                 </div>
               </Link>
-              <Link className="w-[90%] lg:w-[70%] xl:w-[50%]">
+              <Link
+                className="w-[90%] lg:w-[70%] xl:w-[50%]"
+                to={"/service-provider-chat-section"}
+              >
                 <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
                   <div className="basis-[80%]">
                     <h1 className="text-black text-center uppercase">
@@ -126,7 +146,10 @@ const ServiceProviderSetting = () => {
                   </div>
                 </div>
               </Link>
-              <Link className="w-[90%] lg:w-[70%] xl:w-[50%]">
+              <Link
+                className="w-[90%] lg:w-[70%] xl:w-[50%]"
+                to={"/service-provider-sign-in"}
+              >
                 <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
                   <div className="basis-[80%]">
                     <h1 className="text-black text-center uppercase">LOGIN</h1>

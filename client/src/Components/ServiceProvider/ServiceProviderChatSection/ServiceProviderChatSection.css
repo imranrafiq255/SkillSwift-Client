@@ -1,6 +1,12 @@
 .truncate-text {
-  width: 200px; /* Set a fixed width for the element */
-  white-space: nowrap; /* Prevent the text from wrapping to the next line */
-  overflow: hidden; /* Hide the overflowed text */
-  text-overflow: ellipsis; /* Add the ellipsis (...) */
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.truncate-text-2 {
+  width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
