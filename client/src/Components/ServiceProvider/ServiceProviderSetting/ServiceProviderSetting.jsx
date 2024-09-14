@@ -1,8 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { handleShowFailureToast } from "../../ToastMessages/ToastMessage";
 const ServiceProviderSetting = () => {
   const navigate = useNavigate();
+  const signOutHandler = async () => {
+    try {
+      const response = await axios.get("/api/v1/service-provider/sign-out");
+      if (response.data) {
+        navigate("/service-provider-sign-in", {
+          state: { message: response.data.message },
+        });
+      }
+    } catch (error) {
+      handleShowFailureToast(error?.response?.data?.message);
+    }
+  };
   return (
     <>
       <div className="setting-container">
@@ -163,7 +177,10 @@ const ServiceProviderSetting = () => {
                   </div>
                 </div>
               </Link>
-              <Link className="w-[90%] lg:w-[70%] xl:w-[50%]">
+              <Link
+                className="w-[90%] lg:w-[70%] xl:w-[50%]"
+                onClick={signOutHandler}
+              >
                 <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
                   <div className="basis-[80%]">
                     <h1 className="text-black text-center uppercase">LOGOUT</h1>

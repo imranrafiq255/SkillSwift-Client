@@ -1,9 +1,44 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import SkeletonNotificationLoader from "../../Loader/ServiceProviderLoaders/SkeletonNotificationLoader";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  loadNewNotificationsAction,
+  readNotificationAction,
+} from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
+import {
+  handleShowFailureToast,
+  handleShowSuccessToast,
+} from "../../ToastMessages/ToastMessage";
+import { Toaster } from "react-hot-toast";
 const ServiceProviderNotification = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loadNotificationLoader, notifications } = useSelector(
+    (state) => state.loadNewNotificationsReducer
+  );
+  const {
+    readNotificationLoader,
+    readNotificationMessage,
+    readNotificationError,
+  } = useSelector((state) => state.readNotificationReducer);
+  useEffect(() => {
+    dispatch(loadNewNotificationsAction());
+  }, [dispatch]);
+  useEffect(() => {
+    if (!readNotificationLoader && readNotificationError) {
+      handleShowFailureToast(readNotificationError);
+    } else if (!readNotificationLoader && readNotificationMessage) {
+      handleShowSuccessToast(readNotificationMessage);
+    }
+  }, [readNotificationError, readNotificationMessage, readNotificationLoader]);
+  const readNotificationHandler = (id) => {
+    dispatch(readNotificationAction(id));
+    dispatch(loadNewNotificationsAction());
+  };
   return (
     <>
+      <Toaster />
       <div className="notification-container">
         <div className="top-border h-20 w-full bg-[#dadada] flex justify-center items-center">
           <div className="lg:w-[80%] xl:w-[60%] flex items-center gap-14 xl:gap-5 lg:gap-10">
@@ -21,31 +56,55 @@ const ServiceProviderNotification = () => {
         <div className="notification-message ml-10 my-4">
           <h1 className="font-bold text-2xl">Notifications</h1>
         </div>
-        <div className="notification flex justify-center">
-          <div className="center w-full p-5 lg:w-10/12 xl:w-5/12">
-            <div className="notification-card shadow-2xl w-full bg-[#c8c8c8] rounded-md flex items-center relative">
-              <img
-                src={require("../../../Assets/avatar.png")}
-                alt=""
-                className="w-14 h-14 m-7 rounded-full"
-              />
-              <div>
-                <h1 className="text-sm font-bold text-[#4e97fd]">John Doe</h1>
-                <p className="text-sm text-[#878787]">You have a new message</p>
-              </div>
-              <div className="read absolute bottom-3 right-3">
-                <div className="btn flex items-center gap-1 bg-black py-1 px-2 rounded-xl cursor-pointer">
-                  <h1 className="text-white text-xs">Read</h1>
-                  <img
-                    src={require("../../../Assets/up-arrows.png")}
-                    alt=""
-                    className="w-3 h-3 invert animate-pulse"
-                  />
+        {loadNotificationLoader &&
+          Array.from({ length: 5 }).map((_, index) => (
+            <SkeletonNotificationLoader key={index} />
+          ))}
+        {!loadNotificationLoader && notifications?.length > 0 ? (
+          notifications.map((notification) => (
+            <div className="notification flex justify-center">
+              <div className="center w-full p-5 lg:w-10/12 xl:w-5/12">
+                <div className="notification-card shadow-2xl w-full bg-[#c8c8c8] rounded-md items-center relative flex p-3 gap-2">
+                  <div className=" basis-[15%] flex justify-center">
+                    <img
+                      src={notification?.notificationSendBy?.consumerAvatar}
+                      alt=""
+                      className="w-14 h-14 rounded-full"
+                    />
+                  </div>
+                  <div className="basis-[85%]">
+                    <h1 className="text-sm font-bold text-[#4e97fd]">
+                      {notification?.notificationSendBy?.consumerFullName}
+                    </h1>
+                    <p className="text-sm text-[#878787]">
+                      {notification?.notificationMessage}
+                    </p>
+                  </div>
+                  <div
+                    className="read absolute 
+                  top-2 right-3"
+                  >
+                    <div
+                      className="btn flex items-center gap-1 bg-black py-1 px-2 rounded-xl cursor-pointer"
+                      onClick={() => readNotificationHandler(notification?._id)}
+                    >
+                      <h1 className="text-white text-xs">Read</h1>
+                      <img
+                        src={require("../../../Assets/up-arrows.png")}
+                        alt=""
+                        className="w-3 h-3 invert animate-pulse"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+          ))
+        ) : (
+          <div>
+            <h1>No notifications</h1>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

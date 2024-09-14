@@ -8,11 +8,14 @@ import {
   serviceProviderSignInAction,
   clearErrors,
 } from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
-import { handleShowFailureToast } from "../../ToastMessages/ToastMessage";
+import {
+  handleShowFailureToast,
+  handleShowSuccessToast,
+} from "../../ToastMessages/ToastMessage";
 import { Toaster } from "react-hot-toast";
 import LoaderCircles from "../../Loader/LoaderCircles";
 import axios from "axios";
-
+import { useLocation } from "react-router-dom";
 // Validation schema
 const validationSchema = Yup.object({
   serviceProviderEmail: Yup.string()
@@ -26,6 +29,7 @@ const validationSchema = Yup.object({
 const SignIn = () => {
   const navigate = useNavigate();
   const passwordRef = useRef();
+  const location = useLocation();
   const [eyeToggler, setEyeToggler] = useState(false);
   const { loading, message, error } = useSelector(
     (state) => state.serviceProviderSignInReducer
@@ -81,7 +85,15 @@ const SignIn = () => {
       }
     }
   }, [loading, message, error, navigate]);
-
+  const hasShownToast = useRef(false);
+  const myMessage = location?.state?.message || null;
+  useEffect(() => {
+    if (myMessage && !hasShownToast.current) {
+      handleShowSuccessToast(myMessage);
+      hasShownToast.current = true;
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [myMessage, navigate, location.pathname]);
   return (
     <>
       <Toaster />

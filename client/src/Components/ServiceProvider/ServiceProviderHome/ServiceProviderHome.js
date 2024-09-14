@@ -71,45 +71,46 @@ const ServiceProviderHome = () => {
               )}
               {!loadLoading && posts?.length > 0 ? (
                 posts.map((post) => (
-                  <div className="lg:w-6/12 xl:w-4/12 w-full">
+                  <div key={post._id} className="lg:w-6/12 xl:w-4/12 w-full">
                     <div className="card w-full h-full p-5">
-                      <img
-                        src={post.servicePostImage}
-                        alt=""
-                        className="w-full rounded-tl-lg rounded-tr-lg h-[200px] lg:h-[250px]"
-                      />
-                      <div className="w-full bg-slate-600 rounded-b-lg">
-                        <div className="flex justify-between items-center">
-                          <h1 className="text-white p-4 font-bold lg:text-xl text-lg">
-                            {post.service.serviceName}
-                          </h1>
-                          <div className="bg-[#4e97fd] w-20 h-8 mr-5 flex justify-center items-center shadow-xl rounded-lg">
-                            <h1 className="text-white font-bold">
-                              {"$" + post.servicePostPrice}
+                      <div className="relative">
+                        <img
+                          src={post.servicePostImage}
+                          alt=""
+                          className="w-full rounded-tl-lg rounded-tr-lg h-[250px]"
+                        />
+                        <div className="w-full bg-slate-600 rounded-b-lg">
+                          <div className="flex justify-between items-center">
+                            <h1 className="text-white p-4 font-bold lg:text-xl text-lg">
+                              {post.service.serviceName}
+                            </h1>
+                            <div className="bg-[#4e97fd] w-20 h-8 mr-5 flex justify-center items-center shadow-xl rounded-lg">
+                              <h1 className="text-white font-bold">
+                                ${post.servicePostPrice}
+                              </h1>
+                            </div>
+                          </div>
+                          <div className="message px-4 py-1">
+                            <h1 className="text-white">
+                              {post.servicePostMessage}
                             </h1>
                           </div>
-                        </div>
-                        <div className="message px-4 py-1">
-                          <h1 className="text-white">
-                            {post?.service?.serviceDescription?.length > 150
-                              ? post.service.serviceDescription.slice(0, 150) +
-                                "..."
-                              : post.service.serviceDescription}
-                          </h1>
-                        </div>
-                        <div className="flex mt-5 justify-between">
-                          <h1 className="font-bold text-white px-4">
-                            {timeFormatter(post.createdAt)}
-                          </h1>
-                          <div className="flex flex-col justify-center items-center mb-8 bg-white mr-10 lg:p-2 p-1 rounded-xl lg:-mt-5 -mt-2">
-                            <img
-                              src={require("../../../Assets/star.png")}
-                              alt=""
-                              className="lg:w-5 lg:h-5 w-3 h-3"
-                            />
-                            <h1 className="text-xs mt-2">
-                              {post.servicePostRatings.length}
+                          <div className="flex mt-5 justify-between">
+                            <h1 className="font-bold text-white px-4">
+                              {timeFormatter(post.createdAt)}
                             </h1>
+                            <div className="flex flex-col justify-center items-center mb-8 bg-white mr-10 lg:p-2 p-1 rounded-xl lg:-mt-5 -mt-2">
+                              <div>
+                                <img
+                                  src={require("../../../Assets/star.png")}
+                                  alt=""
+                                  className="lg:w-5 lg:h-5 w-3 h-3"
+                                />
+                                <h1 className="text-xs mt-2 text-center">
+                                  {post.servicePostRatings.length}
+                                </h1>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>

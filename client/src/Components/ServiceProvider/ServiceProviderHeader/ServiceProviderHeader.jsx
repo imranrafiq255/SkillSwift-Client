@@ -2,9 +2,16 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./ServiceProviderHeader.css";
 import { useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { loadNewNotificationsAction } from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
 const ServiceProviderHeader = () => {
   const [showing, setShowing] = useState(false);
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  const { loadNotificationLoader, notifications } = useSelector(
+    (state) => state.loadNewNotificationsReducer
+  );
   const toggleSidebar = () => {
     setShowing((prevShowing) => {
       const newShowing = !prevShowing;
@@ -18,7 +25,9 @@ const ServiceProviderHeader = () => {
       document.body.classList.remove("no-scroll");
     };
   }, []);
-
+  useEffect(() => {
+    dispatch(loadNewNotificationsAction());
+  }, [dispatch]);
   return (
     <>
       <div className="header-container h-[100px] lg:h-[200px] w-full">
@@ -64,7 +73,7 @@ const ServiceProviderHeader = () => {
                     className="w-5 h-5 cursor-pointer"
                   />
                 </Link>
-                {false ? (
+                {!loadNotificationLoader && notifications?.length > 0 ? (
                   <div className="dot w-2 h-2 bg-red-600 rounded-full absolute top-0 right-0"></div>
                 ) : (
                   ""
@@ -98,15 +107,6 @@ const ServiceProviderHeader = () => {
             } nav-link cursor-pointer `}
           >
             <Link to={"/service-provider-post"}>POST</Link>
-          </div>
-          <div
-            className={`${
-              location.pathname === "/service-provider-services"
-                ? " border-b-2 text-[#4e97fd] border-[#4e97fd] transition-all ease-linear duration-1000"
-                : ""
-            } nav-link cursor-pointer `}
-          >
-            <Link to={"/service-provider-services"}>SERVICES</Link>
           </div>
           <div
             className={`${
@@ -202,21 +202,6 @@ const ServiceProviderHeader = () => {
                 className=" font-extralight text-3xl"
               >
                 POSTS
-              </Link>
-            </div>
-            <div className="line w-full h-[0.2px] bg-white"></div>
-            <div
-              className={`${
-                location.pathname === "/service-provider-services"
-                  ? "text-[#4e97fd]"
-                  : "text-white"
-              } nav-link cursor-pointer h-14 flex items-center pl-8 my-10`}
-            >
-              <Link
-                to={"/service-provider-services"}
-                className="text-3xl font-extralight"
-              >
-                SERVICES
               </Link>
             </div>
             <div className="line w-full h-[0.2px] bg-white"></div>

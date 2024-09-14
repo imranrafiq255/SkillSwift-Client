@@ -176,7 +176,9 @@ const ServiceProviderOrder = () => {
             {isShowing === 1 && (
               <div className="pending-container w-11/12 lg:w-8/12 xl:w-4/12 my-10">
                 {pendingLoading ? <SkeletonOrderLoader /> : ""}
-                {!pendingLoading && pendingOrders?.length > 0 ? (
+                {!pendingLoading &&
+                pendingOrders &&
+                pendingOrders?.length > 0 ? (
                   pendingOrders?.map((order) => (
                     <div className="order w-full card shadow-xl bg-[#dadada] rounded-xl my-8">
                       <div className="consumer-information p-4">
@@ -302,7 +304,9 @@ const ServiceProviderOrder = () => {
             {isShowing === 2 && (
               <div className="completed-container w-11/12 lg:w-8/12 xl:w-4/12 my-10">
                 {completedLoading ? <SkeletonOrderLoader /> : ""}
-                {!completedLoading && completedOrders.length > 0 ? (
+                {!completedLoading &&
+                completedOrders &&
+                completedOrders?.length > 0 ? (
                   completedOrders.map((order) => (
                     <div className="order w-full card shadow-xl bg-[#dadada] rounded-xl my-8">
                       <div className="consumer-information p-4">
@@ -408,7 +412,9 @@ const ServiceProviderOrder = () => {
             {isShowing === 3 && (
               <div className="accepted-container w-11/12 lg:w-8/12 xl:w-4/12 my-10">
                 {acceptedLoading ? <SkeletonOrderLoader /> : ""}
-                {!acceptedLoading && acceptedOrders.length > 0 ? (
+                {!acceptedLoading &&
+                acceptedOrders &&
+                acceptedOrders?.length > 0 ? (
                   acceptedOrders.map((order) => (
                     <div className="order w-full card shadow-xl bg-[#dadada] rounded-xl my-8">
                       <div className="consumer-information p-4">
@@ -534,7 +540,9 @@ const ServiceProviderOrder = () => {
             {isShowing === 4 && (
               <div className="rejected-container w-11/12 lg:w-8/12 xl:w-4/12 my-10">
                 {rejectedLoading ? <SkeletonOrderLoader /> : ""}
-                {!rejectedLoading && rejectedOrders.length > 0 ? (
+                {!rejectedLoading &&
+                rejectedOrders &&
+                rejectedOrders?.length > 0 ? (
                   rejectedOrders.map((order) => (
                     <div className="order w-full card shadow-xl bg-[#dadada] rounded-xl my-8">
                       <div className="consumer-information p-4">
@@ -640,7 +648,9 @@ const ServiceProviderOrder = () => {
             {isShowing === 5 && (
               <div className="cancelled-container w-11/12 lg:w-8/12 xl:w-4/12 my-10">
                 {cancelledLoading ? <SkeletonOrderLoader /> : ""}
-                {!cancelledLoading && cancelledOrders.length > 0 ? (
+                {!cancelledLoading &&
+                cancelledOrders &&
+                cancelledOrders?.length > 0 ? (
                   cancelledOrders.map((order) => (
                     <div className="order w-full card shadow-xl bg-[#dadada] rounded-xl my-8">
                       <div className="consumer-information p-4">

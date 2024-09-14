@@ -454,6 +454,82 @@ const completeOrderReducer = createReducer(
       });
   }
 );
+// notifications
+const loadNewNotificationsReducer = createReducer(
+  {
+    loadNotificationLoader: false,
+    notifications: null,
+    loadNotificationError: null,
+  },
+  (builder) => {
+    builder
+      .addCase("LOAD_NEW_NOTIFICATIONS_REQUEST", (state) => {
+        state.loadNotificationLoader = true;
+        state.loadNotificationError = null;
+      })
+      .addCase("LOAD_NEW_NOTIFICATIONS_SUCCESS", (state, action) => {
+        state.loadNotificationLoader = false;
+        state.notifications = action.payload;
+      })
+      .addCase("LOAD_NEW_NOTIFICATIONS_FAILURE", (state, action) => {
+        state.loadNotificationLoader = false;
+        state.loadNotificationError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.loadNotificationError = null;
+      });
+  }
+);
+const readNotificationReducer = createReducer(
+  {
+    readNotificationLoader: false,
+    readNotificationMessage: null,
+    readNotificationError: null,
+  },
+  (builder) => {
+    builder
+      .addCase("READ_NOTIFICATION_REQUEST", (state) => {
+        state.readNotificationLoader = true;
+        state.readNotificationError = null;
+      })
+      .addCase("READ_NOTIFICATION_SUCCESS", (state, action) => {
+        state.readNotificationLoader = false;
+        state.readNotificationMessage = action.payload;
+      })
+      .addCase("READ_NOTIFICATION_FAILURE", (state, action) => {
+        state.readNotificationLoader = false;
+        state.readNotificationError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.readNotificationError = null;
+      });
+  }
+);
+const deleteServicePostReducer = createReducer(
+  {
+    deleteServicePostLoading: false,
+    deleteServicePostMessage: null,
+    deleteServicePostError: null,
+  },
+  (builder) => {
+    builder
+      .addCase("DELETE_SERVICE_POST_REQUEST", (state) => {
+        state.deleteServicePostLoading = true;
+        state.deleteServicePostError = null;
+      })
+      .addCase("DELETE_SERVICE_POST_SUCCESS", (state, action) => {
+        state.deleteServicePostLoading = false;
+        state.deleteServicePostMessage = action.payload;
+      })
+      .addCase("DELETE_SERVICE_POST_FAILURE", (state, action) => {
+        state.deleteServicePostLoading = false;
+        state.deleteServicePostError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.deleteServicePostError = null;
+      });
+  }
+);
 export {
   serviceProviderSignInReducer,
   serviceProviderForgotPasswordReducer,
@@ -474,4 +550,7 @@ export {
   rejectOrderReducer,
   cancelOrderReducer,
   completeOrderReducer,
+  loadNewNotificationsReducer,
+  readNotificationReducer,
+  deleteServicePostReducer,
 };

@@ -17,9 +17,10 @@ const serviceProviderSignInAction =
       dispatch({
         type: "SERVICE_PROVIDER_SIGN_IN_REQUEST",
       });
-      const response = await axios.post("/api/v1/service-provider/sign-in", {
-        serviceProviderData,
-      });
+      const response = await axios.post(
+        "/api/v1/service-provider/sign-in",
+        serviceProviderData
+      );
       dispatch({
         type: "SERVICE_PROVIDER_SIGN_IN_SUCCESS",
         payload: response?.data?.message,
@@ -427,6 +428,63 @@ const completeOrderAction = (id) => async (dispatch) => {
     });
   }
 };
+const loadNewNotificationsAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LOAD_NEW_NOTIFICATIONS_REQUEST",
+    });
+    const response = await axios.get(
+      "/api/v1/service-provider/load-new-notifications"
+    );
+    dispatch({
+      type: "LOAD_NEW_NOTIFICATIONS_SUCCESS",
+      payload: response?.data?.notifications,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_NEW_NOTIFICATIONS_FAILURE",
+      payload: handleError(error),
+    });
+  }
+};
+const readNotificationAction = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "READ_NOTIFICATION_REQUEST",
+    });
+    const response = await axios.get(
+      `/api/v1/service-provider/read-notification/${id}`
+    );
+    dispatch({
+      type: "READ_NOTIFICATION_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "READ_NOTIFICATION_FAILURE",
+      payload: handleError(error),
+    });
+  }
+};
+const deleteServicePostAction = (id) => (dispatch) => {
+  dispatch({
+    type: "DELETE_SERVICE_POST_REQUEST",
+  });
+  axios
+    .delete(`/api/v1/service-provider/delete-service-post/${id}`)
+    .then((response) => {
+      dispatch({
+        type: "DELETE_SERVICE_POST_SUCCESS",
+        payload: response?.data?.message,
+      });
+    })
+    .catch((error) => {
+      dispatch({
+        type: "DELETE_SERVICE_POST_FAILURE",
+        payload: handleError(error),
+      });
+    });
+};
 export {
   clearErrors,
   serviceProviderSignInAction,
@@ -448,4 +506,7 @@ export {
   rejectOrderAction,
   cancelOrderAction,
   completeOrderAction,
+  loadNewNotificationsAction,
+  readNotificationAction,
+  deleteServicePostAction,
 };

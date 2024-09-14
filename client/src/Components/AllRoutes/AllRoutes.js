@@ -36,7 +36,6 @@ import ServiceProviderTimeSlot from "../ServiceProvider/ServiceProviderTimeSlot/
 import ServiceProviderAddCNIC from "../ServiceProvider/ServiceProviderAddCNIC/ServiceProviderAddCNIC";
 import ServiceProviderPost from "../ServiceProvider/ServiceProviderPost/ServiceProviderPost";
 import ServiceProviderOrder from "../ServiceProvider/ServiceProviderOrder/ServiceProviderOrder";
-import ServiceProviderServices from "../ServiceProvider/ServiceProviderServices/ServiceProviderServices";
 import ServiceProviderSetting from "../ServiceProvider/ServiceProviderSetting/ServiceProviderSetting";
 import ServiceProviderChatSection from "../ServiceProvider/ServiceProviderChatSection/ServiceProviderChatSection";
 import ServiceProviderNotification from "../ServiceProvider/ServiceProviderNotification/ServiceProviderNotification";
@@ -59,9 +58,9 @@ const AuthenticatedRoutes = () => {
     "/service-provider-add-cnic",
     "/service-provider-post",
     "/service-provider-order",
-    "/service-provider-services",
     "/service-provider-chat-section",
     "/service-provider-setting",
+    "/service-provider-notification",
   ];
   const consumerAuthenticatedRoutes = ["consumer-upload-info"];
   useEffect(() => {
@@ -195,7 +194,16 @@ const AuthenticatedRoutes = () => {
       />
 
       {/* Protected Service Provider Routes */}
-      <Route path="/service-provider-home" element={<ServiceProviderHome />} />
+      <Route
+        path="/service-provider-home"
+        element={
+          isServiceProviderAuthenticated ? (
+            <ServiceProviderHome />
+          ) : (
+            <Navigate to={"/service-provider-sign-in"} />
+          )
+        }
+      />
       <Route
         path="/service-provider-upload-info"
         element={
@@ -264,16 +272,6 @@ const AuthenticatedRoutes = () => {
         element={
           isServiceProviderAuthenticated ? (
             <ServiceProviderOrder />
-          ) : (
-            <Navigate to={"/service-provider-sign-in"} />
-          )
-        }
-      />
-      <Route
-        path="/service-provider-services"
-        element={
-          isServiceProviderAuthenticated ? (
-            <ServiceProviderServices />
           ) : (
             <Navigate to={"/service-provider-sign-in"} />
           )
