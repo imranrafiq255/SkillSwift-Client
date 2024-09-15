@@ -89,7 +89,6 @@ const AuthenticatedRoutes = () => {
         );
         if (response.data) {
           setServiceProviderAuthenticated(true);
-
           if (
             serviceProviderAuthenticatedRoutes.includes(location.pathname) &&
             !response?.data?.serviceProvider?.isAccountVerified
@@ -107,9 +106,12 @@ const AuthenticatedRoutes = () => {
               state: { message: "Account is verified now" },
             });
           }
+        } else {
+          setServiceProviderAuthenticated(true);
         }
       } catch (error) {
         console.log(error?.response?.data?.message);
+        setServiceProviderAuthenticated(false);
       } finally {
         setServiceProviderLoading(false);
       }
@@ -200,10 +202,14 @@ const AuthenticatedRoutes = () => {
           isServiceProviderAuthenticated ? (
             <ServiceProviderHome />
           ) : (
-            <Navigate to={"/service-provider-sign-in"} />
+            <Navigate
+              to="/service-provider-sign-in"
+              state={{ from: location }}
+            />
           )
         }
       />
+
       <Route
         path="/service-provider-upload-info"
         element={

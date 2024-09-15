@@ -320,74 +320,78 @@ const ServiceProviderPost = () => {
                 />
               </div>
               <div className="posts-container flex flex-wrap">
-                {loadLoading
-                  ? Array.from({ length: 6 }).map((_, index) => (
-                      <SkeletonPostLoader key={index} />
-                    ))
-                  : posts.map((post) => (
-                      <div key={post.id} className="lg:w-6/12 xl:w-4/12 w-full">
-                        <div className="card w-full h-full p-5">
-                          <div className="relative">
-                            <div className="absolute top-2 right-2">
-                              <div
-                                className="w-10 h-10 bg-[#dadada] rounded-full flex justify-center items-center cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700"
-                                onClick={() => {
-                                  setDeleteOptionShowing(
-                                    !isDeleteOptionShowing
-                                  );
-                                  setDeletePostId(post._id);
-                                }}
-                              >
-                                <img
-                                  src={require("../../../Assets/delete.png")}
-                                  alt=""
-                                  className="h-5 w-5"
-                                />
+                {loadLoading ? (
+                  Array.from({ length: 6 }).map((_, index) => (
+                    <SkeletonPostLoader key={index} />
+                  ))
+                ) : posts && posts.length > 0 ? (
+                  posts.map((post) => (
+                    <div key={post.id} className="lg:w-6/12 xl:w-4/12 w-full">
+                      <div className="card w-full h-full p-5">
+                        <div className="relative">
+                          <div className="absolute top-2 right-2">
+                            <div
+                              className="w-10 h-10 bg-[#dadada] rounded-full flex justify-center items-center cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700"
+                              onClick={() => {
+                                setDeleteOptionShowing(!isDeleteOptionShowing);
+                                setDeletePostId(post._id);
+                              }}
+                            >
+                              <img
+                                src={require("../../../Assets/delete.png")}
+                                alt=""
+                                className="h-5 w-5"
+                              />
+                            </div>
+                          </div>
+                          <img
+                            src={post.servicePostImage}
+                            alt=""
+                            className="w-full rounded-tl-lg rounded-tr-lg h-[250px]"
+                          />
+                          <div className="w-full bg-slate-600 rounded-b-lg">
+                            <div className="flex justify-between items-center">
+                              <h1 className="text-white p-4 font-bold lg:text-xl text-lg">
+                                {post.service.serviceName}
+                              </h1>
+                              <div className="bg-[#4e97fd] w-20 h-8 mr-5 flex justify-center items-center shadow-xl rounded-lg">
+                                <h1 className="text-white font-bold">
+                                  ${post.servicePostPrice}
+                                </h1>
                               </div>
                             </div>
-                            <img
-                              src={post.servicePostImage}
-                              alt=""
-                              className="w-full rounded-tl-lg rounded-tr-lg h-[250px]"
-                            />
-                            <div className="w-full bg-slate-600 rounded-b-lg">
-                              <div className="flex justify-between items-center">
-                                <h1 className="text-white p-4 font-bold lg:text-xl text-lg">
-                                  {post.service.serviceName}
-                                </h1>
-                                <div className="bg-[#4e97fd] w-20 h-8 mr-5 flex justify-center items-center shadow-xl rounded-lg">
-                                  <h1 className="text-white font-bold">
-                                    ${post.servicePostPrice}
+                            <div className="message px-4 py-1">
+                              <h1 className="text-white">
+                                {post.servicePostMessage}
+                              </h1>
+                            </div>
+                            <div className="flex mt-5 justify-between">
+                              <h1 className="font-bold text-white px-4">
+                                {timeFormatter(post.createdAt)}
+                              </h1>
+                              <div className="flex flex-col justify-center items-center mb-8 bg-white mr-10 lg:p-2 p-1 rounded-xl lg:-mt-5 -mt-2">
+                                <div>
+                                  <img
+                                    src={require("../../../Assets/star.png")}
+                                    alt=""
+                                    className="lg:w-5 lg:h-5 w-3 h-3"
+                                  />
+                                  <h1 className="text-xs mt-2 text-center">
+                                    {post.servicePostRatings.length}
                                   </h1>
-                                </div>
-                              </div>
-                              <div className="message px-4 py-1">
-                                <h1 className="text-white">
-                                  {post.servicePostMessage}
-                                </h1>
-                              </div>
-                              <div className="flex mt-5 justify-between">
-                                <h1 className="font-bold text-white px-4">
-                                  {timeFormatter(post.createdAt)}
-                                </h1>
-                                <div className="flex flex-col justify-center items-center mb-8 bg-white mr-10 lg:p-2 p-1 rounded-xl lg:-mt-5 -mt-2">
-                                  <div>
-                                    <img
-                                      src={require("../../../Assets/star.png")}
-                                      alt=""
-                                      className="lg:w-5 lg:h-5 w-3 h-3"
-                                    />
-                                    <h1 className="text-xs mt-2 text-center">
-                                      {post.servicePostRatings.length}
-                                    </h1>
-                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    ))}
+                    </div>
+                  ))
+                ) : (
+                  <div className="w-full">
+                    <h1 className="text-center">No posts into database</h1>
+                  </div>
+                )}
               </div>
             </div>
           ) : (

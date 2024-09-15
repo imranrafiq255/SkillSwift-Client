@@ -88,7 +88,7 @@ const ConsumerSignUp = () => {
       <Toaster />
       <div className="sign-up-container w-screen h-screen flex">
         <div className="left-side w-full lg:w-6/12 h-full flex justify-center items-center flex-col">
-          <div className="sign-up-container w-10/12 sm:w-8/12 lg:w-6/12 h-2/4">
+          <div className="sign-up-container w-10/12 sm:w-8/12 lg:w-6/12 h-2/4 -mt-40  lg:-mt-0">
             <div className="line h-1 w-3 bg-[#4e97fd]"></div>
             <div>
               <h1 className="text-[#4e97fd] my-5 text-4xl font-bold">

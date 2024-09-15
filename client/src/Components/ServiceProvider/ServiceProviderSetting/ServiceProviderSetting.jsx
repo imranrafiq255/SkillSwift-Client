@@ -8,11 +8,10 @@ const ServiceProviderSetting = () => {
   const signOutHandler = async () => {
     try {
       const response = await axios.get("/api/v1/service-provider/sign-out");
-      if (response.data) {
-        navigate("/service-provider-sign-in", {
-          state: { message: response.data.message },
-        });
-      }
+      localStorage.removeItem("serviceProviderToken");
+      navigate("/service-provider-sign-in", {
+        state: { message: response?.data?.message },
+      });
     } catch (error) {
       handleShowFailureToast(error?.response?.data?.message);
     }

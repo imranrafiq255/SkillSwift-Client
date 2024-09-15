@@ -65,26 +65,30 @@ const SignIn = () => {
         console.log(error);
         handleShowFailureToast(error);
       } else if (message) {
-        console.log(message);
         const loadServiceProvider = async () => {
-          const response = await axios.get(
-            "/api/v1/service-provider/load-current-service-provider"
-          );
-          if (response.data) {
-            if (response.data.serviceProvider.isAccountVerified) {
-              navigate("/service-provider-home", { state: { message } });
-            } else {
-              navigate(
-                "/service-provider-account-verification/your account is not verified",
-                { state: { message: "Your account is not verified" } }
-              );
+          try {
+            const response = await axios.get(
+              "/api/v1/service-provider/load-current-service-provider"
+            );
+            if (response.data) {
+              if (response.data.serviceProvider.isAccountVerified) {
+                navigate("/service-provider-home", { state: { message } });
+              } else {
+                navigate(
+                  "/service-provider-account-verification/your account is not verified",
+                  { state: { message: "Your account is not verified" } }
+                );
+              }
             }
+          } catch (error) {
+            console.log(error?.response?.data?.message);
           }
         };
         loadServiceProvider();
       }
     }
-  }, [loading, message, error, navigate]);
+  }, [loading, message, error, navigate, dispatch]);
+
   const hasShownToast = useRef(false);
   const myMessage = location?.state?.message || null;
   useEffect(() => {
