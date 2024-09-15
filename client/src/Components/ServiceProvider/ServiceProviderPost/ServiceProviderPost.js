@@ -86,14 +86,15 @@ const ServiceProviderPost = () => {
   useEffect(() => {
     loadPosts();
   }, []);
-
+  const hasShownToast = useRef(false);
   useEffect(() => {
-    if (!loading && error) {
+    if (!loading && error && !hasShownToast) {
       handleShowFailureToast(error);
-    } else if (!loading && message) {
+    } else if (!loading && message && !hasShownToast) {
       loadPosts();
       handleShowSuccessToast(message);
       setPostShowing(true);
+      hasShownToast.current = true;
     }
   }, [loading, error, message]);
 

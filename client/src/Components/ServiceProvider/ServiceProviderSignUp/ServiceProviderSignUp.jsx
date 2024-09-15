@@ -32,7 +32,7 @@ const validationSchema = Yup.object({
     .required("Confirm Password is required"),
 });
 
-const ConsumerSignUp = () => {
+const ServiceProviderSignUp = () => {
   const navigate = useNavigate();
   const passwordRef1 = useRef();
   const [eyeToggler1, setEyeToggler1] = useState(false);
@@ -256,7 +256,7 @@ const ConsumerSignUp = () => {
                   Already have an account?{" "}
                   <span
                     className="font-semibold ml-2 hover:underline cursor-pointer"
-                    onClick={() => navigate("/consumer-sign-in")}
+                    onClick={() => navigate("/service-provider-sign-in")}
                   >
                     Sign In
                   </span>
@@ -277,4 +277,4 @@ const ConsumerSignUp = () => {
   );
 };
 
-export default ConsumerSignUp;
+export default ServiceProviderSignUp;

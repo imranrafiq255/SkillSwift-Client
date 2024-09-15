@@ -44,8 +44,10 @@ const ServiceProviderTimeSlot = () => {
         console.log(error);
       } else if (message) {
         console.log(message);
-
-        navigate("/service-provider-home", { state: { message } });
+        navigate(
+          "/service-provider-account-verification/your account is not verified",
+          { state: { message } }
+        );
       }
     }
   }, [loading, message, error, navigate]);

@@ -89,10 +89,24 @@ const AuthenticatedRoutes = () => {
         );
         if (response.data) {
           setServiceProviderAuthenticated(true);
-          if (
-            serviceProviderAuthenticatedRoutes.includes(location.pathname) &&
-            !response?.data?.serviceProvider?.isAccountVerified
+          if (!response?.data?.serviceProvider?.serviceProviderAvatar) {
+            navigate("/service-provider-upload-info");
+          } else if (
+            response?.data?.serviceProvider?.serviceProviderCNICImages
+              ?.length === 0
           ) {
+            navigate("/service-provider-add-cnic");
+          } else if (
+            response?.data?.serviceProvider?.serviceProviderListedServices
+              .length === 0
+          ) {
+            navigate("/service-provider-add-services");
+          } else if (
+            response?.data?.serviceProvider?.serviceProviderWorkingHours
+              .length === 0
+          ) {
+            navigate("/service-provider-add-time");
+          } else if (!response?.data?.serviceProvider?.isAccountVerified) {
             navigate(
               "/service-provider-account-verification/your account is not verified"
             );

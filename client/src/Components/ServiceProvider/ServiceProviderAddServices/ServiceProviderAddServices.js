@@ -64,7 +64,7 @@ const ServiceProviderServices = () => {
         handleShowFailureToast(error);
       } else if (message) {
         console.log(message);
-        navigate("/service-provider-home", { state: { message } });
+        navigate("/service-provider-add-time", { state: { message } });
       }
     }
   }, [navigate, message, error, loading]);

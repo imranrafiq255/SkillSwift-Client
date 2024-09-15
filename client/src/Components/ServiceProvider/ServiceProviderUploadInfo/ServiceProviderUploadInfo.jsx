@@ -72,7 +72,7 @@ const ServiceProviderUploadInfo = () => {
         handleShowFailureToast(error);
       } else if (message) {
         console.log(message);
-        navigate("/service-provider-home", {
+        navigate("/service-provider-add-cnic", {
           state: { message: message },
         });
       }
