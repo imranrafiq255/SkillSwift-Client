@@ -23,8 +23,12 @@ import ForgotPassword from "../Consumer/ConsumerForgetPassword/ConsumerForgetPas
 import ResetPassword from "../Consumer/ConsumerResetPassword/ConsumerResetPassword";
 import ConsumerSendEmail from "../Consumer/ConsumerSendEmail/ConsumerSendEmail";
 import ConsumerUploadInfo from "../Consumer/ConsumerUploadInfo/ConsumerUploadInfo";
+import ConsumerUpdateInfo from "../Consumer/ConsumerUpdateInfo/ConsumerUpdateInfo";
 import NotFound from "../NotFound/NotFound";
 import ConsumerVerifyEmail from "../Consumer/ConsumerVerifyEmail/ConsumerVerifyEmail";
+import ConsumerRequestedServicesPage from "../Consumer/ConsumerRequestedServicesPage/ConsumerRequestedServicesPage";
+import ConsumerServiceHistoryPage from "../Consumer/ConsumerServiceHistoryPage/ConsumerServiceHistoryPage";
+
 import ServiceProviderResetPassword from "../ServiceProvider/ServiceProviderResetPassword/ServiceProviderResetPassword";
 import ServiceProviderSendEmail from "../ServiceProvider/ServiceProviderSendEmail/ServiceProviderSendEmail";
 import ServiceProviderForgotPassword from "../ServiceProvider/ServiceProviderForgotPassword/ServiceProviderFrogotPassword";
@@ -39,6 +43,7 @@ import ServiceProviderOrder from "../ServiceProvider/ServiceProviderOrder/Servic
 import ServiceProviderSetting from "../ServiceProvider/ServiceProviderSetting/ServiceProviderSetting";
 import ServiceProviderChatSection from "../ServiceProvider/ServiceProviderChatSection/ServiceProviderChatSection";
 import ServiceProviderNotification from "../ServiceProvider/ServiceProviderNotification/ServiceProviderNotification";
+import Temp from "../MyTemps/Temp";
 
 const AuthenticatedRoutes = () => {
   const location = useLocation();
@@ -208,6 +213,36 @@ const AuthenticatedRoutes = () => {
           )
         }
       />
+      <Route
+        path="/consumer-update-info"
+        element={
+          isConsumerAuthenticated ? (
+            <ConsumerUpdateInfo />
+          ) : (
+            <Navigate to="/consumer-sign-in" state={{ from: location }} />
+          )
+        }
+      />
+      <Route
+        path="/consumer-service-history"
+        element={
+          isConsumerAuthenticated ? (
+            <ConsumerServiceHistoryPage />
+          ) : (
+            <Navigate to="/consumer-sign-in" state={{ from: location }} />
+          )
+        }
+      />
+      <Route
+        path="/consumer-requested-services"
+        element={
+          isConsumerAuthenticated ? (
+            <ConsumerRequestedServicesPage/>
+          ) : (
+            <Navigate to="/consumer-sign-in" state={{ from: location }} />
+          )
+        }
+      />
 
       {/* Protected Service Provider Routes */}
       <Route
@@ -331,6 +366,7 @@ const AuthenticatedRoutes = () => {
       <Route path="/admin-home" element={<AdminHome />} />
 
       {/* Fallback for Not Found */}
+      <Route path="/temp" element={<Temp />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
