@@ -165,7 +165,7 @@ const ServiceProviderUploadInfo = () => {
                       ? "border-red-500"
                       : ""
                   }`}
-                  placeholder="Near noor mahel, Bhawalpur"
+                  placeholder="Near noor mahel, Bahawalpur"
                 />
                 {formik.touched.serviceProviderAddress &&
                 formik.errors.serviceProviderAddress ? (

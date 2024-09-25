@@ -91,7 +91,10 @@ const Navbar = () => {
               </a>
             </li>
             <li className="relative group">
-              <button onClick={() => setShowProfileModal(true)} aria-label="Profile">
+              <button
+                onClick={() => setShowProfileModal(true)}
+                aria-label="Profile"
+              >
                 <FaUser className="w-5 h-5" />
               </button>
               <span className="absolute left-1/2 transform -translate-x-1/2 top-full mt-1 text-xs text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -126,13 +129,22 @@ const Navbar = () => {
 
           {/* Combined Search, Profile, and Location Icons */}
           <div className="hidden md:flex items-center space-x-4">
-            <button onClick={() => setShowSearchModal(true)} aria-label="Search">
+            <button
+              onClick={() => setShowSearchModal(true)}
+              aria-label="Search"
+            >
               <FaSearch className="w-5 h-5" />
             </button>
-            <button onClick={() => setShowAddressModal(true)} aria-label="Address">
+            <button
+              onClick={() => setShowAddressModal(true)}
+              aria-label="Address"
+            >
               <FaMapMarkerAlt className="w-5 h-5" />
             </button>
-            <button onClick={() => alert("Notifications clicked")} aria-label="Profile">
+            <button
+              onClick={() => alert("Notifications clicked")}
+              aria-label="Profile"
+            >
               <FaBell className="w-5 h-5" />
             </button>
           </div>
@@ -165,19 +177,31 @@ const Navbar = () => {
           <FaExclamationCircle className="w-5 h-5 mx-2" />
           Disputes
         </a>
-        <button onClick={() => setShowAddressModal(true)} className="flex items-center">
+        <button
+          onClick={() => setShowAddressModal(true)}
+          className="flex items-center"
+        >
           <FaMapMarkerAlt className="w-5 h-5 mx-2" />
           Address
         </button>
-        <button onClick={() => setShowProfileModal(true)} className="flex items-center">
+        <button
+          onClick={() => setShowProfileModal(true)}
+          className="flex items-center"
+        >
           <FaUser className="w-5 h-5 mx-2" />
           Profile
         </button>
-        <button onClick={() => setShowSearchModal(true)} className="flex items-center">
+        <button
+          onClick={() => setShowSearchModal(true)}
+          className="flex items-center"
+        >
           <FaSearch className="w-5 h-5 mx-2" />
           Search
         </button>
-        <button onClick={() => alert("Notifications clicked")} className="flex items-center">
+        <button
+          onClick={() => alert("Notifications clicked")}
+          className="flex items-center"
+        >
           <FaBell className="w-5 h-5 mx-2" />
           Notifications
         </button>
@@ -189,7 +213,7 @@ const Navbar = () => {
         onClose={() => setShowProfileModal(false)}
         onEdit={() => {
           setShowProfileModal(false);
-          navigate("/consumer-update-info");
+          navigate("/consumer-upload-info");
         }}
         user={user}
         onSave={handleProfileSave}

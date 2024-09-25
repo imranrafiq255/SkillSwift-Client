@@ -22,7 +22,6 @@ import SignIn from "../Consumer/ConsumerSignIn/ConsumerSignIn";
 import ForgotPassword from "../Consumer/ConsumerForgetPassword/ConsumerForgetPassword";
 import ResetPassword from "../Consumer/ConsumerResetPassword/ConsumerResetPassword";
 import ConsumerSendEmail from "../Consumer/ConsumerSendEmail/ConsumerSendEmail";
-import ConsumerUploadInfo from "../Consumer/ConsumerUploadInfo/ConsumerUploadInfo";
 import ConsumerUpdateInfo from "../Consumer/ConsumerUpdateInfo/ConsumerUpdateInfo";
 import NotFound from "../NotFound/NotFound";
 import ConsumerVerifyEmail from "../Consumer/ConsumerVerifyEmail/ConsumerVerifyEmail";
@@ -42,7 +41,6 @@ import ServiceProviderOrder from "../ServiceProvider/ServiceProviderOrder/Servic
 import ServiceProviderSetting from "../ServiceProvider/ServiceProviderSetting/ServiceProviderSetting";
 import ServiceProviderChatSection from "../ServiceProvider/ServiceProviderChatSection/ServiceProviderChatSection";
 import ServiceProviderNotification from "../ServiceProvider/ServiceProviderNotification/ServiceProviderNotification";
-import Temp from "../MyTemps/Temp";
 
 const AuthenticatedRoutes = () => {
   const location = useLocation();
@@ -66,7 +64,7 @@ const AuthenticatedRoutes = () => {
     "/service-provider-notification",
     "/service-provider-account-verification/your%20account%20is%20not%20verified",
   ];
-  const consumerAuthenticatedRoutes = ["consumer-upload-info"];
+  const consumerAuthenticatedRoutes = ["/consumer-upload-info"];
 
   useEffect(() => {
     const loadCurrentConsumer = async () => {
@@ -195,16 +193,6 @@ const AuthenticatedRoutes = () => {
         path="/consumer-upload-info"
         element={
           isConsumerAuthenticated ? (
-            <ConsumerUploadInfo />
-          ) : (
-            <Navigate to="/consumer-sign-in" state={{ from: location }} />
-          )
-        }
-      />
-      <Route
-        path="/consumer-update-info"
-        element={
-          isConsumerAuthenticated ? (
             <ConsumerUpdateInfo />
           ) : (
             <Navigate to="/consumer-sign-in" state={{ from: location }} />
@@ -225,7 +213,7 @@ const AuthenticatedRoutes = () => {
         path="/consumer-requested-services"
         element={
           isConsumerAuthenticated ? (
-            <ConsumerRequestedServicesPage/>
+            <ConsumerRequestedServicesPage />
           ) : (
             <Navigate to="/consumer-sign-in" state={{ from: location }} />
           )
@@ -344,7 +332,6 @@ const AuthenticatedRoutes = () => {
       <Route path="/admin-home" element={<AdminHome />} />
 
       {/* Fallback for Not Found */}
-      <Route path="/temp" element={<Temp />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

@@ -9,7 +9,10 @@ import {
 import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import LoaderCircles from "../../Loader/LoaderCircles";
-import { serviceProviderUploadInfoAction } from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
+import {
+  clearErrors,
+  consumerUploadInfoAction,
+} from "../../Redux/Consumer/Actions/ConsumerActions";
 // Validation Schema
 const validationSchema = Yup.object({
   phoneNumber: Yup.string()
@@ -18,13 +21,14 @@ const validationSchema = Yup.object({
       "Phone number must start with +92 followed by 10 digits"
     )
     .required("Phone number is required"),
+  consumerAddress: Yup.string().required("Consumer address is required"),
   consumerAvatar: Yup.mixed().required("Profile picture is required"),
 });
 
 const ConsumerUpdateInfo = () => {
   const navigate = useNavigate();
-  const fileInputRef = useRef(null); // Ref for the file input
-  const [imagePreview, setImagePreview] = useState(null); // State for image preview
+  const fileInputRef = useRef(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const location = useLocation();
   const myMessage = location.state?.message || null;
   const dispatch = useDispatch();
@@ -34,15 +38,16 @@ const ConsumerUpdateInfo = () => {
   const formik = useFormik({
     initialValues: {
       phoneNumber: "",
+      consumerAddress: "",
       consumerAvatar: null,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      dispatch(serviceProviderUploadInfoAction(values));
+      dispatch(clearErrors(values));
+      dispatch(consumerUploadInfoAction(values));
     },
   });
 
-  // Function to handle image upload
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -58,7 +63,7 @@ const ConsumerUpdateInfo = () => {
   useEffect(() => {
     if (myMessage) {
       handleShowSuccessToast(myMessage);
-      navigate("/consumer-update-info", { replace: true, state: {} });
+      navigate("/consumer-upload-info", { replace: true, state: {} });
     }
   }, [myMessage, navigate]);
   useEffect(() => {
@@ -140,6 +145,30 @@ const ConsumerUpdateInfo = () => {
                 {formik.touched.phoneNumber && formik.errors.phoneNumber ? (
                   <div className="text-red-500 text-sm">
                     {formik.errors.phoneNumber}
+                  </div>
+                ) : null}
+              </div>
+              <div className="address">
+                <label htmlFor="address">Your Address</label> <br />
+                <input
+                  type="text"
+                  id="address"
+                  name="consumerAddress"
+                  value={formik.values.consumerAddress}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={`w-full border-b-[0.5px] border-slate-400 focus:border-b-[2px] focus:border-slate-800 focus:transition-colors focus:duration-700 ease-in-out outline-none mt-2 h-11 text-xl ${
+                    formik.touched.consumerAddress &&
+                    formik.errors.consumerAddress
+                      ? "border-red-500"
+                      : ""
+                  }`}
+                  placeholder="Near noor mahel, Bahawalpur"
+                />
+                {formik.touched.consumerAddress &&
+                formik.errors.consumerAddress ? (
+                  <div className="text-red-500 text-sm">
+                    {formik.errors.consumerAddress}
                   </div>
                 ) : null}
               </div>

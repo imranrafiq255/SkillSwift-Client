@@ -36,6 +36,8 @@ const ConsumerSendEmail = () => {
             <a
               href="https://www.gmail.com"
               className="text-center bg-[#4e97fd] hover:bg-[#68a5fa] px-14 py-4 text-white"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Open Gmail?
             </a>

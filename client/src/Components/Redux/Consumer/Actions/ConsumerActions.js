@@ -1,4 +1,9 @@
 import axios from "axios";
+const clearErrors = () => (dispatch) => {
+  dispatch({
+    type: "CLEAR_ERRORS",
+  });
+};
 const consumerLoginAction = (consumerData) => async (dispatch) => {
   try {
     dispatch({
@@ -96,6 +101,7 @@ const consumerUploadInfoAction = (consumerData) => async (dispatch) => {
     dispatch({
       type: "CONSUMER_UPLOAD_INFO_REQUEST",
     });
+    console.log("there");
     const response = await axios.post(
       "/api/v1/consumer/avatar-phone-upload",
       consumerData,
@@ -105,6 +111,7 @@ const consumerUploadInfoAction = (consumerData) => async (dispatch) => {
         },
       }
     );
+    console.log(response.data.message);
     dispatch({
       type: "CONSUMER_UPLOAD_INFO_SUCCESS",
       payload: response?.data?.message,
@@ -117,6 +124,7 @@ const consumerUploadInfoAction = (consumerData) => async (dispatch) => {
   }
 };
 export {
+  clearErrors,
   consumerLoginAction,
   consumerForgotPasswordLinkAction,
   consumerResetPasswordAction,

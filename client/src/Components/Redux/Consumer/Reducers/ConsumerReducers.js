@@ -1,13 +1,11 @@
 import { createReducer } from "@reduxjs/toolkit";
 
-const consumerLoginInitialState = {
-  loading: false,
-  message: "",
-  error: null,
-};
-
 const consumerLoginReducer = createReducer(
-  consumerLoginInitialState,
+  {
+    loading: false,
+    message: "",
+    error: null,
+  },
   (builder) => {
     builder
       .addCase("CONSUMER_LOADING", (state) => {
@@ -20,17 +18,19 @@ const consumerLoginReducer = createReducer(
       .addCase("CONSUMER_ERROR", (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.error = null;
       });
   }
 );
 
-const consumerForgotPasswordLinkInitialState = {
-  loading: false,
-  message: "",
-  error: null,
-};
 const consumerForgotPasswordLinkReducer = createReducer(
-  consumerForgotPasswordLinkInitialState,
+  {
+    loading: false,
+    message: "",
+    error: null,
+  },
   (builder) => {
     builder.addCase("CONSUMER_FORGOT_PASSWORD_LINK_REQUEST", (state) => {
       state.loading = true;
@@ -49,16 +49,18 @@ const consumerForgotPasswordLinkReducer = createReducer(
         state.error = action.payload;
       }
     );
+    builder.addCase("CLEAR_ERRORS", (state) => {
+      state.error = null;
+    });
   }
 );
 
-const consumerResetPasswordInitialState = {
-  loading: false,
-  message: "",
-  error: null,
-};
 const consumerResetPasswordReducer = createReducer(
-  consumerResetPasswordInitialState,
+  {
+    loading: false,
+    message: "",
+    error: null,
+  },
   (builder) => {
     builder.addCase("CONSUMER_RESET_PASSWORD_REQUEST", (state) => {
       state.loading = true;
@@ -71,15 +73,17 @@ const consumerResetPasswordReducer = createReducer(
       state.loading = false;
       state.error = action.payload;
     });
+    builder.addCase("CLEAR_ERRORS", (state) => {
+      state.error = null;
+    });
   }
 );
-const consumerSignUpInitialValues = {
-  loading: false,
-  message: "",
-  error: null,
-};
 const consumerSignUpReducer = createReducer(
-  consumerSignUpInitialValues,
+  {
+    loading: false,
+    message: "",
+    error: null,
+  },
   (builder) => {
     builder
       .addCase("CONSUMER_SIGN_UP_REQUEST", (state) => {
@@ -92,17 +96,19 @@ const consumerSignUpReducer = createReducer(
       .addCase("CONSUMER_SIGN_UP_FAILURE", (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.error = null;
       });
   }
 );
-const loadCurrentConsumerInitialState = {
-  loading: false,
-  consumer: null,
-  isAuthenticated: false,
-  error: null,
-};
 const loadCurrentConsumerReducer = createReducer(
-  loadCurrentConsumerInitialState,
+  {
+    loading: false,
+    consumer: null,
+    isAuthenticated: false,
+    error: null,
+  },
   (builder) => {
     builder
       .addCase("LOAD_CURRENT_CONSUMER_REQUEST", (state) => {
@@ -116,16 +122,18 @@ const loadCurrentConsumerReducer = createReducer(
       .addCase("LOAD_CURRENT_CONSUMER_FAILURE", (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.error = null;
       });
   }
 );
-const consumerUploadInfoInitialState = {
-  loading: false,
-  message: "",
-  error: null,
-};
 const consumerUploadInfoReducer = createReducer(
-  consumerUploadInfoInitialState,
+  {
+    loading: false,
+    message: "",
+    error: null,
+  },
   (builder) => {
     builder
       .addCase("CONSUMER_UPLOAD_INFO_REQUEST", (state) => {
@@ -138,6 +146,9 @@ const consumerUploadInfoReducer = createReducer(
       .addCase("CONSUMER_UPLOAD_INFO_FAILURE", (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.error = null;
       });
   }
 );
