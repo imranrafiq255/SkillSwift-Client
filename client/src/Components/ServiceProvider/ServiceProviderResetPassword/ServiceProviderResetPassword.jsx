@@ -59,7 +59,7 @@ const ServiceProviderResetPassword = () => {
         handleShowFailureToast(error);
       } else if (message) {
         console.log(message);
-        navigate("/service-provider-home", { state: { message } });
+        navigate("/service-provider-sign-in", { state: { message } });
       }
     }
   }, [message, error, navigate, loading]);

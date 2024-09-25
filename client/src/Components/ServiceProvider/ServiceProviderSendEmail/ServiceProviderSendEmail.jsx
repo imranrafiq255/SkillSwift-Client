@@ -7,14 +7,13 @@ const ServiceProviderSendEmail = () => {
   const messageRef = useRef(false);
   const navigate = useNavigate();
   const message = location.state?.message || null;
-
   useEffect(() => {
     if (message && !messageRef.current) {
       messageRef.current = true;
       handleShowSuccessToast(message);
       navigate(location.pathname, { replace: true, state: {} });
     }
-  }, [message, navigate, location.pathname]);
+  }, [message, navigate, location.pathname, messageRef]);
   return (
     <>
       <Toaster />
@@ -34,6 +33,8 @@ const ServiceProviderSendEmail = () => {
           <div className="flex justify-center mt-12">
             <a
               href="https://www.gmail.com"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-center bg-[#4e97fd] hover:bg-[#68a5fa] px-14 py-4 text-white"
             >
               Open Gmail?

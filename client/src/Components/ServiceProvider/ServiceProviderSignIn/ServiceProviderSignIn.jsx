@@ -30,6 +30,8 @@ const SignIn = () => {
   const navigate = useNavigate();
   const passwordRef = useRef();
   const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const toastMessage = query.get("message");
   const [eyeToggler, setEyeToggler] = useState(false);
   const { loading, message, error } = useSelector(
     (state) => state.serviceProviderSignInReducer
@@ -72,7 +74,7 @@ const SignIn = () => {
             );
             if (response.data) {
               if (response.data.serviceProvider.isAccountVerified) {
-                navigate("/service-provider-home", { state: { message } });
+                window.location.href = `/service-provider-home?message=${"You signed in successfully."}`;
               } else {
                 navigate(
                   "/service-provider-account-verification/your account is not verified",
@@ -90,14 +92,13 @@ const SignIn = () => {
   }, [loading, message, error, navigate, dispatch]);
 
   const hasShownToast = useRef(false);
-  const myMessage = location?.state?.message || null;
   useEffect(() => {
-    if (myMessage && !hasShownToast.current) {
-      handleShowSuccessToast(myMessage);
+    if (toastMessage && !hasShownToast.current) {
+      handleShowSuccessToast(toastMessage);
       hasShownToast.current = true;
       navigate(location.pathname, { replace: true, state: {} });
     }
-  }, [myMessage, navigate, location.pathname]);
+  }, [toastMessage, navigate, location.pathname]);
   return (
     <>
       <Toaster />

@@ -49,9 +49,7 @@ const ServiceProviderAddCNIC = () => {
       if (error) {
         handleShowFailureToast(error);
       } else if (message) {
-        navigate("/service-provider-add-services", {
-          state: { message: message },
-        });
+        navigate("/service-provider-add-time", { state: { message } });
       }
     }
   }, [loading, error, navigate, message]);

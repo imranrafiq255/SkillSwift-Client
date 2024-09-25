@@ -1,21 +1,44 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { handleShowFailureToast } from "../../ToastMessages/ToastMessage";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clearErrors,
+  loadCurrentServiceProviderAction,
+} from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
 const ServiceProviderSetting = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const serviceProviderErrorToastMessage = useRef(false);
+  const { serviceProvider, serviceProviderLoading, serviceProviderError } =
+    useSelector((state) => state.loadCurrentServiceProviderReducer);
   const signOutHandler = async () => {
     try {
       const response = await axios.get("/api/v1/service-provider/sign-out");
-      localStorage.removeItem("serviceProviderToken");
-      navigate("/service-provider-sign-in", {
-        state: { message: response?.data?.message },
-      });
+      window.location.href = `/service-provider-sign-in?message=${response?.data?.message}`;
     } catch (error) {
       handleShowFailureToast(error?.response?.data?.message);
     }
   };
+  useEffect(() => {
+    dispatch(clearErrors());
+    dispatch(loadCurrentServiceProviderAction());
+  }, [dispatch]);
+  useEffect(() => {
+    if (
+      !serviceProviderLoading &&
+      serviceProviderError &&
+      !serviceProviderErrorToastMessage.current
+    ) {
+      console.log(serviceProviderError);
+    }
+  }, [
+    serviceProviderLoading,
+    serviceProviderError,
+    serviceProviderErrorToastMessage,
+  ]);
   return (
     <>
       <div className="setting-container">
@@ -36,17 +59,14 @@ const ServiceProviderSetting = () => {
           <div className="w-11/12 lg:w-8/12 xl:w-6/12 flex flex-col items-center mt-5 bg-slate-200 rounded-2xl">
             <div className="profile-pic h-[200px] w-[200px] rounded-full border-slate-700 border-2 flex justify-center items-center p-2 relative mt-4">
               <img
-                src={require("../../../Assets/avatar.png")}
+                src={
+                  !serviceProviderLoading &&
+                  serviceProvider &&
+                  serviceProvider?.serviceProviderAvatar
+                }
                 alt=""
                 className="w-full h-full rounded-full"
               />
-              <div className="w-10 h-10 absolute bottom-5 right-3 p-2 bg-[#f904d4] rounded-full flex justify-center items-center cursor-pointer">
-                <img
-                  src={require("../../../Assets/photo-camera.png")}
-                  alt=""
-                  className="w-[80%] h-[80%] invert"
-                />
-              </div>
             </div>
             <div className="setting-options flex flex-col items-center w-full my-10 gap-5">
               <Link
@@ -56,23 +76,6 @@ const ServiceProviderSetting = () => {
                 <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
                   <div className="basis-[80%]">
                     <h1 className="text-black text-center">UPLOAD INFO</h1>
-                  </div>
-                  <div className="basis-[20%]">
-                    <img
-                      src={require("../../../Assets/next-arrow.png")}
-                      alt=""
-                      className="w-10 h-10"
-                    />
-                  </div>
-                </div>
-              </Link>
-              <Link
-                className="w-[90%] lg:w-[70%] xl:w-[50%]"
-                to={"/service-provider-add-services"}
-              >
-                <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
-                  <div className="basis-[80%]">
-                    <h1 className="text-black text-center">ADD SERVICES</h1>
                   </div>
                   <div className="basis-[20%]">
                     <img

@@ -11,16 +11,17 @@ const ServiceProviderHome = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const hasShownToast = useRef(false);
-  const myMessage = location?.state?.message || null;
+  const query = new URLSearchParams(location.search);
+  const toastMessage = query.get("message");
   const [loadLoading, setLoadLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   useEffect(() => {
-    if (myMessage && !hasShownToast.current) {
-      handleShowSuccessToast(myMessage);
+    if (toastMessage && !hasShownToast.current) {
+      handleShowSuccessToast(toastMessage);
       hasShownToast.current = true;
       navigate(location.pathname, { replace: true, state: {} });
     }
-  }, [myMessage, navigate, location.pathname]);
+  }, [toastMessage, navigate, location.pathname]);
   const loadPosts = async () => {
     try {
       const response = await axios.get(
@@ -75,29 +76,29 @@ const ServiceProviderHome = () => {
                     <div className="card w-full h-full p-5">
                       <div className="relative">
                         <img
-                          src={post.servicePostImage}
+                          src={post?.servicePostImage}
                           alt=""
                           className="w-full rounded-tl-lg rounded-tr-lg h-[250px]"
                         />
                         <div className="w-full bg-slate-600 rounded-b-lg">
                           <div className="flex justify-between items-center">
                             <h1 className="text-white p-4 font-bold lg:text-xl text-lg">
-                              {post.service.serviceName}
+                              {post?.serviceName}
                             </h1>
                             <div className="bg-[#4e97fd] w-20 h-8 mr-5 flex justify-center items-center shadow-xl rounded-lg">
                               <h1 className="text-white font-bold">
-                                ${post.servicePostPrice}
+                                ${post?.servicePostPrice}
                               </h1>
                             </div>
                           </div>
                           <div className="message px-4 py-1">
                             <h1 className="text-white">
-                              {post.servicePostMessage}
+                              {post?.servicePostMessage}
                             </h1>
                           </div>
                           <div className="flex mt-5 justify-between">
                             <h1 className="font-bold text-white px-4">
-                              {timeFormatter(post.createdAt)}
+                              {timeFormatter(post?.createdAt)}
                             </h1>
                             <div className="flex flex-col justify-center items-center mb-8 bg-white mr-10 lg:p-2 p-1 rounded-xl lg:-mt-5 -mt-2">
                               <div>
@@ -107,7 +108,7 @@ const ServiceProviderHome = () => {
                                   className="lg:w-5 lg:h-5 w-3 h-3"
                                 />
                                 <h1 className="text-xs mt-2 text-center">
-                                  {post.servicePostRatings.length}
+                                  {post?.servicePostRatings.length}
                                 </h1>
                               </div>
                             </div>

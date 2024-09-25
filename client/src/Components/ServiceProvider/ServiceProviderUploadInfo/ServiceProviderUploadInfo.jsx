@@ -62,9 +62,8 @@ const ServiceProviderUploadInfo = () => {
     if (myMessage && !myMessageRef.current) {
       handleShowSuccessToast(myMessage);
       myMessageRef.current = true;
-      navigate("/service-provider-upload-info", { replace: true, state: {} });
     }
-  }, [myMessage, navigate]);
+  }, [myMessage, myMessageRef]);
   useEffect(() => {
     if (!loading) {
       if (error) {

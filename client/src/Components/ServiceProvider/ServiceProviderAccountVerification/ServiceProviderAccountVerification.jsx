@@ -17,6 +17,7 @@ const ServiceProviderAccountVerification = () => {
       });
     }
   }, [myMessage, navigate, location.pathname]);
+
   return (
     <>
       <Toaster />

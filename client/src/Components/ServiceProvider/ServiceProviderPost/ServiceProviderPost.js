@@ -30,25 +30,22 @@ const ServiceProviderPost = () => {
   const { loading, message, error } = useSelector(
     (state) => state.serviceProviderAddServicePostReducer
   );
-  const { serviceProvider, serviceProviderLoading } = useSelector(
-    (state) => state.loadCurrentServiceProviderReducer
-  );
   const {
     deleteServicePostLoading,
     deleteServicePostMessage,
     deleteServicePostError,
   } = useSelector((state) => state.deleteServicePostReducer);
   const dispatch = useDispatch();
-
+  const deletePostToastMessage = useRef(false);
   const formik = useFormik({
     initialValues: {
-      service: "",
+      serviceName: "",
       servicePostMessage: "",
       servicePostPrice: "",
       servicePostImage: null,
     },
     validationSchema: Yup.object({
-      service: Yup.string().required("Post title is required"),
+      serviceName: Yup.string().required("Post name is required"),
       servicePostMessage: Yup.string().required("Post message is required"),
       servicePostPrice: Yup.number()
         .required("Post price is required")
@@ -110,10 +107,8 @@ const ServiceProviderPost = () => {
       return;
     }
 
-    const filteredPosts = allPosts.filter(
-      (post) =>
-        post.service.serviceName.toLowerCase().includes(searchTerm) ||
-        post.service.serviceDescription.toLowerCase().includes(searchTerm)
+    const filteredPosts = allPosts.filter((post) =>
+      post.serviceName.toLowerCase().includes(searchTerm)
     );
     setPosts(filteredPosts);
   };
@@ -124,16 +119,23 @@ const ServiceProviderPost = () => {
     setDeleteOptionShowing(false);
   };
   useEffect(() => {
-    if (!deleteServicePostLoading && deleteServicePostMessage) {
+    if (
+      !deleteServicePostLoading &&
+      deleteServicePostMessage &&
+      !deletePostToastMessage.current
+    ) {
       loadPosts();
       handleShowSuccessToast(deleteServicePostMessage);
+      deletePostToastMessage.current = false;
     } else if (!deleteServicePostLoading && deleteServicePostError) {
       handleShowFailureToast(deleteServicePostError);
+      deletePostToastMessage.current = false;
     }
   }, [
     deleteServicePostLoading,
     deleteServicePostMessage,
     deleteServicePostError,
+    deletePostToastMessage,
   ]);
   return (
     <>
@@ -233,34 +235,18 @@ const ServiceProviderPost = () => {
                     onBlur={formik.handleBlur}
                     accept="image/*"
                   />
-                  <select
-                    name="service"
-                    id=""
+                  <input
+                    type="text"
+                    name="serviceName"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.serviceName}
-                    className="w-full border-[0.8px] border-slate-600 outline-none h-12 rounded-xl text-xl px-4 mt-6 focus:border-2 cursor-pointer"
-                  >
-                    <option readOnly={true}>
-                      ---- Select the service ----
-                    </option>
-                    {!serviceProviderLoading &&
-                      serviceProvider &&
-                      serviceProvider.serviceProviderListedServices.map(
-                        (service) => (
-                          <option
-                            key={service.service._id}
-                            value={service.service._id}
-                            className="text-black"
-                          >
-                            {service.service.serviceName}
-                          </option>
-                        )
-                      )}
-                  </select>
-                  {formik.touched.service && formik.errors.service && (
+                    placeholder="Enter your service name"
+                    className="w-full border-[0.8px] border-slate-600 outline-none h-12 rounded-xl text-xl px-4 mt-6"
+                  />
+                  {formik.touched.serviceName && formik.errors.serviceName && (
                     <div className="error text-red-600">
-                      {formik.errors.service}
+                      {formik.errors.serviceName}
                     </div>
                   )}
                   <textarea
@@ -353,11 +339,11 @@ const ServiceProviderPost = () => {
                           <div className="w-full bg-slate-600 rounded-b-lg">
                             <div className="flex justify-between items-center">
                               <h1 className="text-white p-4 font-bold lg:text-xl text-lg">
-                                {post.service.serviceName}
+                                {post.serviceName}
                               </h1>
                               <div className="bg-[#4e97fd] w-20 h-8 mr-5 flex justify-center items-center shadow-xl rounded-lg">
                                 <h1 className="text-white font-bold">
-                                  ${post.servicePostPrice}
+                                  Rs {post.servicePostPrice}
                                 </h1>
                               </div>
                             </div>

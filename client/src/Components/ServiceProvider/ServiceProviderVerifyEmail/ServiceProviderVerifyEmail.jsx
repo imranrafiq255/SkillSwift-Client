@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import {
-  handleShowFailureToast,
-  handleShowSuccessToast,
-} from "../../ToastMessages/ToastMessage";
+import { handleShowFailureToast } from "../../ToastMessages/ToastMessage";
 import LoaderBars from "../../Loader/LoaderBars";
 import { Toaster } from "react-hot-toast";
 const ServiceProviderVerifyEmail = () => {
@@ -20,10 +17,11 @@ const ServiceProviderVerifyEmail = () => {
           `/api/v1/service-provider/verify-email/${token}`
         );
         setLoading(false);
-        handleShowSuccessToast(response.data.message);
         setVerified(true);
         setTimeout(() => {
-          navigate("/service-provider-upload-info");
+          navigate("/service-provider-upload-info", {
+            state: { message: response.data.message },
+          });
         }, 2000);
       } catch (error) {
         console.log(error?.response?.data?.message);

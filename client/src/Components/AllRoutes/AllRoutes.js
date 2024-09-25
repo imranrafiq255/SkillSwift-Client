@@ -35,7 +35,6 @@ import ServiceProviderForgotPassword from "../ServiceProvider/ServiceProviderFor
 import ServiceProviderUploadInfo from "../ServiceProvider/ServiceProviderUploadInfo/ServiceProviderUploadInfo";
 import ServiceProviderConfirmEmail from "../ServiceProvider/ServiceProviderVerifyEmail/ServiceProviderVerifyEmail";
 import ServiceProviderAccountVerification from "../ServiceProvider/ServiceProviderAccountVerification/ServiceProviderAccountVerification";
-import ServiceProviderAddService from "../ServiceProvider/ServiceProviderAddServices/ServiceProviderAddServices";
 import ServiceProviderTimeSlot from "../ServiceProvider/ServiceProviderTimeSlot/ServiceProviderTimeSlot";
 import ServiceProviderAddCNIC from "../ServiceProvider/ServiceProviderAddCNIC/ServiceProviderAddCNIC";
 import ServiceProviderPost from "../ServiceProvider/ServiceProviderPost/ServiceProviderPost";
@@ -58,7 +57,6 @@ const AuthenticatedRoutes = () => {
   const serviceProviderAuthenticatedRoutes = [
     "/service-provider-home",
     "/service-provider-upload-info",
-    "/service-provider-add-services",
     "/service-provider-add-time",
     "/service-provider-add-cnic",
     "/service-provider-post",
@@ -66,8 +64,10 @@ const AuthenticatedRoutes = () => {
     "/service-provider-chat-section",
     "/service-provider-setting",
     "/service-provider-notification",
+    "/service-provider-account-verification/your%20account%20is%20not%20verified",
   ];
   const consumerAuthenticatedRoutes = ["consumer-upload-info"];
+
   useEffect(() => {
     const loadCurrentConsumer = async () => {
       try {
@@ -76,6 +76,9 @@ const AuthenticatedRoutes = () => {
         );
         if (response.data) {
           setConsumerAuthenticated(true);
+          if (!response?.data?.consumer?.isEmailVerified) {
+            navigate("/consumer-send-email");
+          }
         }
       } catch (error) {
         console.log(error?.response?.data?.message);
@@ -83,10 +86,7 @@ const AuthenticatedRoutes = () => {
         setConsumerLoading(false);
       }
     };
-    loadCurrentConsumer();
-  }, []);
 
-  useEffect(() => {
     const loadCurrentServiceProvider = async () => {
       try {
         const response = await axios.get(
@@ -101,11 +101,6 @@ const AuthenticatedRoutes = () => {
               ?.length === 0
           ) {
             navigate("/service-provider-add-cnic");
-          } else if (
-            response?.data?.serviceProvider?.serviceProviderListedServices
-              .length === 0
-          ) {
-            navigate("/service-provider-add-services");
           } else if (
             response?.data?.serviceProvider?.serviceProviderWorkingHours
               .length === 0
@@ -135,8 +130,10 @@ const AuthenticatedRoutes = () => {
         setServiceProviderLoading(false);
       }
     };
+
+    loadCurrentConsumer();
     loadCurrentServiceProvider();
-  });
+  }, [location.pathname, navigate]);
 
   if (
     (isConsumerLoading &&
@@ -193,16 +190,7 @@ const AuthenticatedRoutes = () => {
       />
 
       {/* Protected Consumer Routes */}
-      <Route
-        path="/consumer-home"
-        element={
-          isConsumerAuthenticated ? (
-            <ConsumerHome />
-          ) : (
-            <Navigate to="/consumer-sign-in" state={{ from: location }} />
-          )
-        }
-      />
+      <Route path="/consumer-home" element={<ConsumerHome />} />
       <Route
         path="/consumer-upload-info"
         element={
@@ -279,16 +267,6 @@ const AuthenticatedRoutes = () => {
               to="/service-provider-sign-in"
               state={{ from: location }}
             />
-          )
-        }
-      />
-      <Route
-        path="/service-provider-add-services"
-        element={
-          isServiceProviderAuthenticated ? (
-            <ServiceProviderAddService />
-          ) : (
-            <Navigate to={"/service-provider-sign-in"} />
           )
         }
       />
