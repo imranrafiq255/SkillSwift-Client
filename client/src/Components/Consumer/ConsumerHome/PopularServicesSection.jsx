@@ -1,39 +1,66 @@
-import React from 'react';
-import AdImage from "../../../Assets/ServiceAd.png";
+import React, { useEffect } from "react";
 import StarRating from "../ConsumerCommon/StarRating";
-
+import { useSelector, useDispatch } from "react-redux";
+import { loadPopularPostsAction } from "../../Redux/Consumer/Actions/ConsumerActions";
+import SkeletonRecentPostLoader from "../../Loader/ConsumerLoaders/SkeletonRecentPostLoader";
+import { useNavigate } from "react-router-dom";
 const PopularServicesSection = () => {
-  const popularServices = [
-    { name: "House Help", price: "3000", imgSrc: AdImage, rating: 4 },
-    { name: "House Help", price: "3000", imgSrc: AdImage, rating: 5 },
-    { name: "House Help", price: "3000", imgSrc: AdImage, rating: 3 },
-    { name: "House Help", price: "3000", imgSrc: AdImage, rating: 4 },
-    { name: "House Help", price: "3000", imgSrc: AdImage, rating: 5 },
-    { name: "House Help", price: "3000", imgSrc: AdImage, rating: 2 },
-    { name: "House Help", price: "3000", imgSrc: AdImage, rating: 4 },
-    { name: "House Help", price: "3000", imgSrc: AdImage, rating: 3 },
-    // Add more popularServices here...
-  ];
+  const dispatch = useDispatch();
+  const { loading, posts } = useSelector(
+    (state) => state.loadPopularPostsReducer
+  );
+  const navigate = useNavigate();
+  useEffect(() => {
+    dispatch(loadPopularPostsAction());
+  }, []);
 
   return (
     <section className="py-16 bg-gray-100">
       <h2 className="text-center text-3xl font-bold mb-8">Popular Services</h2>
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {popularServices.map((service, index) => (
-            <div key={index} className="bg-white p-4 rounded-lg shadow-lg flex flex-col">
-              <img
-                src={service.imgSrc}
-                alt={service.name}
-                className="w-full h-48 md:h-64 object-cover mb-4 rounded-t-lg"
-              />
-              <div className="flex-grow">
-                <h3 className="text-lg font-semibold mb-2">{service.name}</h3>
-                <StarRating rating={service.rating} />
-                <p className="text-gray-700 mt-2">{"Rs " + service.price}</p>
-              </div>
+          {loading ? (
+            <div>
+              {Array.from({ length: 3 }).map((_, index) => (
+                <div key={index}>
+                  <div className="w-full h-24 bg-gray-200 rounded-lg">
+                    <SkeletonRecentPostLoader />
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          ) : posts && posts.length > 0 ? (
+            posts.map((service, index) => (
+              <div
+                key={index}
+                className="bg-white p-4 rounded-lg shadow-lg flex flex-col"
+                onClick={() =>
+                  navigate("/consumer-service-page", {
+                    state: { service: service },
+                  })
+                }
+              >
+                <img
+                  src={service.servicePostImage}
+                  alt={service.serviceName}
+                  className="w-full h-48 md:h-64 object-cover mb-4 rounded-t-lg"
+                />
+                <div className="flex-grow">
+                  <h3 className="text-lg font-semibold mb-2">
+                    {service.serviceName}
+                  </h3>
+                  <StarRating rating={service.servicePostRatings.length} />
+                  <p className="text-gray-700 mt-2">
+                    {"Rs " + service.servicePostPrice}
+                  </p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div>
+              <h1>No post into database</h1>
+            </div>
+          )}
         </div>
       </div>
     </section>

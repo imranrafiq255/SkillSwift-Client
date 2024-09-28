@@ -152,6 +152,75 @@ const consumerUploadInfoReducer = createReducer(
       });
   }
 );
+const loadPopularPostsReducer = createReducer(
+  { loading: false, error: null, posts: null },
+  (builder) => {
+    builder.addCase("LOAD_POPULAR_POSTS", (state) => {
+      state.loading = true;
+    });
+    builder.addCase("LOAD_POPULAR_POSTS_SUCCESS", (state, action) => {
+      state.loading = false;
+      state.posts = action.payload;
+    });
+    builder.addCase("LOAD_POPULAR_POSTS_FAILURE", (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase("CLEAR_ERRORS", (state) => {
+      state.error = null;
+    });
+  }
+);
+const loadConsumerNewNotificationsReducer = createReducer(
+  {
+    loadNotificationLoader: false,
+    notifications: null,
+    loadNotificationError: null,
+  },
+  (builder) => {
+    builder
+      .addCase("LOAD_NEW_NOTIFICATIONS_REQUEST", (state) => {
+        state.loadNotificationLoader = true;
+        state.loadNotificationError = null;
+      })
+      .addCase("LOAD_NEW_NOTIFICATIONS_SUCCESS", (state, action) => {
+        state.loadNotificationLoader = false;
+        state.notifications = action.payload;
+      })
+      .addCase("LOAD_NEW_NOTIFICATIONS_FAILURE", (state, action) => {
+        state.loadNotificationLoader = false;
+        state.loadNotificationError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.loadNotificationError = null;
+      });
+  }
+);
+const readConsumerNotificationReducer = createReducer(
+  {
+    readNotificationLoader: false,
+    readNotificationMessage: null,
+    readNotificationError: null,
+  },
+  (builder) => {
+    builder
+      .addCase("READ_NOTIFICATION_REQUEST", (state) => {
+        state.readNotificationLoader = true;
+        state.readNotificationError = null;
+      })
+      .addCase("READ_NOTIFICATION_SUCCESS", (state, action) => {
+        state.readNotificationLoader = false;
+        state.readNotificationMessage = action.payload;
+      })
+      .addCase("READ_NOTIFICATION_FAILURE", (state, action) => {
+        state.readNotificationLoader = false;
+        state.readNotificationError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.readNotificationError = null;
+      });
+  }
+);
 export {
   consumerLoginReducer,
   consumerForgotPasswordLinkReducer,
@@ -159,4 +228,7 @@ export {
   consumerSignUpReducer,
   loadCurrentConsumerReducer,
   consumerUploadInfoReducer,
+  loadPopularPostsReducer,
+  loadConsumerNewNotificationsReducer,
+  readConsumerNotificationReducer,
 };

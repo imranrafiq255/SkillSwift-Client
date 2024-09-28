@@ -13,7 +13,7 @@ import {
 import ProfileModal from "./ProfileModal";
 import AddressModal from "./AddressModal";
 import ConsumerSearchPage from "../ConsumerSearchPage/ConsumerSearchPage";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white shadow-md p-4">
+    <nav className="bg-white shadow-md p-4 z-10">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <div className="text-blue-700 font-semibold text-xl">SkillSwift</div>
@@ -67,28 +67,34 @@ const Navbar = () => {
               </a>
             </li>
             <li className="relative group">
-              <a href="/requests" className="flex items-center">
+              <Link
+                to={"/consumer-requested-services"}
+                className="flex items-center"
+              >
                 <FaClipboardList className="w-5 h-5" />
                 <span className="absolute left-1/2 transform -translate-x-1/2 top-full mt-1 text-xs text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity">
-                  Service Requests
+                  Requests
                 </span>
-              </a>
+              </Link>
             </li>
             <li className="relative group">
-              <a href="/history" className="flex items-center">
+              <Link
+                to={"/consumer-service-history"}
+                className="flex items-center"
+              >
                 <FaHistory className="w-5 h-5" />
                 <span className="absolute left-1/2 transform -translate-x-1/2 top-full mt-1 text-xs text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity">
-                  Service History
+                  History
                 </span>
-              </a>
+              </Link>
             </li>
             <li className="relative group">
-              <a href="/disputes" className="flex items-center">
+              <Link to={"/consumer-disputes"} className="flex items-center">
                 <FaExclamationCircle className="w-5 h-5" />
                 <span className="absolute left-1/2 transform -translate-x-1/2 top-full mt-1 text-xs text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity">
                   Disputes
                 </span>
-              </a>
+              </Link>
             </li>
             <li className="relative group">
               <button
@@ -142,7 +148,7 @@ const Navbar = () => {
               <FaMapMarkerAlt className="w-5 h-5" />
             </button>
             <button
-              onClick={() => alert("Notifications clicked")}
+              onClick={() => navigate("/consumer-notifications")}
               aria-label="Profile"
             >
               <FaBell className="w-5 h-5" />

@@ -5,13 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   loadNewNotificationsAction,
   readNotificationAction,
-} from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
+} from "../../Redux/Consumer/Actions/ConsumerActions.js";
 import {
   handleShowFailureToast,
   handleShowSuccessToast,
 } from "../../ToastMessages/ToastMessage";
 import { Toaster } from "react-hot-toast";
-const ServiceProviderNotification = () => {
+const ConsumerNotification = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loadNotificationLoader, notifications } = useSelector(
@@ -47,6 +47,7 @@ const ServiceProviderNotification = () => {
     dispatch(readNotificationAction(id));
     dispatch(loadNewNotificationsAction());
   };
+
   return (
     <>
       <Toaster />
@@ -60,7 +61,7 @@ const ServiceProviderNotification = () => {
               onClick={() => navigate(-1)}
             />
             <h1 className="text-lg lg:text-lg xl:text-2xl font-bold text-[#4e97fd] uppercase">
-              Service Provider Notification
+              Consumer Notification
             </h1>
           </div>
         </div>
@@ -78,14 +79,19 @@ const ServiceProviderNotification = () => {
                 <div className="notification-card shadow-2xl w-full bg-[#c8c8c8] rounded-md items-center relative flex p-3 gap-2">
                   <div className=" basis-[15%] flex justify-center">
                     <img
-                      src={notification?.notificationSendBy?.consumerAvatar}
+                      src={
+                        notification?.notificationSendBy?.serviceProviderAvatar
+                      }
                       alt=""
                       className="w-14 h-14 rounded-full"
                     />
                   </div>
                   <div className="basis-[85%]">
                     <h1 className="text-sm font-bold text-[#4e97fd]">
-                      {notification?.notificationSendBy?.consumerFullName}
+                      {
+                        notification?.notificationSendBy
+                          ?.serviceProviderFullName
+                      }
                     </h1>
                     <p className="text-sm text-[#878787]">
                       {notification?.notificationMessage}
@@ -121,4 +127,4 @@ const ServiceProviderNotification = () => {
   );
 };
 
-export default ServiceProviderNotification;
+export default ConsumerNotification;

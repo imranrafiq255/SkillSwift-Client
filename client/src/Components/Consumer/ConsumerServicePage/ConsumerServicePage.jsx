@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
-import { FaStar, FaHeart, FaInfoCircle } from 'react-icons/fa';
-import Footer from '../ConsumerCommon/Footer.jsx';
-import Navbar from '../ConsumerCommon/Navbar';
-import ContactSection from '../ConsumerCommon/ContactSection';
-import PopularServicesSection from '../ConsumerHome/PopularServicesSection.jsx';
-
-const ServicePage = ({ service }) => {
-  const [selectedSlot, setSelectedSlot] = useState('');
+import React, { useState } from "react";
+import { FaStar, FaHeart, FaInfoCircle } from "react-icons/fa";
+import Footer from "../ConsumerCommon/Footer.jsx";
+import Navbar from "../ConsumerCommon/Navbar";
+import ContactSection from "../ConsumerCommon/ContactSection";
+import PopularServicesSection from "../ConsumerHome/PopularServicesSection.jsx";
+import { useLocation } from "react-router-dom";
+const ServicePage = () => {
+  const [selectedSlot, setSelectedSlot] = useState("");
 
   const handleBookService = () => {
     if (selectedSlot) {
       alert(`Booking Request is Sent for: ${selectedSlot}`);
     }
   };
-
+  const location = useLocation();
+  const service = location?.state?.service || null;
+  console.log(service);
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
@@ -25,26 +27,46 @@ const ServicePage = ({ service }) => {
           {/* Service Details */}
           <div className="md:w-2/3">
             <div className="mb-6">
-              <img src={service.imageUrl} alt={service.title} className="w-full h-64 object-cover rounded-lg" />
+              <img
+                src={service?.imageUrl}
+                alt={service?.title}
+                className="w-full h-64 object-cover rounded-lg"
+              />
             </div>
             <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-              <p className="text-3xl font-bold text-blue-600">Rs. {service.price}</p>
-              <h1 className="text-3xl font-bold mb-4 mt-4">{service.title}</h1>
-              <p className="text-gray-700 mb-4">{service.description}</p>
+              <p className="text-3xl font-bold text-blue-600">
+                Rs. {service?.price}
+              </p>
+              <h1 className="text-3xl font-bold mb-4 mt-4">{service?.title}</h1>
+              <p className="text-gray-700 mb-4">{service?.description}</p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h2 className="text-xl font-semibold mb-4">Service Provider</h2>
               <div className="flex items-center mb-4">
-                <img src={service.provider.imageUrl} alt={service.provider.name} className="w-12 h-12 rounded-full object-cover mr-4" />
+                <img
+                  src={service?.provider?.imageUrl}
+                  alt={service?.provider?.name}
+                  className="w-12 h-12 rounded-full object-cover mr-4"
+                />
                 <div>
-                  <h3 className="font-semibold">{service.provider.name}</h3>
+                  <h3 className="font-semibold">{service?.provider?.name}</h3>
                   <div className="flex items-center mb-4">
                     <div className="flex text-yellow-400 mr-2">
                       {[...Array(5)].map((_, i) => (
-                        <FaStar key={i} className={i < service.provider.rating ? "text-yellow-500" : "text-gray-300"} />
+                        <FaStar
+                          key={i}
+                          className={
+                            i < service?.provider?.rating
+                              ? "text-yellow-500"
+                              : "text-gray-300"
+                          }
+                        />
                       ))}
                     </div>
-                    <span className="text-gray-600">({service.provider.rating} out of 5 based on {service.provider.reviewCount} reviews)</span>
+                    <span className="text-gray-600">
+                      ({service?.provider?.rating} out of 5 based on{" "}
+                      {service?.provider?.reviewCount} reviews)
+                    </span>
                   </div>
                 </div>
               </div>
@@ -56,26 +78,37 @@ const ServicePage = ({ service }) => {
             <div className="bg-white p-6 rounded-lg shadow-md mb-6">
               <h2 className="text-xl font-semibold mb-4">Availability</h2>
               <form>
-                {service.provider.serviceProviderWorkingHours.map((slot, index) => (
-                  <div key={index} className="flex items-center mb-2">
-                    <input
-                      type="radio"
-                      id={`slot-${index}`}
-                      name="availability"
-                      value={slot}
-                      checked={selectedSlot === slot}
-                      onChange={() => setSelectedSlot(slot)}
-                      className="mr-2"
-                    />
-                    <label htmlFor={`slot-${index}`} className="text-gray-700">{slot}</label>
-                  </div>
-                ))}
+                {service?.serviceProvider?.serviceProviderWorkingHours.map(
+                  (slot, index) => (
+                    <div key={index} className="flex items-center mb-2">
+                      <input
+                        type="radio"
+                        id={`slot-${index}`}
+                        name="availability"
+                        value={slot}
+                        checked={selectedSlot === slot}
+                        onChange={() => setSelectedSlot(slot)}
+                        className="mr-2"
+                      />
+                      <label
+                        htmlFor={`slot-${index}`}
+                        className="text-gray-700"
+                      >
+                        {slot?.dayOfWeek} - {slot?.time}
+                      </label>
+                    </div>
+                  )
+                )}
               </form>
-              <button 
-                className={`mt-4 py-2 px-4 rounded-lg transition duration-300 w-full ${selectedSlot ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-blue-400 text-white cursor-not-allowed'}`} 
-                onClick={handleBookService} 
+              <button
+                className={`mt-4 py-2 px-4 rounded-lg transition duration-300 w-full ${
+                  selectedSlot
+                    ? "bg-blue-600 text-white hover:bg-blue-700"
+                    : "bg-blue-400 text-white cursor-not-allowed"
+                }`}
+                onClick={handleBookService}
                 disabled={!selectedSlot}
-                title={!selectedSlot ? 'Please select a time slot' : ''}
+                title={!selectedSlot ? "Please select a time slot" : ""}
               >
                 Book Now
               </button>
@@ -86,10 +119,18 @@ const ServicePage = ({ service }) => {
               <h2 className="text-xl font-semibold mb-4">Rating</h2>
               <div className="flex text-yellow-400 mb-2">
                 {[...Array(5)].map((_, i) => (
-                  <FaStar key={i} className={i < service.rating ? "text-yellow-500" : "text-gray-300"} />
+                  <FaStar
+                    key={i}
+                    className={
+                      i < service?.rating ? "text-yellow-500" : "text-gray-300"
+                    }
+                  />
                 ))}
               </div>
-              <p className="text-gray-600">{service.rating} out of 5 based on {service.reviewCount} reviews</p>
+              <p className="text-gray-600">
+                {service?.rating} out of 5 based on {service?.reviewCount}{" "}
+                reviews
+              </p>
             </div>
 
             {/* Actions */}

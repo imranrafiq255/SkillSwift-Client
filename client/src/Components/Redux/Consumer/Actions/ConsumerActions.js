@@ -123,6 +123,61 @@ const consumerUploadInfoAction = (consumerData) => async (dispatch) => {
     });
   }
 };
+const loadPopularPostsAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LOAD_POPULAR_POSTS_REQUEST",
+    });
+    const response = await axios.get(
+      "/api/v1/consumer/load-popular-service-posts?all=true"
+    );
+    dispatch({
+      type: "LOAD_POPULAR_POSTS_SUCCESS",
+      payload: response?.data?.servicePosts,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_POPULAR_POSTS_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
+const loadNewNotificationsAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LOAD_NEW_NOTIFICATIONS_REQUEST",
+    });
+    const response = await axios.get("/api/v1/consumer/load-new-notifications");
+    dispatch({
+      type: "LOAD_NEW_NOTIFICATIONS_SUCCESS",
+      payload: response?.data?.notifications,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_NEW_NOTIFICATIONS_FAILURE",
+      payload: error?.response?.data?.message,
+    });
+  }
+};
+const readNotificationAction = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "READ_NOTIFICATION_REQUEST",
+    });
+    const response = await axios.get(
+      `/api/v1/consumer/read-notification/${id}`
+    );
+    dispatch({
+      type: "READ_NOTIFICATION_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "READ_NOTIFICATION_FAILURE",
+      payload: error?.response?.data?.message,
+    });
+  }
+};
 export {
   clearErrors,
   consumerLoginAction,
@@ -131,4 +186,7 @@ export {
   consumerSignUpAction,
   loadCurrentConsumerAction,
   consumerUploadInfoAction,
+  loadPopularPostsAction,
+  loadNewNotificationsAction,
+  readNotificationAction,
 };

@@ -3,36 +3,25 @@ import Navbar from "../ConsumerCommon/Navbar";
 import Footer from "../ConsumerCommon/Footer";
 import ContactSection from "../ConsumerCommon/ContactSection";
 
-const DisputePage = () => {
+const ConsumerRefundPage = () => {
   const [activeTab, setActiveTab] = useState("inProgress");
-  const [showDisputeModal, setShowDisputeModal] = useState(false);
-  const [showRefundModal, setShowRefundModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [selectedServiceId, setSelectedServiceId] = useState("");
   const [reason, setReason] = useState("");
   const [description, setDescription] = useState("");
   const [errors, setErrors] = useState({});
   const modalRef = useRef(null);
 
-  const handleOpenDisputeModal = () => {
-    setShowDisputeModal(true);
-    setSelectedServiceId("");
-    setReason("");
-    setDescription("");
-    setErrors({});
-  };
-  const handleOpenRefundModal = () => {
-    setShowDisputeModal(true);
+  const handleOpenModal = () => {
+    setShowModal(true);
     setSelectedServiceId("");
     setReason("");
     setDescription("");
     setErrors({});
   };
 
-  const handleCloseDisputeModal = () => {
-    setShowDisputeModal(false);
-  };
-  const handleCloseRefundModal = () => {
-    setShowRefundModal(false);
+  const handleCloseModal = () => {
+    setShowModal(false);
   };
 
   const handleSubmit = (e) => {
@@ -50,12 +39,12 @@ const DisputePage = () => {
 
     // Handle the submission of the new dispute
     alert(`Dispute submitted for Service ID: ${selectedServiceId}`);
-    handleCloseDisputeModal();
+    handleCloseModal();
   };
 
   const handleOutsideClick = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
-      handleCloseDisputeModal();
+      handleCloseModal();
     }
   };
   const services = [
@@ -189,7 +178,7 @@ const DisputePage = () => {
     },
   ];
   useEffect(() => {
-    if (showDisputeModal) {
+    if (showModal) {
       document.addEventListener("mousedown", handleOutsideClick);
     } else {
       document.removeEventListener("mousedown", handleOutsideClick);
@@ -198,7 +187,7 @@ const DisputePage = () => {
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, [showDisputeModal]);
+  }, [showModal]);
 
   // Filter services to show only completed ones
   const completedServices = services?.filter(
@@ -211,20 +200,12 @@ const DisputePage = () => {
       <div className="p-6">
         <h1 className="text-3xl font-bold mb-6">Disputes</h1>
 
-        <div className="flex gap-5">
-          <button
-            onClick={handleOpenDisputeModal}
-            className="text-xs lg:text-lg mb-4 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-300"
-          >
-            Apply for Full Refund
-          </button>
-          <button
-            onClick={handleOpenRefundModal}
-            className="text-xs lg:text-lg mb-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
-          >
-            Apply for Partial Refund
-          </button>
-        </div>
+        <button
+          onClick={handleOpenModal}
+          className="mb-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
+        >
+          File a New Dispute
+        </button>
 
         <div className="flex flex-wrap justify-center md:justify-start mb-6">
           {["inProgress", "accepted", "rejected"].map((tab) => (
@@ -280,7 +261,7 @@ const DisputePage = () => {
       </div>
 
       {/* New Dispute Modal */}
-      {showDisputeModal && (
+      {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div
             ref={modalRef}
@@ -360,99 +341,7 @@ const DisputePage = () => {
                 Submit Dispute
               </button>
             </form>
-            <button
-              onClick={handleCloseDisputeModal}
-              className="mt-4 text-blue-600"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
-      {showRefundModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div
-            ref={modalRef}
-            className="bg-white p-4 rounded-lg shadow-lg max-w-sm w-full flex flex-col"
-          >
-            <h2 className="text-xl font-bold mb-4">File a New Dispute</h2>
-            <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-              <div>
-                <label
-                  htmlFor="service"
-                  className="block text-sm font-medium mb-1"
-                >
-                  Select Service
-                </label>
-                <select
-                  id="service"
-                  value={selectedServiceId}
-                  onChange={(e) => setSelectedServiceId(e.target.value)}
-                  className={`border rounded-lg w-full p-2 ${
-                    errors.service ? "border-red-500" : ""
-                  }`}
-                >
-                  <option value="">Select a service...</option>
-                  {completedServices.map((service) => (
-                    <option key={service.id} value={service.id}>
-                      {service.title}
-                    </option>
-                  ))}
-                </select>
-                {errors.service && (
-                  <p className="text-red-500 text-xs">{errors.service}</p>
-                )}
-              </div>
-              <div>
-                <label
-                  htmlFor="reason"
-                  className="block text-sm font-medium mb-1"
-                >
-                  Reason
-                </label>
-                <input
-                  type="text"
-                  id="reason"
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value)}
-                  className={`border rounded-lg w-full p-2 ${
-                    errors.reason ? "border-red-500" : ""
-                  }`}
-                />
-                {errors.reason && (
-                  <p className="text-red-500 text-xs">{errors.reason}</p>
-                )}
-              </div>
-              <div>
-                <label
-                  htmlFor="description"
-                  className="block text-sm font-medium mb-1"
-                >
-                  Description
-                </label>
-                <textarea
-                  id="description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  className={`border rounded-lg w-full p-2 ${
-                    errors.description ? "border-red-500" : ""
-                  }`}
-                />
-                {errors.description && (
-                  <p className="text-red-500 text-xs">{errors.description}</p>
-                )}
-              </div>
-              <button
-                type="submit"
-                className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
-              >
-                Submit Dispute
-              </button>
-            </form>
-            <button
-              onClick={handleCloseDisputeModal}
-              className="mt-4 text-blue-600"
-            >
+            <button onClick={handleCloseModal} className="mt-4 text-blue-600">
               Cancel
             </button>
           </div>
@@ -465,4 +354,4 @@ const DisputePage = () => {
   );
 };
 
-export default DisputePage;
+export default ConsumerRefundPage;

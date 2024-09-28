@@ -11,13 +11,10 @@ import { Toaster } from "react-hot-toast";
 import { handleShowSuccessToast } from "../../ToastMessages/ToastMessage";
 
 const ConsumerHome = () => {
-  // const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
   const hasShownToast = useRef(false);
-
   const message = location?.state?.message || null;
-
   useEffect(() => {
     if (message && !hasShownToast.current) {
       handleShowSuccessToast(message);
@@ -29,7 +26,6 @@ const ConsumerHome = () => {
   // const toggleSidebar = () => {
   //   setIsSidebarVisible((prevState) => !prevState);
   // };
-
   return (
     <>
       <Toaster />

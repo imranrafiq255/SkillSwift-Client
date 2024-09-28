@@ -240,7 +240,7 @@ const ServiceProviderOrder = () => {
                                 Service Name
                               </h1>
                             </div>
-                            <h1>{order?.servicePost?.service?.serviceName}</h1>
+                            <h1>{order?.servicePost?.serviceName}</h1>
                           </div>
                           <div className="flex gap-3 items-center message">
                             <div className="order-name bg-white inline-block py-2 px-4 rounded-lg">
@@ -368,7 +368,7 @@ const ServiceProviderOrder = () => {
                                 Service Name
                               </h1>
                             </div>
-                            <h1>{order?.servicePost?.service?.serviceName}</h1>
+                            <h1>{order?.servicePost?.serviceName}</h1>
                           </div>
                           <div className="flex gap-3 items-center message">
                             <div className="order-name bg-white inline-block py-2 px-4 rounded-lg">
@@ -476,7 +476,7 @@ const ServiceProviderOrder = () => {
                                 Service Name
                               </h1>
                             </div>
-                            <h1>{order?.servicePost?.service?.serviceName}</h1>
+                            <h1>{order?.servicePost?.serviceName}</h1>
                           </div>
                           <div className="flex gap-3 items-center message">
                             <div className="order-name bg-white inline-block py-2 px-4 rounded-lg">
@@ -604,7 +604,7 @@ const ServiceProviderOrder = () => {
                                 Service Name
                               </h1>
                             </div>
-                            <h1>{order?.servicePost?.service?.serviceName}</h1>
+                            <h1>{order?.servicePost?.serviceName}</h1>
                           </div>
                           <div className="flex gap-3 items-center message">
                             <div className="order-name bg-white inline-block py-2 px-4 rounded-lg">
@@ -712,7 +712,7 @@ const ServiceProviderOrder = () => {
                                 Service Name
                               </h1>
                             </div>
-                            <h1>{order?.servicePost?.service?.serviceName}</h1>
+                            <h1>{order?.servicePost?.serviceName}</h1>
                           </div>
                           <div className="flex gap-3 items-center message">
                             <div className="order-name bg-white inline-block py-2 px-4 rounded-lg">

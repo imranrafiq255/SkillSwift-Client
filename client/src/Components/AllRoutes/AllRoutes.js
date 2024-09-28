@@ -41,7 +41,10 @@ import ServiceProviderOrder from "../ServiceProvider/ServiceProviderOrder/Servic
 import ServiceProviderSetting from "../ServiceProvider/ServiceProviderSetting/ServiceProviderSetting";
 import ServiceProviderChatSection from "../ServiceProvider/ServiceProviderChatSection/ServiceProviderChatSection";
 import ServiceProviderNotification from "../ServiceProvider/ServiceProviderNotification/ServiceProviderNotification";
-
+import ConsumerNotification from "../Consumer/ConsumerNotification/ConsumerNotification";
+import ConsumerDisputePage from "../Consumer/ConsumerDisputePage/ConsumerDisputePage";
+import ConsumerServicePage from "../Consumer/ConsumerServicePage/ConsumerServicePage";
+import ConsumerRefundPage from "../Consumer/ConsumerRefundPage/ConsumerRefundPage";
 const AuthenticatedRoutes = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -64,7 +67,15 @@ const AuthenticatedRoutes = () => {
     "/service-provider-notification",
     "/service-provider-account-verification/your%20account%20is%20not%20verified",
   ];
-  const consumerAuthenticatedRoutes = ["/consumer-upload-info"];
+  const consumerAuthenticatedRoutes = [
+    "/consumer-upload-info",
+    "/consumer-notifications",
+    "/consumer-disputes",
+    "/consumer-service-page",
+    "/consumer-service-history",
+    "/consumer-requested-services",
+    "/consumer-refund-page",
+  ];
 
   useEffect(() => {
     const loadCurrentConsumer = async () => {
@@ -162,6 +173,7 @@ const AuthenticatedRoutes = () => {
         path="/consumer-confirm-email/:token"
         element={<ConsumerVerifyEmail />}
       />
+      {/*Service provider public routes*/}
       <Route
         path="/service-provider-sign-up"
         element={<ServiceProviderSignUp />}
@@ -186,7 +198,6 @@ const AuthenticatedRoutes = () => {
         path="/service-provider-confirm-email/:token"
         element={<ServiceProviderConfirmEmail />}
       />
-
       {/* Protected Consumer Routes */}
       <Route path="/consumer-home" element={<ConsumerHome />} />
       <Route
@@ -219,8 +230,47 @@ const AuthenticatedRoutes = () => {
           )
         }
       />
-
-      {/* Protected Service Provider Routes */}
+      <Route
+        path="/consumer-notifications"
+        element={
+          isConsumerAuthenticated ? (
+            <ConsumerNotification />
+          ) : (
+            <Navigate to={"/consumer-sign-in"} />
+          )
+        }
+      />
+      <Route
+        path="/consumer-disputes"
+        element={
+          isConsumerAuthenticated ? (
+            <ConsumerDisputePage />
+          ) : (
+            <Navigate to={"/consumer-sign-in"} />
+          )
+        }
+      />
+      <Route
+        path="/consumer-service-page"
+        element={
+          isConsumerAuthenticated ? (
+            <ConsumerServicePage />
+          ) : (
+            <Navigate to={"/consumer-sign-in"} />
+          )
+        }
+      />
+      <Route
+        path="/consumer-refund-page"
+        element={
+          isConsumerAuthenticated ? (
+            <ConsumerRefundPage />
+          ) : (
+            <Navigate to={"/consumer-sign-in"} />
+          )
+        }
+      />
+      {/* Protected Servicse Provider Routes */}
       <Route
         path="/service-provider-home"
         element={

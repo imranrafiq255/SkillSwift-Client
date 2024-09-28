@@ -1,42 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ServiceCard from "../ConsumerServiceCard/ConsumerServiceCard";
 import SearchBar from "./SearchBar";
-import AdImage from "../../../Assets/avatar.png";
-
+import { useSelector, useDispatch } from "react-redux";
+import { loadPopularPostsAction } from "../../Redux/Consumer/Actions/ConsumerActions.js";
 const ConsumerSearchPage = ({ onClose }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const services = [
-    { name: "Plumbing", price: "2500", imgSrc: AdImage, rating: 3 },
-    { name: "Electrical Repair", price: "3500", imgSrc: AdImage, rating: 5 },
-    { name: "Gardening", price: "2000", imgSrc: AdImage, rating: 4 },
-    { name: "Home Cleaning", price: "1800", imgSrc: AdImage, rating: 4 },
-    { name: "Pest Control", price: "2200", imgSrc: AdImage, rating: 2 },
-    { name: "Painting", price: "4000", imgSrc: AdImage, rating: 5 },
-    { name: "Car Wash", price: "1200", imgSrc: AdImage, rating: 3 },
-    { name: "AC Installation", price: "3000", imgSrc: AdImage, rating: 4 },
-    { name: "Plumbing", price: "2500", imgSrc: AdImage, rating: 3 },
-    { name: "Electrical Repair", price: "3500", imgSrc: AdImage, rating: 5 },
-    { name: "Gardening", price: "2000", imgSrc: AdImage, rating: 4 },
-    { name: "Home Cleaning", price: "1800", imgSrc: AdImage, rating: 4 },
-    { name: "Pest Control", price: "2200", imgSrc: AdImage, rating: 2 },
-    { name: "Painting", price: "4000", imgSrc: AdImage, rating: 5 },
-    { name: "Car Wash", price: "1200", imgSrc: AdImage, rating: 3 },
-    { name: "AC Installation", price: "3000", imgSrc: AdImage, rating: 4 },
-    { name: "Plumbing", price: "2500", imgSrc: AdImage, rating: 3 },
-    { name: "Electrical Repair", price: "3500", imgSrc: AdImage, rating: 5 },
-    { name: "Gardening", price: "2000", imgSrc: AdImage, rating: 4 },
-    { name: "Home Cleaning", price: "1800", imgSrc: AdImage, rating: 4 },
-    { name: "Pest Control", price: "2200", imgSrc: AdImage, rating: 2 },
-    { name: "Painting", price: "4000", imgSrc: AdImage, rating: 5 },
-    { name: "Car Wash", price: "1200", imgSrc: AdImage, rating: 3 },
-    { name: "AC Installation", price: "3000", imgSrc: AdImage, rating: 4 },
-  ];
-
-  // Filter services based on search query
-  const filteredServices = services.filter((service) =>
-    service.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const dispatch = useDispatch();
+  const [filteredServices, setFilteredServices] = useState(null);
+  const { loading, posts, error } = useSelector(
+    (state) => state.loadPopularPostsReducer
   );
-
+  useEffect(() => {
+    if (!loading && posts) {
+      setFilteredServices(posts);
+      const filtered = posts.filter((post) =>
+        post.serviceName.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredServices(filtered);
+    } else if (!loading && error) {
+      console.error(error);
+      setFilteredServices([]);
+    }
+  }, [searchQuery, loading, posts, error]);
+  useEffect(() => {
+    dispatch(loadPopularPostsAction());
+  }, [dispatch]);
   return (
     <div className="flex flex-col h-screen">
       <div className="sticky top-0 z-10">
@@ -51,7 +39,7 @@ const ConsumerSearchPage = ({ onClose }) => {
 
       <main className="flex-1 overflow-y-auto p-8 mb-24">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {filteredServices.length > 0 ? (
+          {!loading && filteredServices && filteredServices.length > 0 ? (
             filteredServices.map((service, index) => (
               <ServiceCard key={index} service={service} />
             ))

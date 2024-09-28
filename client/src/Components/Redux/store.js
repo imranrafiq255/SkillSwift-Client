@@ -6,6 +6,7 @@ import {
   consumerSignUpReducer,
   consumerUploadInfoReducer,
   loadCurrentConsumerReducer,
+  loadPopularPostsReducer,
 } from "./Consumer/Reducers/ConsumerReducers";
 import {
   acceptOrderReducer,
@@ -34,13 +35,14 @@ import {
 
 const store = configureStore({
   reducer: {
+    // consumer reducers
     consumerLoginReducer: consumerLoginReducer,
     consumerForgotPasswordLinkReducer: consumerForgotPasswordLinkReducer,
     consumerResetPasswordReducer: consumerResetPasswordReducer,
     consumerSignUpReducer: consumerSignUpReducer,
     loadCurrentConsumerReducer: loadCurrentConsumerReducer,
     consumerUploadInfoReducer: consumerUploadInfoReducer,
-
+    loadPopularPostsReducer: loadPopularPostsReducer,
     // service provider reducers
     serviceProviderSignInReducer: serviceProviderSignInReducer,
     serviceProviderForgotPasswordReducer: serviceProviderForgotPasswordReducer,
