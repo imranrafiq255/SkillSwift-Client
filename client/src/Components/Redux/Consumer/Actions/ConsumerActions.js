@@ -178,6 +178,156 @@ const readNotificationAction = (id) => async (dispatch) => {
     });
   }
 };
+const consumerOrderServiceAction = (serviceData) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "CONSUMER_ORDER_SERVICE_REQUEST",
+    });
+    const response = await axios.post(
+      "/api/v1/consumer/order-service",
+      serviceData
+    );
+    dispatch({
+      type: "CONSUMER_ORDER_SERVICE_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "CONSUMER_ORDER_SERVICE_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
+const loadOrdersAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LOAD_ORDERS_REQUEST",
+    });
+    const response = await axios.get("/api/v1/consumer/load-orders");
+    dispatch({
+      type: "LOAD_ORDERS_SUCCESS",
+      payload: response?.data?.orders,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_ORDERS_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
+const consumerRejectOrderAction = (orderId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "CONSUMER_REJECT_ORDER_REQUEST",
+    });
+    const response = await axios.delete(
+      `/api/v1/consumer/reject-order/${orderId}`
+    );
+    dispatch({
+      type: "CONSUMER_REJECT_ORDER_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "CONSUMER_REJECT_ORDER_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
+const consumerAddRatingAction = (id, data) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "CONSUMER_ADD_RATING_REQUEST",
+    });
+    const response = await axios.post(
+      `/api/v1/consumer/add-rating/${id}`,
+      data
+    );
+    dispatch({
+      type: "CONSUMER_ADD_RATING_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "CONSUMER_ADD_RATING_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
+const loadAllDisputesAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LOAD_ALL_DISPUTES_REQUEST",
+    });
+    const response = await axios.get("/api/v1/consumer/load-disputes");
+    dispatch({
+      type: "LOAD_ALL_DISPUTES_SUCCESS",
+      payload: response?.data?.disputes,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_ALL_DISPUTES_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
+const fileDisputeAction = (id, data) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "FILE_DISPUTE_REQUEST",
+    });
+    const response = await axios.post(
+      `/api/v1/consumer/file-dispute/${id}`,
+      data
+    );
+    dispatch({
+      type: "FILE_DISPUTE_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "FILE_DISPUTE_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
+const loadRefundsAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LOAD_REFUNDS_REQUEST",
+    });
+    const response = await axios.get("/api/v1/consumer/load-refunds");
+    dispatch({
+      type: "LOAD_REFUNDS_SUCCESS",
+      payload: response?.data?.refunds,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_REFUNDS_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
+const refundAmountRequestAction = (refundData) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "REFUND_AMOUNT_REQUEST",
+    });
+    const response = await axios.post(
+      "/api/v1/consumer/refund-amount-request",
+      refundData
+    );
+    dispatch({
+      type: "REFUND_AMOUNT_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "REFUND_AMOUNT_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
 export {
   clearErrors,
   consumerLoginAction,
@@ -189,4 +339,12 @@ export {
   loadPopularPostsAction,
   loadNewNotificationsAction,
   readNotificationAction,
+  consumerOrderServiceAction,
+  loadOrdersAction,
+  consumerRejectOrderAction,
+  consumerAddRatingAction,
+  loadAllDisputesAction,
+  fileDisputeAction,
+  loadRefundsAction,
+  refundAmountRequestAction,
 };

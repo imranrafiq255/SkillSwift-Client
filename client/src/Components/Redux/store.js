@@ -1,12 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
 import {
+  consumerAddRatingReducer,
   consumerForgotPasswordLinkReducer,
   consumerLoginReducer,
+  consumerOrderServiceReducer,
+  consumerRejectOrderReducer,
   consumerResetPasswordReducer,
   consumerSignUpReducer,
   consumerUploadInfoReducer,
+  fileDisputeReducer,
+  loadAllDisputesReducer,
   loadCurrentConsumerReducer,
+  loadOrdersReducer,
   loadPopularPostsReducer,
+  loadRefundsReducer,
+  refundAmountRequestReducer,
 } from "./Consumer/Reducers/ConsumerReducers";
 import {
   acceptOrderReducer,
@@ -43,6 +51,14 @@ const store = configureStore({
     loadCurrentConsumerReducer: loadCurrentConsumerReducer,
     consumerUploadInfoReducer: consumerUploadInfoReducer,
     loadPopularPostsReducer: loadPopularPostsReducer,
+    consumerOrderServiceReducer: consumerOrderServiceReducer,
+    loadOrdersReducer: loadOrdersReducer,
+    consumerRejectOrderReducer: consumerRejectOrderReducer,
+    consumerAddRatingReducer: consumerAddRatingReducer,
+    loadAllDisputesReducer: loadAllDisputesReducer,
+    fileDisputeReducer: fileDisputeReducer,
+    loadRefundsReducer: loadRefundsReducer,
+    refundAmountRequestReducer: refundAmountRequestReducer,
     // service provider reducers
     serviceProviderSignInReducer: serviceProviderSignInReducer,
     serviceProviderForgotPasswordReducer: serviceProviderForgotPasswordReducer,

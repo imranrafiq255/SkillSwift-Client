@@ -1,8 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loadCurrentConsumerAction } from "../../Redux/Consumer/Actions/ConsumerActions";
 
 const AddressModal = ({ isOpen, onClose, address, onSave }) => {
   const [newAddress, setNewAddress] = useState(address);
   const [error, setError] = useState("");
+  const dispatch = useDispatch();
+  const { consumer } = useSelector((state) => state.loadCurrentConsumerReducer);
+  useEffect(() => {
+    dispatch(loadCurrentConsumerAction());
+  }, [dispatch]);
 
   const handleChange = (e) => {
     setNewAddress(e.target.value);
@@ -31,7 +38,7 @@ const AddressModal = ({ isOpen, onClose, address, onSave }) => {
           <label className="block font-semibold mb-1">Address</label>
           <input
             type="text"
-            value={newAddress}
+            value={consumer?.consumerAddress}
             onChange={handleChange}
             className="border p-2 w-full rounded"
           />
@@ -42,7 +49,10 @@ const AddressModal = ({ isOpen, onClose, address, onSave }) => {
           <button onClick={onClose} className="bg-gray-300 px-4 py-2 rounded">
             Cancel
           </button>
-          <button onClick={handleSubmit} className="bg-blue-500 text-white px-4 py-2 rounded">
+          <button
+            onClick={handleSubmit}
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
             Save
           </button>
         </div>

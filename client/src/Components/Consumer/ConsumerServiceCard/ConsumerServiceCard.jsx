@@ -1,9 +1,17 @@
 import React from "react";
 import StarRating from "../ConsumerCommon/StarRating";
-
+import { useNavigate } from "react-router-dom";
 const ServiceCard = ({ service }) => {
+  const navigate = useNavigate();
   return (
-    <div className="bg-white p-4 rounded-lg shadow-lg">
+    <div
+      className="bg-white p-4 rounded-lg shadow-lg cursor-pointer"
+      onClick={() =>
+        navigate("/consumer-service-page", {
+          state: { service: service },
+        })
+      }
+    >
       <img
         src={service.servicePostImage}
         alt={service.serviceName}

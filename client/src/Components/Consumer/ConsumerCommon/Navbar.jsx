@@ -14,6 +14,12 @@ import ProfileModal from "./ProfileModal";
 import AddressModal from "./AddressModal";
 import ConsumerSearchPage from "../ConsumerSearchPage/ConsumerSearchPage";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import {
+  handleShowFailureToast,
+  handleShowSuccessToast,
+} from "../../ToastMessages/ToastMessage";
+import { Toaster } from "react-hot-toast";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -37,13 +43,23 @@ const Navbar = () => {
   const handleProfileSave = (updatedUser) => {
     setUser(updatedUser);
   };
-
-  const handleAddressSave = (newAddress) => {
-    alert("Address saved");
+  const handleAddressSave = async (newAddress) => {
+    try {
+      const data = { consumerAddress: newAddress };
+      const response = await axios.post(
+        "/api/v1/consumer/change-consumer-address",
+        data
+      );
+      handleShowSuccessToast(response?.data?.message);
+    } catch (error) {
+      console.log(error?.response?.data?.message);
+      handleShowFailureToast(error?.response?.data?.message);
+    }
   };
 
   return (
     <nav className="bg-white shadow-md p-4 z-10">
+      <Toaster />
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <div className="text-blue-700 font-semibold text-xl">SkillSwift</div>

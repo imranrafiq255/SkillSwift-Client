@@ -12,8 +12,14 @@ const PopularServicesSection = () => {
   const navigate = useNavigate();
   useEffect(() => {
     dispatch(loadPopularPostsAction());
-  }, []);
+  }, [dispatch]);
+  const ratingCalculator = (ratings) => {
+    let sum = 0;
+    ratings.forEach((rating) => (sum += rating.rating));
+    console.log(sum);
 
+    return sum / ratings.length;
+  };
   return (
     <section className="py-16 bg-gray-100">
       <h2 className="text-center text-3xl font-bold mb-8">Popular Services</h2>
@@ -33,7 +39,7 @@ const PopularServicesSection = () => {
             posts.map((service, index) => (
               <div
                 key={index}
-                className="bg-white p-4 rounded-lg shadow-lg flex flex-col"
+                className="bg-white p-4 rounded-lg shadow-lg flex flex-col cursor-pointer hover:scale-105 transition-transform duration-700 ease-out"
                 onClick={() =>
                   navigate("/consumer-service-page", {
                     state: { service: service },
@@ -49,7 +55,9 @@ const PopularServicesSection = () => {
                   <h3 className="text-lg font-semibold mb-2">
                     {service.serviceName}
                   </h3>
-                  <StarRating rating={service.servicePostRatings.length} />
+                  <StarRating
+                    rating={ratingCalculator(service.servicePostRatings)}
+                  />
                   <p className="text-gray-700 mt-2">
                     {"Rs " + service.servicePostPrice}
                   </p>

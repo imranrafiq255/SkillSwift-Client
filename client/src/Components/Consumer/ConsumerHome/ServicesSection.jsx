@@ -3,7 +3,7 @@ import StarRating from "../ConsumerCommon/StarRating";
 import axios from "axios";
 import SkeletonRecentPostLoader from "../../Loader/ConsumerLoaders/SkeletonRecentPostLoader";
 import RingLoader from "../../Loader/RingLoader";
-
+import { useNavigate } from "react-router-dom";
 const ServicesSection = () => {
   const [recentPosts, setRecentPosts] = useState([]);
   const [hasMore, setHasMore] = useState(true);
@@ -11,7 +11,7 @@ const ServicesSection = () => {
   const [loadedPostIds, setLoadedPostIds] = useState(new Set());
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
-
+  const navigate = useNavigate();
   const loadInitialPosts = async () => {
     try {
       setLoading(true);
@@ -68,7 +68,11 @@ const ServicesSection = () => {
       loadMorePosts();
     }
   };
-
+  const ratingCalculator = (ratings) => {
+    let sum = 0;
+    ratings.forEach((rating) => (sum += rating.rating));
+    return Math.floor(sum / ratings.length);
+  };
   return (
     <section className="py-16 bg-gray-100">
       <h2 className="text-center text-3xl font-bold mb-8">
@@ -82,7 +86,15 @@ const ServicesSection = () => {
             ))
           ) : recentPosts && recentPosts.length > 0 ? (
             recentPosts?.map((service, index) => (
-              <div key={index} className="bg-white p-4 rounded-lg shadow-lg">
+              <div
+                key={index}
+                className="bg-white p-4 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-transform duration-700 ease-out"
+                onClick={() =>
+                  navigate("/consumer-service-page", {
+                    state: { service: service },
+                  })
+                }
+              >
                 <img
                   src={service.servicePostImage}
                   alt={service.serviceName}
@@ -92,7 +104,9 @@ const ServicesSection = () => {
                   <h3 className="text-lg font-semibold mb-2">
                     {service.serviceName}
                   </h3>
-                  <StarRating rating={service.servicePostRatings.length} />
+                  <StarRating
+                    rating={ratingCalculator(service?.servicePostRatings)}
+                  />
                   <p className="text-gray-700 mt-2">
                     {"Rs " + service.servicePostPrice}
                   </p>
