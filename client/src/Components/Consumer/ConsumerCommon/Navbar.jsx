@@ -75,12 +75,12 @@ const Navbar = () => {
               </a>
             </li>
             <li className="relative group">
-              <a href="/messages" className="flex items-center">
+              <Link to="/consumer-chat-section" className="flex items-center">
                 <FaEnvelope className="w-5 h-5" />
                 <span className="absolute left-1/2 transform -translate-x-1/2 top-full mt-1 text-xs text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity">
                   Messages
                 </span>
-              </a>
+              </Link>
             </li>
             <li className="relative group">
               <Link

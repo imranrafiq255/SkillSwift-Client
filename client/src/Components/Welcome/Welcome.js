@@ -6,9 +6,9 @@ const Welcome = () => {
   const navigate = useNavigate();
   const moduleNavigator = () => {
     if (navigator === "consumer") {
-      navigate("/consumer-sign-in");
+      navigate("/consumer-home");
     } else if (navigator === "serviceProvider") {
-      navigate("/service-provider-sign-in");
+      navigate("/service-provider-home");
     }
   };
   return (
@@ -19,12 +19,13 @@ const Welcome = () => {
             <div className="line h-1 w-6 bg-slate-800"></div>
             <div className="mt-10">
               <h1 className="text-4xl font-serif text-[#441ed1] font-bold">
-              SkillSwift: Where Skills and Needs Click for Perfect Solutions!
+                SkillSwift: Where Skills and Needs Click for Perfect Solutions!
               </h1>
             </div>
             <div className="mt-10">
               <h1 className="font-serif text-slate-600 font-light">
-              Bridging talented professionals with those seeking top-notch services for a perfect match.
+                Bridging talented professionals with those seeking top-notch
+                services for a perfect match.
               </h1>
             </div>
             <div className="mt-10">

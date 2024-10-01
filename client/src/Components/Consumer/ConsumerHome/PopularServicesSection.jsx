@@ -16,7 +16,6 @@ const PopularServicesSection = () => {
   const ratingCalculator = (ratings) => {
     let sum = 0;
     ratings.forEach((rating) => (sum += rating.rating));
-    console.log(sum);
 
     return sum / ratings.length;
   };
@@ -56,7 +55,7 @@ const PopularServicesSection = () => {
                     {service.serviceName}
                   </h3>
                   <StarRating
-                    rating={ratingCalculator(service.servicePostRatings)}
+                    rating={ratingCalculator(service.servicePostRatings) || 0}
                   />
                   <p className="text-gray-700 mt-2">
                     {"Rs " + service.servicePostPrice}

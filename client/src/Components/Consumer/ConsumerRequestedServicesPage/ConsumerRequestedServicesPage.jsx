@@ -7,17 +7,17 @@ import {
   clearErrors,
   loadOrdersAction,
 } from "../../Redux/Consumer/Actions/ConsumerActions";
-
+import { useNavigate } from "react-router-dom";
 const RequestedServicesPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { loading, error, orders } = useSelector(
     (state) => state.loadOrdersReducer
   );
   console.log(orders);
 
   const handleChat = () => {
-    // Implement chat functionality here
-    alert(`Handle Chat`);
+    navigate("/consumer-chat-section");
   };
 
   useEffect(() => {

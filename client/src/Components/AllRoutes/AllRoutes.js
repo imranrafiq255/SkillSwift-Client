@@ -44,6 +44,7 @@ import ServiceProviderNotification from "../ServiceProvider/ServiceProviderNotif
 import ConsumerNotification from "../Consumer/ConsumerNotification/ConsumerNotification";
 import ConsumerDisputePage from "../Consumer/ConsumerDisputePage/ConsumerDisputePage";
 import ConsumerServicePage from "../Consumer/ConsumerServicePage/ConsumerServicePage";
+import ConsumerChatModule from "../Consumer/ConsumerChatModule/ConsumerChatModule";
 const AuthenticatedRoutes = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -73,6 +74,7 @@ const AuthenticatedRoutes = () => {
     "/consumer-service-page",
     "/consumer-service-history",
     "/consumer-requested-services",
+    "/consumer-chat-section",
   ];
 
   useEffect(() => {
@@ -253,6 +255,16 @@ const AuthenticatedRoutes = () => {
         element={
           isConsumerAuthenticated ? (
             <ConsumerServicePage />
+          ) : (
+            <Navigate to={"/consumer-sign-in"} />
+          )
+        }
+      />
+      <Route
+        path="/consumer-chat-section"
+        element={
+          isConsumerAuthenticated ? (
+            <ConsumerChatModule />
           ) : (
             <Navigate to={"/consumer-sign-in"} />
           )

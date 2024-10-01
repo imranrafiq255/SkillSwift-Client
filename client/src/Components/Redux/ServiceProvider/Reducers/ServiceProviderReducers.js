@@ -530,6 +530,107 @@ const deleteServicePostReducer = createReducer(
       });
   }
 );
+// chat
+const loadConversationsReducer = createReducer(
+  {
+    conversationsLoading: false,
+    conversationsError: null,
+    conversations: null,
+  },
+  (builder) => {
+    builder
+      .addCase("LOAD_CONVERSATIONS_REQUEST", (state) => {
+        state.conversationsLoading = true;
+        state.conversationsError = null;
+      })
+      .addCase("LOAD_CONVERSATIONS_SUCCESS", (state, action) => {
+        state.conversationsLoading = false;
+        state.conversations = action.payload;
+      })
+      .addCase("LOAD_CONVERSATIONS_FAILURE", (state, action) => {
+        state.conversationsLoading = false;
+        state.conversationsError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.conversationsError = null;
+      });
+  }
+);
+const loadMessagesReducer = createReducer(
+  { loadMessagesLoading: false, loadMessagesError: null, messages: null },
+  (builder) => {
+    builder
+      .addCase("LOAD_MESSAGES_REQUEST", (state) => {
+        state.loadMessagesLoading = true;
+        state.loadMessagesError = null;
+      })
+      .addCase("LOAD_MESSAGES_SUCCESS", (state, action) => {
+        state.loadMessagesLoading = false;
+        state.messages = action.payload;
+      })
+      .addCase("LOAD_MESSAGES_FAILURE", (state, action) => {
+        state.loadMessagesLoading = false;
+        state.loadMessagesError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.loadMessagesError = null;
+      });
+  }
+);
+const sendMessageReducer = createReducer(
+  {
+    sendMessageLoading: false,
+    sendMessageError: null,
+    sendMessageSuccess: null,
+  },
+  (builder) => {
+    builder
+      .addCase("SEND_MESSAGE_REQUEST", (state) => {
+        state.sendMessageLoading = true;
+        state.sendMessageError = null;
+        state.sendMessageSuccess = null;
+      })
+      .addCase("SEND_MESSAGE_SUCCESS", (state, action) => {
+        state.sendMessageLoading = false;
+        state.sendMessageSuccess = action.payload;
+      })
+      .addCase("SEND_MESSAGE_FAILURE", (state, action) => {
+        state.sendMessageLoading = false;
+        state.sendMessageError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.sendMessageError = null;
+        state.sendMessageSuccess = null;
+      });
+  }
+);
+const createConversationReducer = createReducer(
+  {
+    conversationLoading: false,
+    conversationError: null,
+    conversationMessage: null,
+  },
+  (builder) => {
+    builder
+      .addCase("CREATE_CONVERSATION_REQUEST", (state) => {
+        state.conversationLoading = true;
+        state.conversationError = null;
+        state.conversationMessage = null;
+      })
+      .addCase("CREATE_CONVERSATION_SUCCESS", (state, action) => {
+        state.conversationLoading = false;
+        state.conversationMessage = action.payload;
+      })
+      .addCase("CREATE_CONVERSATION_FAILURE", (state, action) => {
+        state.conversationLoading = false;
+        state.conversationError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.conversationError = null;
+        state.conversationMessage = null;
+      });
+  }
+);
 export {
   serviceProviderSignInReducer,
   serviceProviderForgotPasswordReducer,
@@ -553,4 +654,8 @@ export {
   loadNewNotificationsReducer,
   readNotificationReducer,
   deleteServicePostReducer,
+  loadConversationsReducer,
+  loadMessagesReducer,
+  sendMessageReducer,
+  createConversationReducer,
 };

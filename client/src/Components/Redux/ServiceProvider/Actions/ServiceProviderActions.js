@@ -485,6 +485,84 @@ const deleteServicePostAction = (id) => (dispatch) => {
       });
     });
 };
+const loadConversationsAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LOAD_CONVERSATIONS_REQUEST",
+    });
+    const response = await axios.get(
+      "/api/v1/service-provider/load-conversations"
+    );
+    dispatch({
+      type: "LOAD_CONVERSATIONS_SUCCESS",
+      payload: response?.data?.conversations,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_CONVERSATIONS_FAILURE",
+      payload: handleError(error),
+    });
+  }
+};
+const loadMessagesAction = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LOAD_MESSAGES_REQUEST",
+    });
+    const response = await axios.get(
+      `/api/v1/service-provider/load-messages/${id}`
+    );
+    dispatch({
+      type: "LOAD_MESSAGES_SUCCESS",
+      payload: response?.data?.messages,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_MESSAGES_FAILURE",
+      payload: handleError(error),
+    });
+  }
+};
+const sendMessageAction = (data) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "SEND_MESSAGE_REQUEST",
+    });
+    const response = await axios.post(
+      `/api/v1/service-provider/send-message`,
+      data
+    );
+    dispatch({
+      type: "SEND_MESSAGE_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "SEND_MESSAGE_FAILURE",
+      payload: handleError(error),
+    });
+  }
+};
+const createConversationAction = (data) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "CREATE_CONVERSATION_REQUEST",
+    });
+    const response = await axios.post(
+      "/api/v1/service-provider/create-conversation",
+      data
+    );
+    dispatch({
+      type: "CREATE_CONVERSATION_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "CREATE_CONVERSATION_FAILURE",
+      payload: handleError(error),
+    });
+  }
+};
 export {
   clearErrors,
   serviceProviderSignInAction,
@@ -509,4 +587,8 @@ export {
   loadNewNotificationsAction,
   readNotificationAction,
   deleteServicePostAction,
+  loadConversationsAction,
+  loadMessagesAction,
+  sendMessageAction,
+  createConversationAction,
 };

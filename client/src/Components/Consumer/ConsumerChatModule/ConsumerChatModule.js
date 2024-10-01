@@ -1,41 +1,39 @@
 import React, { useEffect, useRef, useState } from "react";
-import "./ServiceProviderChatSection.css";
+import "./ConsumerChatModule.css";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearErrors,
   loadConversationsAction,
-  loadCurrentServiceProviderAction,
+  loadCurrentConsumerAction,
   loadMessagesAction,
   sendMessageAction,
-} from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
+} from "../../Redux/Consumer/Actions/ConsumerActions.js";
 import RingLoader from "../../Loader/RingLoader";
 import { handleShowFailureToast } from "../../ToastMessages/ToastMessage";
-const ServiceProviderChatSection = () => {
+const ConsumerChatModule = () => {
   const [chatSectionShowing, setChatSectionShowing] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [socket, setSocket] = useState(null);
   const [messageToSend, setMessageToSend] = useState("");
-  const [activeServiceProviders, setActiveServiceProviders] = useState([]);
+  const [activeConsumers, setActiveConsumers] = useState([]);
   const [allMessages, setAllMessages] = useState([]);
   const scrollToEndMessage = useRef(null);
-  const { serviceProvider, serviceProviderLoading } = useSelector(
-    (state) => state.loadCurrentServiceProviderReducer
-  );
+  const { consumer } = useSelector((state) => state.loadCurrentConsumerReducer);
   const { conversationsLoading, conversations, conversationsError } =
-    useSelector((state) => state.loadConversationsReducer);
+    useSelector((state) => state.loadConsumerConversationsReducer);
   const { loadMessagesLoading, loadMessagesError, messages } = useSelector(
-    (state) => state.loadMessagesReducer
+    (state) => state.loadConsumerMessagesReducer
   );
   const { sendMessageLoading, sendMessageError } = useSelector(
-    (state) => state.sendMessageReducer
+    (state) => state.sendConsumerMessageReducer
   );
   const [currentConversation, setCurrentConversation] = useState(null);
   useEffect(() => {
     dispatch(clearErrors());
-    dispatch(loadCurrentServiceProviderAction());
+    dispatch(loadCurrentConsumerAction());
   }, [dispatch]);
   useEffect(() => {
     dispatch(clearErrors());
@@ -60,19 +58,24 @@ const ServiceProviderChatSection = () => {
     };
   }, []);
   useEffect(() => {
-    if (socket && !serviceProviderLoading && serviceProvider) {
-      socket.emit("addUser", { id: serviceProvider._id });
-      const handleGetServiceProviders = (data) => {
-        setActiveServiceProviders(data);
-      };
-      socket.on("getUsers", handleGetServiceProviders);
+    let isMounted = true;
 
-      return () => {
-        socket.off("getUsers", handleGetServiceProviders);
-      };
+    if (socket && consumer) {
+      if (isMounted) {
+        socket.emit("addUser", { id: consumer?._id });
+
+        const handleGetServiceProviders = (data) => {
+          setActiveConsumers(data);
+        };
+        socket.on("getUsers", handleGetServiceProviders);
+
+        return () => {
+          socket.off("getUsers", handleGetServiceProviders);
+          isMounted = false;
+        };
+      }
     }
-  }, [serviceProviderLoading, serviceProvider, socket]);
-
+  }, [consumer, socket]);
   useEffect(() => {
     if (socket) {
       socket.on("receivedMessage", ({ message }) => {
@@ -83,9 +86,8 @@ const ServiceProviderChatSection = () => {
       };
     }
   }, [socket]);
-
-  const checkOnlineServiceProvider = (id) => {
-    const onlineServiceProviders = activeServiceProviders.filter(
+  const checkOnlineConsumer = (id) => {
+    const onlineServiceProviders = activeConsumers.filter(
       (provider) => provider.id === id
     );
     return onlineServiceProviders.length > 0;
@@ -96,76 +98,58 @@ const ServiceProviderChatSection = () => {
         message: messageToSend,
         conversation: {
           _id: currentConversation?._id || null,
-          createdAt: new Date().toISOString(),
+          createdAt: currentConversation?.createdAt || new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           members: {
-            sender: {
-              serviceProviderFullName: serviceProvider.serviceProviderFullName,
-              serviceProviderEmail: serviceProvider.serviceProviderEmail,
-              serviceProviderAvatar: serviceProvider.serviceProviderAvatar,
-              serviceProviderAddress: serviceProvider.serviceProviderAddress,
-              serviceProviderPhoneNumber:
-                serviceProvider.serviceProviderPhoneNumber,
-              isAccountVerified: serviceProvider.isAccountVerified,
-              isEmailVerified: serviceProvider.isEmailVerified,
-              serviceProviderListedServices:
-                serviceProvider.serviceProviderListedServices,
-              serviceProviderWorkingHours:
-                serviceProvider.serviceProviderWorkingHours,
-              createdAt: serviceProvider.createdAt,
-              updatedAt: serviceProvider.updatedAt,
-              _id: serviceProvider._id,
-            },
             receiver: {
-              consumerFullName:
-                currentConversation?.members?.receiver?.consumerFullName,
-              consumerEmail:
-                currentConversation?.members?.receiver?.consumerEmail,
-              consumerAvatar:
-                currentConversation?.members?.receiver?.consumerAvatar,
-              consumerAddress:
-                currentConversation?.members?.receiver?.consumerAddress,
-              consumerFavoriteServicePosts:
-                currentConversation?.members?.receiver
-                  ?.consumerFavoriteServicePosts,
-              consumerOrders:
-                currentConversation?.members?.receiver?.consumerOrders,
+              createdAt: consumer?.createdAt,
+              isEmailVerified: consumer?.isEmailVerified,
+              consumerFullName: consumer?.consumerFullName,
+              consumerEmail: consumer?.consumerEmail,
+              consumerAvatar: consumer?.consumerAvatar,
+              consumerAddress: consumer?.consumerAddress,
+              consumerPhoneNumber: consumer?.consumerPhoneNumber,
+              updatedAt: consumer?.updatedAt,
+              _id: consumer?._id,
+            },
+            sender: {
+              createdAt: currentConversation?.members?.sender?.createdAt,
+              serviceProviderFullName:
+                currentConversation?.members?.sender?.serviceProviderFullName,
+              serviceProviderEmail:
+                currentConversation?.members?.sender?.serviceProviderEmail,
+              serviceProviderAvatar:
+                currentConversation?.members?.sender?.serviceProviderAvatar,
+              serviceProviderAddress:
+                currentConversation?.members?.sender?.serviceProviderAddress,
               isEmailVerified:
-                currentConversation?.members?.receiver?.isEmailVerified,
-              createdAt: currentConversation?.members?.receiver?.createdAt,
-              updatedAt: currentConversation?.members?.receiver?.updatedAt,
+                currentConversation?.members?.sender?.isEmailVerified,
+              updatedAt: currentConversation?.members?.sender?.updatedAt,
               _id: currentConversation?.members?.receiver?._id,
             },
           },
         },
         sender: {
-          serviceProviderFullName: serviceProvider.serviceProviderFullName,
-          serviceProviderEmail: serviceProvider.serviceProviderEmail,
-          serviceProviderAvatar: serviceProvider.serviceProviderAvatar,
-          serviceProviderAddress: serviceProvider.serviceProviderAddress,
-          serviceProviderPhoneNumber:
-            serviceProvider.serviceProviderPhoneNumber,
-          isAccountVerified: serviceProvider.isAccountVerified,
-          isEmailVerified: serviceProvider.isEmailVerified,
-          serviceProviderListedServices:
-            serviceProvider.serviceProviderListedServices,
-          serviceProviderWorkingHours:
-            serviceProvider.serviceProviderWorkingHours,
-          createdAt: serviceProvider.createdAt,
-          updatedAt: serviceProvider.updatedAt,
-          _id: serviceProvider._id,
+          createdAt: consumer?.createdAt,
+          isEmailVerified: consumer?.isEmailVerified,
+          consumerFullName: consumer?.consumerFullName,
+          consumerEmail: consumer?.consumerEmail,
+          consumerAvatar: consumer?.consumerAvatar,
+          consumerAddress: consumer?.consumerAddress,
+          consumerPhoneNumber: consumer?.consumerPhoneNumber,
+          updatedAt: consumer?.updatedAt,
+          _id: consumer?._id,
         },
-        senderId: serviceProvider._id,
-        senderType: "ServiceProvider",
-        memberTypeSender: "ServiceProvider",
-        memberTypeReceiver: "Consumer",
+        senderType: "Consumer",
+        memberTypeSender: "Consumer",
+        memberTypeReceiver: "ServiceProvider",
         createdAt: new Date().toISOString(),
       };
 
       socket.emit("sendMessage", {
         message: newMessage,
-        senderId: serviceProvider?._id,
-        receiverId: currentConversation?.members?.receiver?._id,
+        senderId: consumer?._id,
+        receiverId: currentConversation?.members?.sender?._id,
       });
 
       setAllMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -228,6 +212,8 @@ const ServiceProviderChatSection = () => {
   useEffect(() => {
     scrollToEndMessage?.current?.scrollIntoView();
   }, [allMessages]);
+  console.log(currentConversation?.members?.sender?._id);
+
   return (
     <>
       <div className="chat-section-container">
@@ -242,11 +228,11 @@ const ServiceProviderChatSection = () => {
               }}
             />
             <h1 className="text-lg lg:text-lg xl:text-2xl font-bold text-[#4e97fd] uppercase">
-              Service Provider Chat Section
+              Consumer Chat Section
             </h1>
           </div>
         </div>
-        {conversations && conversations?.length === 0 ? (
+        {conversations && conversations.length === 0 ? (
           <div className="flex justify-center">
             <h1>No conversation available</h1>
           </div>
@@ -293,7 +279,8 @@ const ServiceProviderChatSection = () => {
                           <div className="profile basis-[60%] lg:basis-[50%] xl:basis-[20%] flex justify-center items-center">
                             <img
                               src={
-                                conversation?.members?.receiver?.consumerAvatar
+                                conversation?.members?.sender
+                                  ?.serviceProviderAvatar
                               }
                               alt=""
                               className="w-[0.5rem] h-[0.5rem] lg:h-[1rem] lg:w-[1rem] xl:h-[3rem] xl:w-[3rem] rounded-full"
@@ -302,8 +289,8 @@ const ServiceProviderChatSection = () => {
                           <div className="name basis-[60%] lg:basis-[50%] xl:basis-[80%]">
                             <h1 className="xl:text-lg lg:text-sm text-xs font-bold mx-2 mt-2">
                               {
-                                conversation?.members?.receiver
-                                  ?.consumerFullName
+                                conversation?.members?.sender
+                                  ?.serviceProviderFullName
                               }
                             </h1>
                             <h1 className="message ml-2 truncate-text text-sm">
@@ -327,8 +314,8 @@ const ServiceProviderChatSection = () => {
                           <div className="profile basis-[30%] lg:basis-[20%] xl:basis-[10%] flex justify-center">
                             <img
                               src={
-                                currentConversation?.members?.receiver
-                                  ?.consumerAvatar
+                                currentConversation?.members?.sender
+                                  ?.serviceProviderAvatar
                               }
                               alt=""
                               className="w-[3rem] h-[3rem] rounded-full shadow-2xl"
@@ -337,13 +324,13 @@ const ServiceProviderChatSection = () => {
                           <div className="profile basis-[70%] lg:basis-[80%] xl:basis-[90%] -ml-3">
                             <h1 className="font-semibold">
                               {
-                                currentConversation?.members?.receiver
-                                  ?.consumerFullName
+                                currentConversation?.members?.sender
+                                  ?.serviceProviderFullName
                               }
                             </h1>
                             <h1 className="text-sm text-[#878787]">
-                              {checkOnlineServiceProvider(
-                                currentConversation?.members?.receiver?._id
+                              {checkOnlineConsumer(
+                                currentConversation?.members?.sender?._id
                               )
                                 ? "Online"
                                 : "Offline"}
@@ -362,24 +349,17 @@ const ServiceProviderChatSection = () => {
                           ) : allMessages && allMessages.length > 0 ? (
                             allMessages?.map((message) => (
                               <div>
-                                {message.sender?._id ===
-                                serviceProvider?._id ? (
+                                {message.sender?._id === consumer?._id ? (
                                   <div className="mb-4 flex items-end justify-end mr-2 w-full px-2">
                                     <div className=" p-4 rounded-lg bg-[#4e97fd]  shadow-md max-w-xs lg:max-w-md">
                                       <div className="flex gap-2 items-center">
                                         <img
-                                          src={
-                                            message?.sender
-                                              ?.serviceProviderAvatar
-                                          }
+                                          src={message?.sender?.consumerAvatar}
                                           alt=""
                                           className="w-8 h-8 rounded-full"
                                         />
                                         <p className="text-gray-900 font-medium">
-                                          {
-                                            message?.sender
-                                              ?.serviceProviderFullName
-                                          }
+                                          {message?.sender?.consumerFullName}
                                         </p>
                                       </div>
                                       <p className="text-white mt-1">
@@ -392,13 +372,13 @@ const ServiceProviderChatSection = () => {
                                     </div>
                                   </div>
                                 ) : (
-                                  <div className="mb-4 flex items-end ml-2 w-full">
+                                  <div className="mb-4 flex items-end pl-2 w-full">
                                     <div className="bg-green-400 p-4 rounded-lg shadow-md max-w-xs lg:max-w-md">
                                       <div className="flex gap-2 items-center">
                                         <img
                                           src={
                                             message?.conversation?.members
-                                              ?.receiver?.consumerAvatar
+                                              ?.sender?.serviceProviderAvatar
                                           }
                                           alt=""
                                           className="w-8 h-8 rounded-full"
@@ -406,7 +386,7 @@ const ServiceProviderChatSection = () => {
                                         <p className="text-gray-900 font-medium">
                                           {
                                             message?.conversation?.members
-                                              ?.receiver?.consumerFullName
+                                              ?.sender?.serviceProviderFullName
                                           }
                                         </p>
                                       </div>
@@ -505,4 +485,4 @@ const ServiceProviderChatSection = () => {
   );
 };
 
-export default ServiceProviderChatSection;
+export default ConsumerChatModule;

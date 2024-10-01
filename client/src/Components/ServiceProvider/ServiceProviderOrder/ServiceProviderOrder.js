@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ServiceProviderHeader from "../ServiceProviderHeader/ServiceProviderHeader";
 import ServiceProviderFooter from "../ServiceProviderFooter/ServiceProviderFooter";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,6 +6,7 @@ import {
   acceptOrderAction,
   cancelOrderAction,
   completeOrderAction,
+  createConversationAction,
   loadAcceptedOrdersAction,
   loadCancelledOrdersAction,
   loadCompletedOrdersAction,
@@ -23,6 +24,7 @@ import LoaderCircles from "../../Loader/LoaderCircles";
 const ServiceProviderOrder = () => {
   const [isShowing, setShowing] = useState(1);
   const dispatch = useDispatch();
+  const [consumer, setConsumer] = useState(null);
   const { pendingLoading, pendingOrders } = useSelector(
     (state) => state.loadPendingOrdersReducer
   );
@@ -46,6 +48,8 @@ const ServiceProviderOrder = () => {
     useSelector((state) => state.completeOrderReducer);
   const { cancelOrderLoading, cancelOrderError, cancelOrderMessage } =
     useSelector((state) => state.cancelOrderReducer);
+  const { conversationLoading, conversationError, conversationMessage } =
+    useSelector((state) => state.createConversationReducer);
   useEffect(() => {
     dispatch(loadPendingOrdersAction());
     dispatch(loadCompletedOrdersAction());
@@ -61,13 +65,21 @@ const ServiceProviderOrder = () => {
       handleShowFailureToast(acceptOrderError);
     } else if (!acceptOrderLoading && acceptOrderMessage) {
       handleShowSuccessToast(acceptOrderMessage);
+      const data = { receiver: consumer, receiverType: "Consumer" };
+      dispatch(createConversationAction(data));
       dispatch(loadPendingOrdersAction());
       dispatch(loadCompletedOrdersAction());
       dispatch(loadRejectedOrdersAction());
       dispatch(loadAcceptedOrdersAction());
       dispatch(loadCancelledOrdersAction());
     }
-  }, [acceptOrderError, acceptOrderLoading, acceptOrderMessage, dispatch]);
+  }, [
+    acceptOrderError,
+    acceptOrderLoading,
+    acceptOrderMessage,
+    dispatch,
+    consumer,
+  ]);
   const rejectOrder = (id) => {
     dispatch(rejectOrderAction(id));
   };
@@ -118,6 +130,23 @@ const ServiceProviderOrder = () => {
       dispatch(loadCancelledOrdersAction());
     }
   }, [cancelOrderError, cancelOrderLoading, cancelOrderMessage, dispatch]);
+  const conversationToastMessageRef = useRef(false);
+  useEffect(() => {
+    if (
+      !conversationLoading &&
+      conversationError &&
+      !conversationToastMessageRef.current
+    ) {
+      handleShowFailureToast(conversationError);
+      conversationToastMessageRef.current = true;
+    } else if (
+      !conversationLoading &&
+      conversationMessage &&
+      !conversationToastMessageRef.current
+    ) {
+      handleShowSuccessToast("You can now chat with this consumer");
+    }
+  }, [conversationError, conversationMessage, conversationLoading]);
   return (
     <>
       <Toaster />
@@ -285,7 +314,10 @@ const ServiceProviderOrder = () => {
                             </button>
                             <button
                               className="bg-[#10f31b] text-white py-2 px-8 rounded-lg shadow-lg basis-[45%]"
-                              onClick={() => acceptOrder(order?._id)}
+                              onClick={() => {
+                                acceptOrder(order?._id);
+                                setConsumer(order?.serviceOrderBy?._id);
+                              }}
                             >
                               Accept
                             </button>

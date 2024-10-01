@@ -328,6 +328,60 @@ const refundAmountRequestAction = (refundData) => async (dispatch) => {
     });
   }
 };
+// chat
+const loadConversationsAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LOAD_CONVERSATIONS_REQUEST",
+    });
+    const response = await axios.get(
+      "/api/v1/consumer/load-consumer-conversations"
+    );
+    dispatch({
+      type: "LOAD_CONVERSATIONS_SUCCESS",
+      payload: response?.data?.conversations,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_CONVERSATIONS_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
+const loadMessagesAction = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LOAD_MESSAGES_REQUEST",
+    });
+    const response = await axios.get(`/api/v1/consumer/load-messages/${id}`);
+    dispatch({
+      type: "LOAD_MESSAGES_SUCCESS",
+      payload: response?.data?.messages,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_MESSAGES_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
+const sendMessageAction = (data) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "SEND_MESSAGE_REQUEST",
+    });
+    const response = await axios.post(`/api/v1/consumer/send-message`, data);
+    dispatch({
+      type: "SEND_MESSAGE_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "SEND_MESSAGE_FAILURE",
+      payload: error?.response?.data?.message || "Network Error",
+    });
+  }
+};
 export {
   clearErrors,
   consumerLoginAction,
@@ -347,4 +401,7 @@ export {
   fileDisputeAction,
   loadRefundsAction,
   refundAmountRequestAction,
+  loadConversationsAction,
+  loadMessagesAction,
+  sendMessageAction,
 };

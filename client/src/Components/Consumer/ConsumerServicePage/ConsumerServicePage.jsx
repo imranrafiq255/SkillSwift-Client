@@ -40,8 +40,8 @@ const ServicePage = () => {
   };
   const ratingCalculator = (ratings) => {
     let sum = 0;
-    ratings.forEach((rating) => (sum += rating.rating));
-    return Math.floor(sum / ratings.length);
+    ratings?.forEach((rating) => (sum += rating?.rating));
+    return Math.floor(sum / ratings?.length);
   };
   return (
     <div className="min-h-screen bg-gray-100">
@@ -97,8 +97,8 @@ const ServicePage = () => {
                       ))}
                     </div>
                     <span className="text-gray-600">
-                      ({ratingCalculator(service?.servicePostRatings)} out of 5
-                      based on {service?.provider?.reviewCount} reviews)
+                      ({ratingCalculator(service?.servicePostRatings) || 0} out
+                      of 5 based on {service?.provider?.reviewCount} reviews)
                     </span>
                   </div>
                 </div>
@@ -175,8 +175,8 @@ const ServicePage = () => {
                 ))}
               </div>
               <p className="text-gray-600">
-                {ratingCalculator(service?.servicePostRatings)} out of 5 based
-                on {service?.reviewCount} reviews
+                {ratingCalculator(service?.servicePostRatings) || 0} out of 5
+                based on {service?.reviewCount} reviews
               </p>
             </div>
 

@@ -105,7 +105,7 @@ const ServicesSection = () => {
                     {service.serviceName}
                   </h3>
                   <StarRating
-                    rating={ratingCalculator(service?.servicePostRatings)}
+                    rating={ratingCalculator(service?.servicePostRatings) || 0}
                   />
                   <p className="text-gray-700 mt-2">
                     {"Rs " + service.servicePostPrice}
