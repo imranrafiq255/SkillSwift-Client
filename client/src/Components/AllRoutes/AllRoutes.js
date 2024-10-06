@@ -206,7 +206,10 @@ const AuthenticatedRoutes = () => {
           isConsumerAuthenticated ? (
             <ConsumerUpdateInfo />
           ) : (
-            <Navigate to="/consumer-sign-in" state={{ from: location }} />
+            <Navigate
+              to="/consumer-sign-in"
+              state={{ message: "Please sign in first" }}
+            />
           )
         }
       />
@@ -216,7 +219,10 @@ const AuthenticatedRoutes = () => {
           isConsumerAuthenticated ? (
             <ConsumerServiceHistoryPage />
           ) : (
-            <Navigate to="/consumer-sign-in" state={{ from: location }} />
+            <Navigate
+              to="/consumer-sign-in"
+              state={{ message: "Please sign in first" }}
+            />
           )
         }
       />
@@ -226,7 +232,10 @@ const AuthenticatedRoutes = () => {
           isConsumerAuthenticated ? (
             <ConsumerRequestedServicesPage />
           ) : (
-            <Navigate to="/consumer-sign-in" state={{ from: location }} />
+            <Navigate
+              to="/consumer-sign-in"
+              state={{ message: "Please sign in first" }}
+            />
           )
         }
       />
@@ -236,7 +245,10 @@ const AuthenticatedRoutes = () => {
           isConsumerAuthenticated ? (
             <ConsumerNotification />
           ) : (
-            <Navigate to={"/consumer-sign-in"} />
+            <Navigate
+              to={"/consumer-sign-in"}
+              state={{ message: "Please sign in first" }}
+            />
           )
         }
       />
@@ -246,7 +258,10 @@ const AuthenticatedRoutes = () => {
           isConsumerAuthenticated ? (
             <ConsumerDisputePage />
           ) : (
-            <Navigate to={"/consumer-sign-in"} />
+            <Navigate
+              to={"/consumer-sign-in"}
+              state={{ message: "Please sign in first" }}
+            />
           )
         }
       />
@@ -256,7 +271,10 @@ const AuthenticatedRoutes = () => {
           isConsumerAuthenticated ? (
             <ConsumerServicePage />
           ) : (
-            <Navigate to={"/consumer-sign-in"} />
+            <Navigate
+              to={"/consumer-sign-in"}
+              state={{ message: "Please sign in first" }}
+            />
           )
         }
       />
@@ -266,7 +284,10 @@ const AuthenticatedRoutes = () => {
           isConsumerAuthenticated ? (
             <ConsumerChatModule />
           ) : (
-            <Navigate to={"/consumer-sign-in"} />
+            <Navigate
+              to={"/consumer-sign-in"}
+              state={{ message: "Please sign in first" }}
+            />
           )
         }
       />

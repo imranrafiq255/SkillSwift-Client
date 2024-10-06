@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ServiceProviderHeader from "../ServiceProviderHeader/ServiceProviderHeader";
 import ServiceProviderFooter from "../ServiceProviderFooter/ServiceProviderFooter";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,10 +21,13 @@ import {
   handleShowSuccessToast,
 } from "../../ToastMessages/ToastMessage";
 import LoaderCircles from "../../Loader/LoaderCircles";
+
 const ServiceProviderOrder = () => {
   const [isShowing, setShowing] = useState(1);
   const dispatch = useDispatch();
   const [consumer, setConsumer] = useState(null);
+
+  // Selectors for all orders and reducers
   const { pendingLoading, pendingOrders } = useSelector(
     (state) => state.loadPendingOrdersReducer
   );
@@ -40,6 +43,8 @@ const ServiceProviderOrder = () => {
   const { cancelledLoading, cancelledOrders } = useSelector(
     (state) => state.loadCancelledOrdersReducer
   );
+
+  // Reducers for order actions
   const { acceptOrderLoading, acceptOrderError, acceptOrderMessage } =
     useSelector((state) => state.acceptOrderReducer);
   const { rejectOrderLoading, rejectOrderError, rejectOrderMessage } =
@@ -50,6 +55,8 @@ const ServiceProviderOrder = () => {
     useSelector((state) => state.cancelOrderReducer);
   const { conversationLoading, conversationError, conversationMessage } =
     useSelector((state) => state.createConversationReducer);
+
+  // Load all orders on initial mount
   useEffect(() => {
     dispatch(loadPendingOrdersAction());
     dispatch(loadCompletedOrdersAction());
@@ -57,14 +64,36 @@ const ServiceProviderOrder = () => {
     dispatch(loadAcceptedOrdersAction());
     dispatch(loadCancelledOrdersAction());
   }, [dispatch]);
+
+  // Helper function to check and set localStorage
+  const isToastShown = (key) => {
+    return localStorage.getItem(key) === "true";
+  };
+
+  const setToastShown = (key) => {
+    localStorage.setItem(key, "true");
+  };
+
+  // Accept Order Handling
   const acceptOrder = (id) => {
     dispatch(acceptOrderAction(id));
   };
+
   useEffect(() => {
-    if (!acceptOrderLoading && acceptOrderError) {
+    if (
+      !acceptOrderLoading &&
+      acceptOrderError &&
+      !isToastShown("acceptOrder")
+    ) {
       handleShowFailureToast(acceptOrderError);
-    } else if (!acceptOrderLoading && acceptOrderMessage) {
+      setToastShown("acceptOrder");
+    } else if (
+      !acceptOrderLoading &&
+      acceptOrderMessage &&
+      !isToastShown("acceptOrder")
+    ) {
       handleShowSuccessToast(acceptOrderMessage);
+      setToastShown("acceptOrder");
       const data = { receiver: consumer, receiverType: "Consumer" };
       dispatch(createConversationAction(data));
       dispatch(loadPendingOrdersAction());
@@ -80,14 +109,27 @@ const ServiceProviderOrder = () => {
     dispatch,
     consumer,
   ]);
+
+  // Reject Order Handling
   const rejectOrder = (id) => {
     dispatch(rejectOrderAction(id));
   };
+
   useEffect(() => {
-    if (!rejectOrderLoading && rejectOrderError) {
+    if (
+      !rejectOrderLoading &&
+      rejectOrderError &&
+      !isToastShown("rejectOrder")
+    ) {
       handleShowFailureToast(rejectOrderError);
-    } else if (!rejectOrderLoading && rejectOrderMessage) {
+      setToastShown("rejectOrder");
+    } else if (
+      !rejectOrderLoading &&
+      rejectOrderMessage &&
+      !isToastShown("rejectOrder")
+    ) {
       handleShowSuccessToast(rejectOrderMessage);
+      setToastShown("rejectOrder");
       dispatch(loadPendingOrdersAction());
       dispatch(loadCompletedOrdersAction());
       dispatch(loadRejectedOrdersAction());
@@ -95,14 +137,27 @@ const ServiceProviderOrder = () => {
       dispatch(loadCancelledOrdersAction());
     }
   }, [rejectOrderError, rejectOrderLoading, rejectOrderMessage, dispatch]);
+
+  // Complete Order Handling
   const completeOrder = (id) => {
     dispatch(completeOrderAction(id));
   };
+
   useEffect(() => {
-    if (!completeOrderLoading && completeOrderError) {
+    if (
+      !completeOrderLoading &&
+      completeOrderError &&
+      !isToastShown("completeOrder")
+    ) {
       handleShowFailureToast(completeOrderError);
-    } else if (!completeOrderLoading && completeOrderMessage) {
+      setToastShown("completeOrder");
+    } else if (
+      !completeOrderLoading &&
+      completeOrderMessage &&
+      !isToastShown("completeOrder")
+    ) {
       handleShowSuccessToast(completeOrderMessage);
+      setToastShown("completeOrder");
       dispatch(loadPendingOrdersAction());
       dispatch(loadCompletedOrdersAction());
       dispatch(loadRejectedOrdersAction());
@@ -115,14 +170,27 @@ const ServiceProviderOrder = () => {
     completeOrderMessage,
     dispatch,
   ]);
+
+  // Cancel Order Handling
   const cancelOrder = (id) => {
     dispatch(cancelOrderAction(id));
   };
+
   useEffect(() => {
-    if (!cancelOrderLoading && cancelOrderError) {
+    if (
+      !cancelOrderLoading &&
+      cancelOrderError &&
+      !isToastShown("cancelOrder")
+    ) {
       handleShowFailureToast(cancelOrderError);
-    } else if (!cancelOrderLoading && cancelOrderMessage) {
+      setToastShown("cancelOrder");
+    } else if (
+      !cancelOrderLoading &&
+      cancelOrderMessage &&
+      !isToastShown("cancelOrder")
+    ) {
       handleShowSuccessToast(cancelOrderMessage);
+      setToastShown("cancelOrder");
       dispatch(loadPendingOrdersAction());
       dispatch(loadCompletedOrdersAction());
       dispatch(loadRejectedOrdersAction());
@@ -130,23 +198,26 @@ const ServiceProviderOrder = () => {
       dispatch(loadCancelledOrdersAction());
     }
   }, [cancelOrderError, cancelOrderLoading, cancelOrderMessage, dispatch]);
-  const conversationToastMessageRef = useRef(false);
+
+  // Conversation Handling
   useEffect(() => {
     if (
       !conversationLoading &&
       conversationError &&
-      !conversationToastMessageRef.current
+      !isToastShown("conversation")
     ) {
-      handleShowFailureToast(conversationError);
-      conversationToastMessageRef.current = true;
+      console.log(conversationError);
+      setToastShown("conversation");
     } else if (
       !conversationLoading &&
       conversationMessage &&
-      !conversationToastMessageRef.current
+      !isToastShown("conversation")
     ) {
       handleShowSuccessToast("You can now chat with this consumer");
+      setToastShown("conversation");
     }
   }, [conversationError, conversationMessage, conversationLoading]);
+
   return (
     <>
       <Toaster />

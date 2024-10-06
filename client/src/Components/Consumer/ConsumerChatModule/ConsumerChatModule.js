@@ -212,7 +212,6 @@ const ConsumerChatModule = () => {
   useEffect(() => {
     scrollToEndMessage?.current?.scrollIntoView();
   }, [allMessages]);
-  console.log(currentConversation?.members?.sender?._id);
 
   return (
     <>
@@ -294,7 +293,11 @@ const ConsumerChatModule = () => {
                               }
                             </h1>
                             <h1 className="message ml-2 truncate-text text-sm">
-                              hey dear i am using skillswift the thing is
+                              {checkOnlineConsumer(
+                                currentConversation?.members?.sender?._id
+                              )
+                                ? "Online"
+                                : "Offline"}
                             </h1>
                           </div>
                         </div>
@@ -443,7 +446,10 @@ const ConsumerChatModule = () => {
                                 ? "bg-[#E5EFFC]"
                                 : ""
                             } chat w-[90%] h-[4rem] flex rounded-lg mb-3 cursor-pointer overflow-x-hidden`}
-                            onClick={() => setCurrentConversation(conversation)}
+                            onClick={() => {
+                              setCurrentConversation(conversation);
+                              setChatSectionShowing(false);
+                            }}
                           >
                             <div className="profile w-3/12 flex justify-center items-center ">
                               <img
@@ -463,7 +469,11 @@ const ConsumerChatModule = () => {
                                 }
                               </h1>
                               <h1 className="message ml-2 truncate-text-2 text-sm">
-                                hey dear i am using skillswift the thing is
+                                {checkOnlineConsumer(
+                                  currentConversation?.members?.sender?._id
+                                )
+                                  ? "Online"
+                                  : "Offline"}
                               </h1>
                             </div>
                           </div>

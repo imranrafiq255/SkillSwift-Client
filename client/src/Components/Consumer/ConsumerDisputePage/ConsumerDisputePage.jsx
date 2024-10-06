@@ -78,7 +78,6 @@ const DisputePage = () => {
     [showDisputeModal, showRefundModal]
   );
 
-  // Attaching event listener to detect outside click
   useEffect(() => {
     if (showDisputeModal || showRefundModal) {
       document.addEventListener("mousedown", handleOutsideClick);
@@ -91,7 +90,6 @@ const DisputePage = () => {
     };
   }, [showDisputeModal, showRefundModal, handleOutsideClick]);
 
-  // Filter services to show only completed ones
   useEffect(() => {
     dispatch(clearErrors());
     dispatch(loadAllDisputesAction());
@@ -202,7 +200,7 @@ const DisputePage = () => {
       !refundRequestLoading
     ) {
       refundRequestToastRef.current = true;
-      handleShowFailureToast(refundRequestMessage);
+      handleShowSuccessToast(refundRequestMessage);
       handleCloseRefundModal();
     }
   }, [refundRequestMessage, refundRequestLoading, refundRequestError]);

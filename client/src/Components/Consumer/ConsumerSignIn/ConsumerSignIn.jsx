@@ -7,7 +7,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { consumerLoginAction } from "../../Redux/Consumer/Actions/ConsumerActions";
 import LoaderCircles from "../../Loader/LoaderCircles";
 import { Toaster } from "react-hot-toast";
-import { handleShowFailureToast } from "../../ToastMessages/ToastMessage";
+import {
+  handleShowFailureToast,
+  handleShowSuccessToast,
+} from "../../ToastMessages/ToastMessage";
+import { useLocation } from "react-router-dom";
 // Validation schema
 const validationSchema = Yup.object({
   consumerEmail: Yup.string()
@@ -23,6 +27,9 @@ const SignIn = () => {
   const passwordRef = useRef();
   const [eyeToggler, setEyeToggler] = useState(false);
   const dispatch = useDispatch();
+  const location = useLocation();
+  const toastMessage = location?.state?.message || null;
+  const toastMessageRef = useRef(false);
   const { loading, message, error } = useSelector(
     (state) => state.consumerLoginReducer
   );
@@ -60,7 +67,12 @@ const SignIn = () => {
       }
     }
   }, [loading, message, error, navigate]);
-
+  useEffect(() => {
+    if (toastMessage && !toastMessageRef.current) {
+      handleShowSuccessToast(toastMessage);
+      toastMessageRef.current = true;
+    }
+  }, [toastMessage, toastMessageRef]);
   return (
     <>
       <Toaster />

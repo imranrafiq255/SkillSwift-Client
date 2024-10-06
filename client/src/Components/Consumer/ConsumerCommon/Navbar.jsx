@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaBell,
   FaSearch,
@@ -20,6 +20,8 @@ import {
   handleShowSuccessToast,
 } from "../../ToastMessages/ToastMessage";
 import { Toaster } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { loadCurrentConsumerAction } from "../../Redux/Consumer/Actions/ConsumerActions";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -28,14 +30,20 @@ const Navbar = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
-
+  const { loading, consumer } = useSelector(
+    (state) => state.loadCurrentConsumerReducer
+  );
+  const dispatch = useDispatch();
   const [user, setUser] = useState({
-    name: "John Doe",
-    email: "john@example.com",
-    phone: "1234567890",
-    address: "1234 Elm Street",
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    image: "",
   });
-
+  useEffect(() => {
+    dispatch(loadCurrentConsumerAction());
+  }, [dispatch]);
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -56,7 +64,17 @@ const Navbar = () => {
       handleShowFailureToast(error?.response?.data?.message);
     }
   };
-
+  useEffect(() => {
+    if (!loading && consumer) {
+      setUser({
+        name: consumer?.consumerFullName,
+        email: consumer?.consumerEmail,
+        phone: consumer?.consumerPhoneNumber,
+        address: consumer?.consumerAddress,
+        image: consumer?.consumerAvatar,
+      });
+    }
+  }, [consumer, loading]);
   return (
     <nav className="bg-white shadow-md p-4 z-10">
       <Toaster />
@@ -67,12 +85,12 @@ const Navbar = () => {
           {/* Menu for desktop */}
           <ul className="hidden md:flex space-x-6 text-gray-700 font-semibold">
             <li className="relative group">
-              <a href="/consumer-home" className="flex items-center">
+              <Link to="/consumer-home" className="flex items-center">
                 <FaHome className="w-5 h-5" />
                 <span className="absolute left-1/2 transform -translate-x-1/2 top-full mt-1 text-xs text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity">
                   Home
                 </span>
-              </a>
+              </Link>
             </li>
             <li className="relative group">
               <Link to="/consumer-chat-section" className="flex items-center">
@@ -114,7 +132,15 @@ const Navbar = () => {
             </li>
             <li className="relative group">
               <button
-                onClick={() => setShowProfileModal(true)}
+                onClick={() => {
+                  if (!loading && !consumer) {
+                    navigate("/consumer-sign-in", {
+                      state: { message: "Please login first" },
+                    });
+                  } else if (!loading && consumer) {
+                    setShowProfileModal(true);
+                  }
+                }}
                 aria-label="Profile"
               >
                 <FaUser className="w-5 h-5" />
@@ -158,7 +184,15 @@ const Navbar = () => {
               <FaSearch className="w-5 h-5" />
             </button>
             <button
-              onClick={() => setShowAddressModal(true)}
+              onClick={() => {
+                if (!loading && !consumer) {
+                  navigate("/consumer-sign-in", {
+                    state: { message: "Please login first" },
+                  });
+                } else if (!loading && consumer) {
+                  setShowAddressModal(true);
+                }
+              }}
               aria-label="Address"
             >
               <FaMapMarkerAlt className="w-5 h-5" />
@@ -179,35 +213,51 @@ const Navbar = () => {
           isOpen ? "block" : "hidden"
         } md:hidden mt-4 space-y-4 text-gray-700 font-semibold text-left`}
       >
-        <a href="/home" className="flex items-center">
+        <Link to="/home" className="flex items-center">
           <FaHome className="w-5 h-5 mx-2" />
           Home
-        </a>
-        <a href="/messages" className="flex items-center">
+        </Link>
+        <Link to="/consumer-chat-section" className="flex items-center">
           <FaEnvelope className="w-5 h-5 mx-2" />
           Messages
-        </a>
-        <a href="/requests" className="flex items-center">
+        </Link>
+        <Link to={"/consumer-requested-services"} className="flex items-center">
           <FaClipboardList className="w-5 h-5 mx-2" />
           Service Requests
-        </a>
-        <a href="/history" className="flex items-center">
+        </Link>
+        <Link to={"/consumer-service-history"} className="flex items-center">
           <FaHistory className="w-5 h-5 mx-2" />
           Service History
-        </a>
-        <a href="/disputes" className="flex items-center">
+        </Link>
+        <Link to={"/consumer-disputes"} className="flex items-center">
           <FaExclamationCircle className="w-5 h-5 mx-2" />
           Disputes
-        </a>
+        </Link>
         <button
-          onClick={() => setShowAddressModal(true)}
+          onClick={() => {
+            if (!loading && !consumer) {
+              navigate("/consumer-sign-in", {
+                state: { message: "Please login first" },
+              });
+            } else if (!loading && consumer) {
+              setShowAddressModal(true);
+            }
+          }}
           className="flex items-center"
         >
           <FaMapMarkerAlt className="w-5 h-5 mx-2" />
           Address
         </button>
         <button
-          onClick={() => setShowProfileModal(true)}
+          onClick={() => {
+            if (!loading && !consumer) {
+              navigate("/consumer-sign-in", {
+                state: { message: "Please login first" },
+              });
+            } else if (!loading && consumer) {
+              setShowProfileModal(true);
+            }
+          }}
           className="flex items-center"
         >
           <FaUser className="w-5 h-5 mx-2" />
@@ -221,7 +271,7 @@ const Navbar = () => {
           Search
         </button>
         <button
-          onClick={() => alert("Notifications clicked")}
+          onClick={() => navigate("/consumer-notifications")}
           className="flex items-center"
         >
           <FaBell className="w-5 h-5 mx-2" />

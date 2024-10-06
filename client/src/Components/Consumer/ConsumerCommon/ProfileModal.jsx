@@ -14,7 +14,7 @@ const ProfileModal = ({ isOpen, onClose, onEdit, user }) => {
         <div className="flex flex-col items-center space-y-4">
           {/* Profile Picture */}
           <img
-            src="https://via.placeholder.com/100"
+            src={user?.image || "https://via.placeholder.com/100"}
             alt="Profile"
             className="rounded-full w-24 h-24"
           />
@@ -24,28 +24,28 @@ const ProfileModal = ({ isOpen, onClose, onEdit, user }) => {
             <div className="w-full">
               <label className="block font-semibold mb-1">Name</label>
               <p className="border p-2 w-full rounded bg-gray-100">
-                {user.name}
+                {user?.name || "Not available"}
               </p>
             </div>
 
             <div className="w-full">
               <label className="block font-semibold mb-1">Email</label>
               <p className="border p-2 w-full rounded bg-gray-100">
-                {user.email}
+                {user?.email || "Not available"}
               </p>
             </div>
 
             <div className="w-full">
               <label className="block font-semibold mb-1">Phone</label>
               <p className="border p-2 w-full rounded bg-gray-100">
-                {user.phone}
+                {user.phone || "Not available"}
               </p>
             </div>
 
             <div className="w-full">
               <label className="block font-semibold mb-1">Address</label>
               <p className="border p-2 w-full rounded bg-gray-100">
-                {user.address}
+                {user.address || "Not available"}
               </p>
             </div>
           </div>
