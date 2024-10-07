@@ -44,7 +44,6 @@ const SignIn = () => {
   };
 
   const handeleSubmit = async (values) => {
-    console.log(values);
     dispatch(consumerLoginAction(values));
   };
 

@@ -83,10 +83,16 @@ const AuthenticatedRoutes = () => {
         const response = await axios.get(
           "/api/v1/consumer/load-current-consumer"
         );
-        if (response.data) {
+        if (response?.data) {
           setConsumerAuthenticated(true);
           if (!response?.data?.consumer?.isEmailVerified) {
             navigate("/consumer-send-email");
+          } else if (
+            !response?.data?.consumer?.consumerAvatar ||
+            !response?.data?.consumer?.consumerAddress ||
+            !response?.data?.consumer?.consumerPhoneNumber
+          ) {
+            navigate("/consumer-upload-info");
           }
         }
       } catch (error) {
@@ -206,10 +212,7 @@ const AuthenticatedRoutes = () => {
           isConsumerAuthenticated ? (
             <ConsumerUpdateInfo />
           ) : (
-            <Navigate
-              to="/consumer-sign-in"
-              state={{ message: "Please sign in first" }}
-            />
+            <Navigate to="/consumer-sign-in" />
           )
         }
       />

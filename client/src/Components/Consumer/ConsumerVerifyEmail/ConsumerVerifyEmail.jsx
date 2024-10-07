@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -12,6 +12,7 @@ const ConsumerVerifyEmail = () => {
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [verified, setVerified] = useState(false);
+  const toastMessageRef = useRef(false);
   useEffect(() => {
     const verifyEmail = async () => {
       try {
@@ -20,11 +21,14 @@ const ConsumerVerifyEmail = () => {
           `/api/v1/consumer/confirm-email/${token}`
         );
         setLoading(false);
-        handleShowSuccessToast(response.data.message);
-        setVerified(true);
-        setTimeout(() => {
-          navigate("/consumer-upload-info");
-        }, 2000);
+        if (!toastMessageRef.current) {
+          toastMessageRef.current = true;
+          handleShowSuccessToast(response?.data?.message);
+          setVerified(true);
+          setTimeout(() => {
+            navigate("/consumer-upload-info");
+          }, 2000);
+        }
       } catch (error) {
         console.log(error?.response?.data?.message);
         handleShowFailureToast(error?.response?.data?.message);

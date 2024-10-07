@@ -59,7 +59,12 @@ const ServiceProviderFooter = () => {
             <h1 className="text-center text-white font-bold text-xl lg:text-3xl my-5">
               WE ARE HERE FOR YOU
             </h1>
-            <button className="text-black bg-white lg:w-40 lg:h-14 w-32 h-10 my-5">
+            <button
+              className="text-black bg-white lg:w-40 lg:h-14 w-32 h-10 my-5"
+              onClick={() =>
+                window.open("https://wa.me/+923247572574", "_blank")
+              }
+            >
               CONTACT US
             </button>
           </div>

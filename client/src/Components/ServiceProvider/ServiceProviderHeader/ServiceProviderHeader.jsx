@@ -4,6 +4,7 @@ import "./ServiceProviderHeader.css";
 import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { loadNewNotificationsAction } from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
+import Logo from "../../../Assets/skillswift_logo.svg";
 const ServiceProviderHeader = () => {
   const [showing, setShowing] = useState(false);
   const location = useLocation();
@@ -42,11 +43,7 @@ const ServiceProviderHeader = () => {
               />
             </div>
             <div className="mr-10 lg:mr-28 flex lg:justify-center justify-end items-center">
-              <img
-                src={require("../../../Assets/puma-logo.png")}
-                alt=""
-                className="w-20 h-14"
-              />
+              <img src={Logo} alt="" className="w-20 h-20" />
             </div>
           </div>
           <div className="logo-left hidden lg:w-5/12 lg:flex justify-end">

@@ -15,7 +15,7 @@ import {
 } from "../../Redux/Consumer/Actions/ConsumerActions";
 // Validation Schema
 const validationSchema = Yup.object({
-  phoneNumber: Yup.string()
+  consumerPhoneNumber: Yup.string()
     .matches(
       /^\+92\d{10}$/,
       "Phone number must start with +92 followed by 10 digits"
@@ -37,7 +37,7 @@ const ConsumerUpdateInfo = () => {
   );
   const formik = useFormik({
     initialValues: {
-      phoneNumber: "",
+      consumerPhoneNumber: "",
       consumerAddress: "",
       consumerAvatar: null,
     },
@@ -130,8 +130,8 @@ const ConsumerUpdateInfo = () => {
                 <label htmlFor="phoneNumber">Your Phone</label> <br />
                 <input
                   type="text"
-                  id="phoneNumber"
-                  name="phoneNumber"
+                  id="consumerPhoneNumber"
+                  name="consumerPhoneNumber"
                   value={formik.values.phoneNumber}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -142,9 +142,10 @@ const ConsumerUpdateInfo = () => {
                   }`}
                   placeholder="+923001234567"
                 />
-                {formik.touched.phoneNumber && formik.errors.phoneNumber ? (
+                {formik.touched.consumerPhoneNumber &&
+                formik.errors.consumerPhoneNumber ? (
                   <div className="text-red-500 text-sm">
-                    {formik.errors.phoneNumber}
+                    {formik.errors.consumerPhoneNumber}
                   </div>
                 ) : null}
               </div>
