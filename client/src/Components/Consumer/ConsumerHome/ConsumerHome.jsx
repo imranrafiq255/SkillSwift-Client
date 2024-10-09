@@ -15,6 +15,7 @@ const ConsumerHome = () => {
   const navigate = useNavigate();
   const hasShownToast = useRef(false);
   const message = location?.state?.message || null;
+
   useEffect(() => {
     if (message && !hasShownToast.current) {
       handleShowSuccessToast(message);
@@ -23,14 +24,17 @@ const ConsumerHome = () => {
     }
   }, [message, navigate, location.pathname]);
 
-  // const toggleSidebar = () => {
-  //   setIsSidebarVisible((prevState) => !prevState);
-  // };
   return (
     <>
       <Toaster />
       <Navbar />
-      <HeroSection />
+      {/* <div className="relative">
+        <HeroSection />
+        <div className="absolute top-0 left-0 right-0 z-10">
+        <ServicesSection />
+        </div>
+        </div> */}
+      {/* <HeroSection /> */}
       <ServicesSection />
       <PopularServicesSection />
       {/* <FAQsSection /> */}

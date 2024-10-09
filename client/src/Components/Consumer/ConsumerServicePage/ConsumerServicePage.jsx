@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaHeart, FaInfoCircle } from "react-icons/fa";
 import Footer from "../ConsumerCommon/Footer.jsx";
 import Navbar from "../ConsumerCommon/Navbar";
 import ContactSection from "../ConsumerCommon/ContactSection";
@@ -182,7 +182,7 @@ const ServicePage = () => {
             </div>
 
             {/* Actions */}
-            {/* <div className="bg-white p-6 rounded-lg shadow-md">
+            <div className="bg-white p-6 rounded-lg shadow-md">
               <h2 className="text-xl font-semibold mb-4">Actions</h2>
               <div className="space-y-4">
                 <button className="flex items-center justify-center bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300 w-full">
@@ -192,7 +192,7 @@ const ServicePage = () => {
                   <FaInfoCircle className="mr-2" /> Request More Info on Chat
                 </button>
               </div>
-            </div> */}
+            </div>
           </div>
         </div>
 

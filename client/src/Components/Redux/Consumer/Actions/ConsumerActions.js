@@ -9,7 +9,7 @@ const consumerLoginAction = (consumerData) => async (dispatch) => {
     dispatch({
       type: "CONSUMER_LOADING",
     });
-    const response = await axios.post("/api/v1/consumer/sign-in", consumerData);
+    const response = await axios.post("/api/v1/consumer/sign-in", consumerData).then();
     dispatch({
       type: "CONSUMER_MESSAGE",
       payload: response?.data?.message,

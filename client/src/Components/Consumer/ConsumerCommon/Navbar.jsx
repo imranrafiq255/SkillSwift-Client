@@ -10,6 +10,7 @@ import {
   FaHistory,
   FaExclamationCircle,
   FaSignOutAlt,
+  FaEdit,
 } from "react-icons/fa";
 import ProfileModal from "./ProfileModal";
 import AddressModal from "./AddressModal";
@@ -45,8 +46,7 @@ const Navbar = () => {
   const signOutHandler = async () => {
     try {
       const response = await axios.get("/api/v1/consumer/sign-out");
-      navigate("/consumer-sign-in")
-      // window.location.href = `/service-provider-sign-in?message=${response?.data?.message}`;
+      navigate("/consumer-sign-in");
     } catch (error) {
       handleShowFailureToast(error?.response?.data?.message);
     }
@@ -87,18 +87,18 @@ const Navbar = () => {
     }
   }, [consumer, loading]);
   return (
-    <nav className="bg-white shadow-md p-4 z-10">
+    <nav className="bg-white shadow-md p-6 z-10">
       <Toaster />
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <div className="text-blue-700 font-semibold text-xl">SkillSwift</div>
 
           {/* Menu for desktop */}
-          <ul className="hidden md:flex space-x-6 text-gray-700 font-semibold">
+          <ul className="hidden md:flex space-x-14 text-gray-700 font-semibold">
             <li className="relative group">
               <Link to="/consumer-home" className="flex items-center">
                 <FaHome className="w-5 h-5" />
-                <span className="absolute left-1/2 transform -translate-x-1/2 top-full mt-1 text-xs text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="absolute left-1/2 transform -translate-x-1/2 top-full text-xs text-gray-700">
                   Home
                 </span>
               </Link>
@@ -106,7 +106,7 @@ const Navbar = () => {
             <li className="relative group">
               <Link to="/consumer-chat-section" className="flex items-center">
                 <FaEnvelope className="w-5 h-5" />
-                <span className="absolute left-1/2 transform -translate-x-1/2 top-full mt-1 text-xs text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="absolute left-1/2 transform -translate-x-1/2 top-full text-xs text-gray-700">
                   Messages
                 </span>
               </Link>
@@ -117,7 +117,7 @@ const Navbar = () => {
                 className="flex items-center"
               >
                 <FaClipboardList className="w-5 h-5" />
-                <span className="absolute left-1/2 transform -translate-x-1/2 top-full mt-1 text-xs text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="absolute left-1/2 transform -translate-x-1/2 top-full text-xs text-gray-700">
                   Requests
                 </span>
               </Link>
@@ -128,7 +128,7 @@ const Navbar = () => {
                 className="flex items-center"
               >
                 <FaHistory className="w-5 h-5" />
-                <span className="absolute left-1/2 transform -translate-x-1/2 top-full mt-1 text-xs text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="absolute left-1/2 transform -translate-x-1/2 top-full text-xs text-gray-700">
                   History
                 </span>
               </Link>
@@ -136,7 +136,7 @@ const Navbar = () => {
             <li className="relative group">
               <Link to={"/consumer-disputes"} className="flex items-center">
                 <FaExclamationCircle className="w-5 h-5" />
-                <span className="absolute left-1/2 transform -translate-x-1/2 top-full mt-1 text-xs text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="absolute left-1/2 transform -translate-x-1/2 top-full text-xs text-gray-700">
                   Disputes
                 </span>
               </Link>
@@ -156,8 +156,21 @@ const Navbar = () => {
               >
                 <FaUser className="w-5 h-5" />
               </button>
-              <span className="absolute left-1/2 transform -translate-x-1/2 top-full mt-1 text-xs text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity">
+              <span className="absolute left-1/2 transform -translate-x-1/2 top-full text-xs text-gray-700">
                 Profile
+              </span>
+            </li>
+            <li className="relative group">
+              <button
+                onClick={() => {
+                  alert("Custom Service");
+                }}
+                aria-label="Custom"
+              >
+                <FaEdit className="w-5 h-5" />
+              </button>
+              <span className="absolute left-1/2 transform -translate-x-1/2 top-full text-xs text-gray-700 whitespace-nowrap">
+                Custom Request
               </span>
             </li>
           </ul>
@@ -214,10 +227,7 @@ const Navbar = () => {
             >
               <FaBell className="w-5 h-5" />
             </button>
-            <button
-              onClick={signOutHandler}
-              aria-label="Signout"
-            >
+            <button onClick={signOutHandler} aria-label="Signout">
               <FaSignOutAlt className="w-5 h-5" />
             </button>
           </div>
@@ -281,6 +291,15 @@ const Navbar = () => {
           Profile
         </button>
         <button
+          onClick={() => {
+            alert("Custom Service");
+          }}
+          className="flex items-center"
+        >
+          <FaEdit className="w-5 h-5 mx-2" />
+          Custom Request
+        </button>
+        <button
           onClick={() => setShowSearchModal(true)}
           className="flex items-center"
         >
@@ -295,13 +314,13 @@ const Navbar = () => {
           Notifications
         </button>
         <button
-              onClick={signOutHandler}
-              className="flex items-center"
-              aria-label="Signout"
-            >
-              <FaSignOutAlt className="w-5 h-5 mx-2" />
-              Signout
-            </button>
+          onClick={signOutHandler}
+          className="flex items-center"
+          aria-label="Signout"
+        >
+          <FaSignOutAlt className="w-5 h-5 mx-2" />
+          Signout
+        </button>
       </div>
 
       {/* Profile Modal */}
