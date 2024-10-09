@@ -33,7 +33,7 @@ const ConsumerHome = () => {
       <HeroSection />
       <ServicesSection />
       <PopularServicesSection />
-      <FAQsSection />
+      {/* <FAQsSection /> */}
       <ContactSection />
       <Footer />
     </>

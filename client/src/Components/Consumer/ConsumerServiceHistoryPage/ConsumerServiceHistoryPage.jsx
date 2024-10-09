@@ -3,6 +3,7 @@ import Navbar from "../ConsumerCommon/Navbar";
 import Footer from "../ConsumerCommon/Footer";
 import ContactSection from "../ConsumerCommon/ContactSection";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   clearErrors,
   consumerAddRatingAction,
@@ -24,6 +25,7 @@ const ServiceHistoryPage = () => {
   const modalRef = useRef(null);
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
   const { loading, error, orders } = useSelector(
     (state) => state.loadOrdersReducer
   );
@@ -39,7 +41,10 @@ const ServiceHistoryPage = () => {
     dispatch(consumerRejectOrderAction(serviceId));
   };
   const handleBookAgain = (serviceId) => {
-    alert(`Booking service with ID: ${serviceId} again`);
+    //get the service from this serviceId and send it in state
+    navigate("/consumer-service-page", {
+      state: { service: serviceId },
+    });
   };
 
   const handleReview = (serviceId) => {
@@ -116,6 +121,8 @@ const ServiceHistoryPage = () => {
       dispatch(loadOrdersAction());
     }
   }, [dispatch, ratingError, ratingLoading, ratingMessage]);
+  console.log(orders);
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Navbar */}

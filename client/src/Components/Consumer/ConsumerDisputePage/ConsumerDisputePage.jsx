@@ -231,14 +231,14 @@ const DisputePage = () => {
             onClick={handleOpenDisputeModal}
             className="text-xs lg:text-lg mb-4 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-300"
           >
-            Apply for Full Refund
+            Apply for Refund
           </button>
-          <button
+          {/* <button
             onClick={handleOpenRefundModal}
             className="text-xs lg:text-lg mb-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
           >
             Apply for Partial Refund
-          </button>
+          </button> */}
         </div>
 
         <div className="flex flex-wrap justify-center md:justify-start mb-6">

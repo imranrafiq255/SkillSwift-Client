@@ -99,7 +99,7 @@ const ServicePage = () => {
                     <span className="text-gray-600">
                       ({ratingCalculator(service?.servicePostRatings) || 0} out
                       of 5 based on {service?.servicePostRatings?.length}{" "}
-                      reviews)
+                      ratings)
                     </span>
                   </div>
                 </div>
@@ -177,7 +177,7 @@ const ServicePage = () => {
               </div>
               <p className="text-gray-600">
                 {ratingCalculator(service?.servicePostRatings) || 0} out of 5
-                based on {service?.reviewCount} reviews
+                based on {service?.servicePostRatings?.length} reviews
               </p>
             </div>
 

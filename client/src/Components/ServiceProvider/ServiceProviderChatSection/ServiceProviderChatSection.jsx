@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { FaComments } from "react-icons/fa";
 import "./ServiceProviderChatSection.css";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
@@ -231,32 +232,23 @@ const ServiceProviderChatSection = () => {
   return (
     <>
       <div className="chat-section-container">
-        <div className="top-border h-20 w-full bg-[#dadada] flex justify-center items-center">
-          <div className="lg:w-[80%] xl:w-[60%] flex items-center gap-8 xl:gap-5 lg:gap-10">
-            <img
-              src={require("../../../Assets/left-arrow.png")}
-              alt=""
-              className="w-6 h-6 lg:w-7 lg:h-7 xl:w-8 xl:h-8 cursor-pointer"
-              onClick={() => {
-                navigate(-1);
-              }}
-            />
-            <h1 className="text-lg lg:text-lg xl:text-2xl font-bold text-[#4e97fd] uppercase">
-              Service Provider Chat Section
-            </h1>
-          </div>
-        </div>
         {conversations && conversations?.length === 0 ? (
-          <div className="flex justify-center">
-            <h1>No conversation available</h1>
+          <div className="flex flex-col items-center justify-center h-full text-center p-4">
+            <div className="bg-blue-100 p-6 rounded-full">
+              <FaComments className="text-blue-500 text-6xl" />
+            </div>
+            <h1 className="text-blue-600 text-2xl font-semibold mt-4">
+              No Conversations Available
+            </h1>
+            <p className="text-blue-500 mt-2">
+              It looks like you have no active conversations. Start a new one or
+              check back later!
+            </p>
           </div>
         ) : (
           <div className="bottom-section-container w-full flex justify-center py-5 bg-[#f6f9fc] h-screen">
             <div className="bottom-section w-full lg:w-11/12 xl:w-10/12">
               <div className="flex justify-between items-center px-3">
-                <h1 className=" w-text-sm ml-1 xl:ml-0 lg:text-lg xl:text-xl font-light">
-                  All messages
-                </h1>
                 <div
                   className="flex items-center gap-2 lg:hidden"
                   onClick={() => setChatSectionShowing(!chatSectionShowing)}
@@ -274,7 +266,7 @@ const ServiceProviderChatSection = () => {
                 </div>
               </div>
               <div className="w-full flex gap-4 mt-4 relative">
-                <div className="left-chat-section w-3/12 border-2 border-slate-300 rounded-lg h-[50rem] lg:block hidden">
+                <div className="left-chat-section w-4/12 border-2 border-slate-300 rounded-lg lg:block hidden">
                   <div className="chat-container flex flex-col items-center py-5">
                     {conversationsLoading ? (
                       <div className="flex justify-center">
@@ -324,133 +316,124 @@ const ServiceProviderChatSection = () => {
                   </div>
                 </div>
                 {currentConversation && (
-                  <div className="right-chat-section w-full xl:w-9/12 h-[35rem] lg:h-[40rem] xl:h-[50rem] lg:p-0 p-4 bg-[#f6f9fc]">
-                    <div className="">
-                      <div className="top w-full h-[45rem] border-2 border-slate-300 rounded-lg relative overflow-scroll vanish-scroll-bar">
-                        <div className="top-user-name flex items-center sticky top-0 left-0 w-full h-[4rem] bg-white rounded-tl-[5px] rounded-tr-[5px] shadow-md">
-                          <div className="profile basis-[30%] lg:basis-[20%] xl:basis-[10%] flex justify-center">
-                            <img
-                              src={
-                                currentConversation?.members?.receiver
-                                  ?.consumerAvatar
-                              }
-                              alt=""
-                              className="w-[3rem] h-[3rem] rounded-full shadow-2xl"
-                            />
-                          </div>
-                          <div className="profile basis-[70%] lg:basis-[80%] xl:basis-[90%] -ml-3">
-                            <h1 className="font-semibold">
-                              {
-                                currentConversation?.members?.receiver
-                                  ?.consumerFullName
-                              }
-                            </h1>
-                            <h1 className="text-sm text-[#878787]">
-                              {checkOnlineServiceProvider(
+                  <div className="right-chat-section w-full xl:w-9/12 h-[calc(100vh-5rem)] lg:p-0 p-4 bg-[#f6f9fc] flex flex-col">
+                    <div className="flex-1 relative border-2 border-slate-300 rounded-lg ">
+                      <div className="top-user-name flex items-center sticky top-0 left-0 w-full h-[4rem] bg-white rounded-tl-[5px] rounded-tr-[5px] shadow-md">
+                        <div className="profile basis-[30%] lg:basis-[20%] xl:basis-[10%] flex justify-center relative">
+                          <img
+                            src={
+                              currentConversation?.members?.receiver
+                                ?.consumerAvatar
+                            }
+                            alt=""
+                            className="w-[3rem] h-[3rem] rounded-full shadow-2xl"
+                          />
+                          <div
+                            className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ml-4 w-3 h-3 rounded-full ${
+                              checkOnlineServiceProvider(
                                 currentConversation?.members?.sender?._id
                               )
-                                ? "Online"
-                                : "Offline"}
-                            </h1>
-                          </div>
+                                ? "bg-green-500"
+                                : "bg-red-500"
+                            }`}
+                          />
                         </div>
-                        <div className="chat-messages mt-[4rem] flex flex-col">
+                        <div className="profile basis-[70%] lg:basis-[80%] xl:basis-[90%] ml-3">
+                          <h1 className="font-semibold">
+                            {
+                              currentConversation?.members?.receiver
+                                ?.consumerFullName
+                            }
+                          </h1>
+                          <h1 className="text-sm text-[#878787]">
+                            {checkOnlineServiceProvider(
+                              currentConversation?.members?.sender?._id
+                            )
+                              ? "Online"
+                              : "Offline"}
+                          </h1>
+                        </div>
+                      </div>
+                      <div className="top w-full flex-1 relative overflow-hidden">
+                        <div className="chat-messages pt-6 mt-[1rem] flex flex-col h-full overflow-auto">
                           {loadMessagesLoading ? (
-                            <div className="flex justify-center items-center">
-                              {
-                                <h1 className="text-lg">
-                                  <RingLoader />
-                                </h1>
-                              }
+                            <div className="flex justify-center items-center h-full">
+                              <h1 className="text-lg">
+                                <RingLoader />
+                              </h1>
                             </div>
                           ) : allMessages && allMessages.length > 0 ? (
-                            allMessages?.map((message) => (
-                              <div>
+                            allMessages.map((message) => (
+                              <div key={message._id}>
                                 {message.sender?._id ===
                                 serviceProvider?._id ? (
-                                  <div className="mb-4 flex items-end justify-end mr-2 w-full px-2">
-                                    <div className=" p-4 rounded-lg bg-[#4e97fd]  shadow-md max-w-xs lg:max-w-md">
-                                      <div className="flex gap-2 items-center">
-                                        <img
-                                          src={
-                                            message?.sender
-                                              ?.serviceProviderAvatar
-                                          }
-                                          alt=""
-                                          className="w-8 h-8 rounded-full"
-                                        />
-                                        <p className="text-gray-900 font-medium">
-                                          {
-                                            message?.sender
-                                              ?.serviceProviderFullName
-                                          }
-                                        </p>
-                                      </div>
+                                  <div className="mb-4 flex justify-end pr-2 w-full">
+                                    <div className="bg-blue-500 mt-2 pb-1 px-2 rounded-lg shadow-md max-w-xs lg:max-w-md">
                                       <p className="text-white mt-1">
                                         {message?.message}
                                       </p>
-                                      <span className="text-xs text-gray-500 mt-2 block text-right">
-                                        {timeConverter(message?.createdAt) ||
-                                          "just now"}
-                                      </span>
                                     </div>
+                                    <img
+                                      src={
+                                        message?.sender?.serviceProviderAvatar
+                                      }
+                                      alt=""
+                                      className="w-8 h-8 rounded-full shadow-md mx-2 border-2 border-blue-500"
+                                    />
                                   </div>
                                 ) : (
-                                  <div className="mb-4 flex items-end ml-2 w-full">
-                                    <div className="bg-green-400 p-4 rounded-lg shadow-md max-w-xs lg:max-w-md">
-                                      <div className="flex gap-2 items-center">
-                                        <img
-                                          src={
-                                            message?.conversation?.members
-                                              ?.receiver?.consumerAvatar
-                                          }
-                                          alt=""
-                                          className="w-8 h-8 rounded-full"
-                                        />
-                                        <p className="text-gray-900 font-medium">
-                                          {
-                                            message?.conversation?.members
-                                              ?.receiver?.consumerFullName
-                                          }
-                                        </p>
-                                      </div>
-                                      <p className="text-white mt-1">
+                                  <div className="mb-4 flex pl-2 w-full">
+                                    <img
+                                      src={
+                                        message?.conversation?.members?.receiver
+                                          ?.consumerAvatar
+                                      }
+                                      alt=""
+                                      className="w-8 h-8 rounded-full shadow-md mx-2 border-2 border-gray-500"
+                                    />
+                                    <div className="bg-gray-300 mt-2 pb-1 px-2 rounded-lg shadow-md max-w-xs lg:max-w-md">
+                                      <p className="text-black mt-1">
                                         {message?.message}
                                       </p>
-                                      <span className="text-xs text-gray-500 mt-2 block text-right">
-                                        {timeConverter(message?.createdAt)}
-                                      </span>
                                     </div>
                                   </div>
                                 )}
                               </div>
                             ))
                           ) : (
-                            <div>
+                            <div className="flex justify-center items-center h-full">
                               <h1>No chat available</h1>
                             </div>
                           )}
                           <div ref={scrollToEndMessage}></div>
                         </div>
                       </div>
-                      <div className="bottom w-full h-[4rem]  mt-[1rem] relative">
-                        <input
-                          type="text"
-                          onChange={(e) => setMessageToSend(e.target.value)}
-                          value={messageToSend}
-                          className="border-2 border-slate-300 rounded-2xl w-full h-full outline-none lg:text-[1.5rem] pl-4 pr-20"
-                          placeholder="Enter what's in your mind..."
-                        />
-                        {messageToSend && (
+                    </div>
+                    <div className="bottom w-full h-12 mt-4 relative">
+                      <input
+                        type="text"
+                        onChange={(e) => setMessageToSend(e.target.value)}
+                        value={messageToSend}
+                        className="border border-gray-300 rounded-lg w-full h-full outline-none px-4 text-sm lg:text-base placeholder-gray-500"
+                        placeholder="Type your message..."
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            sendMessage();
+                          }
+                        }}
+                      />
+                      {messageToSend && (
+                        <button
+                          className="absolute inset-y-0 right-3 flex items-center justify-center"
+                          onClick={() => sendMessage()}
+                        >
                           <img
                             src={require("../../../Assets/submit.png")}
-                            alt=""
-                            className="w-9 h-9 lg:w-10 lg:h-10 absolute top-4 right-7 lg:top-3 lg:right-5 cursor-pointer"
-                            onClick={() => sendMessage()}
-                            onKeyDown={handleEnterKeyBtn}
+                            alt="Send"
+                            className="w-6 h-6 lg:w-8 lg:h-8"
                           />
-                        )}
-                      </div>
+                        </button>
+                      )}
                     </div>
                   </div>
                 )}

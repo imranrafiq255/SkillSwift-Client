@@ -2,6 +2,13 @@ import React from "react";
 import StarRating from "../ConsumerCommon/StarRating";
 import { useNavigate } from "react-router-dom";
 const ServiceCard = ({ service }) => {
+
+  const ratingCalculator = (ratings) => {
+    let sum = 0;
+    ratings.forEach((rating) => (sum += rating.rating));
+    return Math.floor(sum / ratings.length);
+  };
+
   const navigate = useNavigate();
   return (
     <div
@@ -19,7 +26,7 @@ const ServiceCard = ({ service }) => {
       />
       <div className="p-4">
         <h3 className="text-lg font-semibold mb-2">{service.serviceName}</h3>
-        <StarRating rating={service.servicePostRatings.length} />
+        <StarRating rating={ratingCalculator(service?.servicePostRatings) || 0} />
         <p className="text-gray-700 mt-2">{"Rs " + service.servicePostPrice}</p>
       </div>
     </div>

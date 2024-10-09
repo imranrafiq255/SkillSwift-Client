@@ -75,6 +75,7 @@ const AuthenticatedRoutes = () => {
     "/consumer-service-history",
     "/consumer-requested-services",
     "/consumer-chat-section",
+    "/consumer-home",
   ];
 
   useEffect(() => {

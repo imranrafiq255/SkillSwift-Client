@@ -9,6 +9,7 @@ import {
   FaClipboardList,
   FaHistory,
   FaExclamationCircle,
+  FaSignOutAlt,
 } from "react-icons/fa";
 import ProfileModal from "./ProfileModal";
 import AddressModal from "./AddressModal";
@@ -41,6 +42,16 @@ const Navbar = () => {
     address: "",
     image: "",
   });
+  const signOutHandler = async () => {
+    try {
+      const response = await axios.get("/api/v1/consumer/sign-out");
+      navigate("/consumer-sign-in")
+      // window.location.href = `/service-provider-sign-in?message=${response?.data?.message}`;
+    } catch (error) {
+      handleShowFailureToast(error?.response?.data?.message);
+    }
+  };
+
   useEffect(() => {
     dispatch(loadCurrentConsumerAction());
   }, [dispatch]);
@@ -203,6 +214,12 @@ const Navbar = () => {
             >
               <FaBell className="w-5 h-5" />
             </button>
+            <button
+              onClick={signOutHandler}
+              aria-label="Signout"
+            >
+              <FaSignOutAlt className="w-5 h-5" />
+            </button>
           </div>
         </div>
       </div>
@@ -277,6 +294,14 @@ const Navbar = () => {
           <FaBell className="w-5 h-5 mx-2" />
           Notifications
         </button>
+        <button
+              onClick={signOutHandler}
+              className="flex items-center"
+              aria-label="Signout"
+            >
+              <FaSignOutAlt className="w-5 h-5 mx-2" />
+              Signout
+            </button>
       </div>
 
       {/* Profile Modal */}
