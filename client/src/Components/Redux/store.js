@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import {
   consumerAddRatingReducer,
+  consumerCreateConversationReducer,
   consumerForgotPasswordLinkReducer,
   consumerLoginReducer,
   consumerOrderServiceReducer,
@@ -70,6 +71,7 @@ const store = configureStore({
     loadConsumerConversationsReducer: loadConsumerConversationsReducer,
     loadConsumerMessagesReducer: loadConsumerMessagesReducer,
     sendConsumerMessageReducer: sendConsumerMessageReducer,
+    consumerCreateConversationReducer: consumerCreateConversationReducer,
     // service provider reducers
     serviceProviderSignInReducer: serviceProviderSignInReducer,
     serviceProviderForgotPasswordReducer: serviceProviderForgotPasswordReducer,

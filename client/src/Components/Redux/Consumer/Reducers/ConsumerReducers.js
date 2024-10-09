@@ -465,6 +465,33 @@ const sendConsumerMessageReducer = createReducer(
       });
   }
 );
+const consumerCreateConversationReducer = createReducer(
+  {
+    conversationLoading: false,
+    conversationError: null,
+    conversationMessage: null,
+  },
+  (builder) => {
+    builder
+      .addCase("CREATE_CONVERSATION_REQUEST", (state) => {
+        state.conversationLoading = true;
+        state.conversationError = null;
+        state.conversationMessage = null;
+      })
+      .addCase("CREATE_CONVERSATION_SUCCESS", (state, action) => {
+        state.conversationLoading = false;
+        state.conversationMessage = action.payload;
+      })
+      .addCase("CREATE_CONVERSATION_FAILURE", (state, action) => {
+        state.conversationLoading = false;
+        state.conversationError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.conversationError = null;
+        state.conversationMessage = null;
+      });
+  }
+);
 export {
   consumerLoginReducer,
   consumerForgotPasswordLinkReducer,
@@ -486,4 +513,5 @@ export {
   loadConsumerConversationsReducer,
   loadConsumerMessagesReducer,
   sendConsumerMessageReducer,
+  consumerCreateConversationReducer,
 };

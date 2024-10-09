@@ -1,26 +1,40 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FaStar, FaHeart, FaInfoCircle } from "react-icons/fa";
+import { FaStar, FaInfoCircle } from "react-icons/fa";
 import Footer from "../ConsumerCommon/Footer.jsx";
 import Navbar from "../ConsumerCommon/Navbar";
 import ContactSection from "../ConsumerCommon/ContactSection";
 import PopularServicesSection from "../ConsumerHome/PopularServicesSection.jsx";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { handleShowFailureToast } from "../../ToastMessages/ToastMessage.js";
+import {
+  handleShowFailureToast,
+  handleShowSuccessToast,
+} from "../../ToastMessages/ToastMessage.js";
 import { Toaster } from "react-hot-toast";
-import { consumerOrderServiceAction } from "../../Redux/Consumer/Actions/ConsumerActions.js";
+import {
+  consumerOrderServiceAction,
+  loadCurrentConsumerAction,
+} from "../../Redux/Consumer/Actions/ConsumerActions.js";
 import LoaderCircles from "../../Loader/LoaderCircles";
 import { useNavigate } from "react-router-dom";
+import { createConversationAction } from "../../Redux/Consumer/Actions/ConsumerActions";
 const ServicePage = () => {
   const [selectedSlot, setSelectedSlot] = useState("");
   const { loading, error, message } = useSelector(
     (state) => state.consumerOrderServiceReducer
   );
+  const [orderBtnClicked, setOrderBtnClicked] = useState(false);
   const toastMessageShow = useRef(false);
   const dispatch = useDispatch();
   const location = useLocation();
   const service = location?.state?.service || null;
   const navigate = useNavigate();
+
+  const { conversationLoading, conversationError, conversationMessage } =
+    useSelector((state) => state.createConversationReducer);
+  useEffect(() => {
+    dispatch(loadCurrentConsumerAction());
+  }, [dispatch]);
   useEffect(() => {
     if (!loading && !toastMessageShow.current && message) {
       toastMessageShow.current = true;
@@ -37,12 +51,46 @@ const ServicePage = () => {
       serviceProvider: service?.serviceProvider?._id,
     };
     dispatch(consumerOrderServiceAction(data));
+    createConversation(data?.serviceProvider);
   };
   const ratingCalculator = (ratings) => {
     let sum = 0;
     ratings?.forEach((rating) => (sum += rating?.rating));
     return Math.floor(sum / ratings?.length);
   };
+  const createConversation = (id) => {
+    const data = { receiver: id, receiverType: "ServiceProvider" };
+    dispatch(createConversationAction(data));
+  };
+  const conversationToastMessage = useRef(false);
+  useEffect(() => {
+    if (
+      !conversationLoading &&
+      conversationError &&
+      !conversationToastMessage.current
+    ) {
+      console.log(conversationError);
+      conversationToastMessage.current = true;
+    } else if (
+      !conversationLoading &&
+      conversationMessage &&
+      !conversationToastMessage.current
+    ) {
+      conversationToastMessage.current = true;
+      if (!orderBtnClicked) {
+        handleShowSuccessToast("You can now chat with this consumer");
+        setTimeout(() => {
+          navigate("/consumer-chat-section");
+        }, 500);
+      }
+    }
+  }, [
+    conversationError,
+    conversationMessage,
+    conversationLoading,
+    navigate,
+    orderBtnClicked,
+  ]);
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
@@ -150,7 +198,10 @@ const ServicePage = () => {
                         ? "bg-blue-600 text-white hover:bg-blue-700"
                         : "bg-blue-400 text-white cursor-not-allowed"
                     }`}
-                    onClick={handleBookService}
+                    onClick={() => {
+                      handleBookService();
+                      setOrderBtnClicked(true);
+                    }}
                     disabled={!selectedSlot}
                     title={!selectedSlot ? "Please select a time slot" : ""}
                   >
@@ -185,12 +236,23 @@ const ServicePage = () => {
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h2 className="text-xl font-semibold mb-4">Actions</h2>
               <div className="space-y-4">
-                <button className="flex items-center justify-center bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300 w-full">
+                {/* <button className="flex items-center justify-center bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300 w-full">
                   <FaHeart className="mr-2" /> Add to Wishlist
-                </button>
-                <button className="flex items-center justify-center bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300 w-full">
-                  <FaInfoCircle className="mr-2" /> Request More Info on Chat
-                </button>
+                </button> */}
+                {conversationLoading ? (
+                  <div className="flex items-center justify-center bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300 w-full">
+                    <LoaderCircles />
+                  </div>
+                ) : (
+                  <button
+                    className="flex items-center justify-center bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300 w-full"
+                    onClick={() =>
+                      createConversation(service?.serviceProvider?._id)
+                    }
+                  >
+                    <FaInfoCircle className="mr-2" /> Request More Info on Chat
+                  </button>
+                )}
               </div>
             </div>
           </div>

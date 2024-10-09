@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaComments } from "react-icons/fa";
 import "./ServiceProviderChatSection.css";
-import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -15,7 +14,6 @@ import RingLoader from "../../Loader/RingLoader";
 import { handleShowFailureToast } from "../../ToastMessages/ToastMessage";
 const ServiceProviderChatSection = () => {
   const [chatSectionShowing, setChatSectionShowing] = useState(false);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [socket, setSocket] = useState(null);
   const [messageToSend, setMessageToSend] = useState("");
@@ -100,7 +98,7 @@ const ServiceProviderChatSection = () => {
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           members: {
-            sender: {
+            receiver: {
               serviceProviderFullName: serviceProvider.serviceProviderFullName,
               serviceProviderEmail: serviceProvider.serviceProviderEmail,
               serviceProviderAvatar: serviceProvider.serviceProviderAvatar,
@@ -117,25 +115,25 @@ const ServiceProviderChatSection = () => {
               updatedAt: serviceProvider.updatedAt,
               _id: serviceProvider._id,
             },
-            receiver: {
+            sender: {
               consumerFullName:
-                currentConversation?.members?.receiver?.consumerFullName,
+                currentConversation?.members?.sender?.consumerFullName,
               consumerEmail:
-                currentConversation?.members?.receiver?.consumerEmail,
+                currentConversation?.members?.sender?.consumerEmail,
               consumerAvatar:
-                currentConversation?.members?.receiver?.consumerAvatar,
+                currentConversation?.members?.sender?.consumerAvatar,
               consumerAddress:
-                currentConversation?.members?.receiver?.consumerAddress,
+                currentConversation?.members?.sender?.consumerAddress,
               consumerFavoriteServicePosts:
-                currentConversation?.members?.receiver
+                currentConversation?.members?.sender
                   ?.consumerFavoriteServicePosts,
               consumerOrders:
-                currentConversation?.members?.receiver?.consumerOrders,
+                currentConversation?.members?.sender?.consumerOrders,
               isEmailVerified:
-                currentConversation?.members?.receiver?.isEmailVerified,
-              createdAt: currentConversation?.members?.receiver?.createdAt,
-              updatedAt: currentConversation?.members?.receiver?.updatedAt,
-              _id: currentConversation?.members?.receiver?._id,
+                currentConversation?.members?.sender?.isEmailVerified,
+              createdAt: currentConversation?.members?.sender?.createdAt,
+              updatedAt: currentConversation?.members?.sender?.updatedAt,
+              _id: currentConversation?.members?.sender?._id,
             },
           },
         },
@@ -166,7 +164,7 @@ const ServiceProviderChatSection = () => {
       socket.emit("sendMessage", {
         message: newMessage,
         senderId: serviceProvider?._id,
-        receiverId: currentConversation?.members?.receiver?._id,
+        receiverId: currentConversation?.members?.sender?._id,
       });
 
       setAllMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -200,32 +198,32 @@ const ServiceProviderChatSection = () => {
       handleShowFailureToast(sendMessageError);
     }
   }, [sendMessageLoading, sendMessageError]);
-  const timeConverter = (time) => {
-    const a = new Date(time);
-    const now = new Date();
-    const diff = now.getTime() - a.getTime();
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+  // const timeConverter = (time) => {
+  //   const a = new Date(time);
+  //   const now = new Date();
+  //   const diff = now.getTime() - a.getTime();
+  //   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  //   const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  //   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  //   const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-    if (days > 0) {
-      return days === 1 ? `${days} day ago` : `${days} days ago`;
-    } else if (hours > 0) {
-      return `${hours} hours ago`;
-    } else if (minutes > 0) {
-      return `${minutes} minutes ago`;
-    } else if (seconds > 0) {
-      return `${seconds} seconds ago`;
-    }
-  };
-  const handleEnterKeyBtn = (e) => {
-    if (messageToSend) {
-      if (e.key === "Enter") {
-        sendMessage();
-      }
-    }
-  };
+  //   if (days > 0) {
+  //     return days === 1 ? `${days} day ago` : `${days} days ago`;
+  //   } else if (hours > 0) {
+  //     return `${hours} hours ago`;
+  //   } else if (minutes > 0) {
+  //     return `${minutes} minutes ago`;
+  //   } else if (seconds > 0) {
+  //     return `${seconds} seconds ago`;
+  //   }
+  // };
+  // const handleEnterKeyBtn = (e) => {
+  //   if (messageToSend) {
+  //     if (e.key === "Enter") {
+  //       sendMessage();
+  //     }
+  //   }
+  // };
   useEffect(() => {
     scrollToEndMessage?.current?.scrollIntoView();
   }, [allMessages]);
@@ -285,7 +283,7 @@ const ServiceProviderChatSection = () => {
                           <div className="profile basis-[60%] lg:basis-[50%] xl:basis-[20%] flex justify-center items-center">
                             <img
                               src={
-                                conversation?.members?.receiver?.consumerAvatar
+                                conversation?.members?.sender?.consumerAvatar
                               }
                               alt=""
                               className="w-[0.5rem] h-[0.5rem] lg:h-[1rem] lg:w-[1rem] xl:h-[3rem] xl:w-[3rem] rounded-full"
@@ -293,14 +291,11 @@ const ServiceProviderChatSection = () => {
                           </div>
                           <div className="name basis-[60%] lg:basis-[50%] xl:basis-[80%]">
                             <h1 className="xl:text-lg lg:text-sm text-xs font-bold mx-2 mt-2">
-                              {
-                                conversation?.members?.receiver
-                                  ?.consumerFullName
-                              }
+                              {conversation?.members?.sender?.consumerFullName}
                             </h1>
                             <h1 className="message ml-2 truncate-text text-sm">
                               {checkOnlineServiceProvider(
-                                currentConversation?.members?.sender?._id
+                                currentConversation?.members?.receiver?._id
                               )
                                 ? "Online"
                                 : "Offline"}
@@ -322,7 +317,7 @@ const ServiceProviderChatSection = () => {
                         <div className="profile basis-[30%] lg:basis-[20%] xl:basis-[10%] flex justify-center relative">
                           <img
                             src={
-                              currentConversation?.members?.receiver
+                              currentConversation?.members?.sender
                                 ?.consumerAvatar
                             }
                             alt=""
@@ -331,7 +326,7 @@ const ServiceProviderChatSection = () => {
                           <div
                             className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ml-4 w-3 h-3 rounded-full ${
                               checkOnlineServiceProvider(
-                                currentConversation?.members?.sender?._id
+                                currentConversation?.members?.receiver?._id
                               )
                                 ? "bg-green-500"
                                 : "bg-red-500"
@@ -341,13 +336,13 @@ const ServiceProviderChatSection = () => {
                         <div className="profile basis-[70%] lg:basis-[80%] xl:basis-[90%] ml-3">
                           <h1 className="font-semibold">
                             {
-                              currentConversation?.members?.receiver
+                              currentConversation?.members?.sender
                                 ?.consumerFullName
                             }
                           </h1>
                           <h1 className="text-sm text-[#878787]">
                             {checkOnlineServiceProvider(
-                              currentConversation?.members?.sender?._id
+                              currentConversation?.members?.receiver?._id
                             )
                               ? "Online"
                               : "Offline"}
@@ -385,7 +380,7 @@ const ServiceProviderChatSection = () => {
                                   <div className="mb-4 flex pl-2 w-full">
                                     <img
                                       src={
-                                        message?.conversation?.members?.receiver
+                                        message?.conversation?.members?.sender
                                           ?.consumerAvatar
                                       }
                                       alt=""
@@ -458,8 +453,7 @@ const ServiceProviderChatSection = () => {
                             <div className="profile w-3/12 flex justify-center items-center ">
                               <img
                                 src={
-                                  conversation?.members?.receiver
-                                    ?.consumerAvatar
+                                  conversation?.members?.sender?.consumerAvatar
                                 }
                                 alt=""
                                 className="w-[3rem] h-[3rem] rounded-full"
@@ -468,13 +462,13 @@ const ServiceProviderChatSection = () => {
                             <div className="name w-9/12">
                               <h1 className="xl:text-lg lg:text-sm text-xs font-bold mx-2 mt-4">
                                 {
-                                  conversation?.members?.receiver
+                                  conversation?.members?.sender
                                     ?.consumerFullName
                                 }
                               </h1>
                               <h1 className="message ml-2 truncate-text-2 text-sm">
                                 {checkOnlineServiceProvider(
-                                  currentConversation?.members?.sender?._id
+                                  currentConversation?.members?.receiver?._id
                                 )
                                   ? "Online"
                                   : "Offline"}

@@ -6,7 +6,6 @@ import {
   acceptOrderAction,
   cancelOrderAction,
   completeOrderAction,
-  createConversationAction,
   loadAcceptedOrdersAction,
   loadCancelledOrdersAction,
   loadCompletedOrdersAction,
@@ -53,8 +52,6 @@ const ServiceProviderOrder = () => {
     useSelector((state) => state.completeOrderReducer);
   const { cancelOrderLoading, cancelOrderError, cancelOrderMessage } =
     useSelector((state) => state.cancelOrderReducer);
-  const { conversationLoading, conversationError, conversationMessage } =
-    useSelector((state) => state.createConversationReducer);
 
   // Load all orders on initial mount
   useEffect(() => {
@@ -94,8 +91,6 @@ const ServiceProviderOrder = () => {
     ) {
       handleShowSuccessToast(acceptOrderMessage);
       setToastShown("acceptOrder");
-      const data = { receiver: consumer, receiverType: "Consumer" };
-      dispatch(createConversationAction(data));
       dispatch(loadPendingOrdersAction());
       dispatch(loadCompletedOrdersAction());
       dispatch(loadRejectedOrdersAction());
@@ -198,25 +193,6 @@ const ServiceProviderOrder = () => {
       dispatch(loadCancelledOrdersAction());
     }
   }, [cancelOrderError, cancelOrderLoading, cancelOrderMessage, dispatch]);
-
-  // Conversation Handling
-  useEffect(() => {
-    if (
-      !conversationLoading &&
-      conversationError &&
-      !isToastShown("conversation")
-    ) {
-      console.log(conversationError);
-      setToastShown("conversation");
-    } else if (
-      !conversationLoading &&
-      conversationMessage &&
-      !isToastShown("conversation")
-    ) {
-      handleShowSuccessToast("You can now chat with this consumer");
-      setToastShown("conversation");
-    }
-  }, [conversationError, conversationMessage, conversationLoading]);
 
   return (
     <>

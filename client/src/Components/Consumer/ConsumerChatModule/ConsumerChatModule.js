@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaComments } from "react-icons/fa";
 import "./ConsumerChatModule.css";
-import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -16,7 +15,6 @@ import Navbar from "../ConsumerCommon/Navbar.jsx";
 import { handleShowFailureToast } from "../../ToastMessages/ToastMessage";
 const ConsumerChatModule = () => {
   const [chatSectionShowing, setChatSectionShowing] = useState(false);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [socket, setSocket] = useState(null);
   const [messageToSend, setMessageToSend] = useState("");
@@ -103,7 +101,7 @@ const ConsumerChatModule = () => {
           createdAt: currentConversation?.createdAt || new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           members: {
-            receiver: {
+            sender: {
               createdAt: consumer?.createdAt,
               isEmailVerified: consumer?.isEmailVerified,
               consumerFullName: consumer?.consumerFullName,
@@ -114,19 +112,19 @@ const ConsumerChatModule = () => {
               updatedAt: consumer?.updatedAt,
               _id: consumer?._id,
             },
-            sender: {
-              createdAt: currentConversation?.members?.sender?.createdAt,
+            receiver: {
+              createdAt: currentConversation?.members?.receiver?.createdAt,
               serviceProviderFullName:
-                currentConversation?.members?.sender?.serviceProviderFullName,
+                currentConversation?.members?.receiver?.serviceProviderFullName,
               serviceProviderEmail:
-                currentConversation?.members?.sender?.serviceProviderEmail,
+                currentConversation?.members?.receiver?.serviceProviderEmail,
               serviceProviderAvatar:
-                currentConversation?.members?.sender?.serviceProviderAvatar,
+                currentConversation?.members?.receiver?.serviceProviderAvatar,
               serviceProviderAddress:
-                currentConversation?.members?.sender?.serviceProviderAddress,
+                currentConversation?.members?.receiver?.serviceProviderAddress,
               isEmailVerified:
-                currentConversation?.members?.sender?.isEmailVerified,
-              updatedAt: currentConversation?.members?.sender?.updatedAt,
+                currentConversation?.members?.receiver?.isEmailVerified,
+              updatedAt: currentConversation?.members?.receiver?.updatedAt,
               _id: currentConversation?.members?.receiver?._id,
             },
           },
@@ -151,7 +149,7 @@ const ConsumerChatModule = () => {
       socket.emit("sendMessage", {
         message: newMessage,
         senderId: consumer?._id,
-        receiverId: currentConversation?.members?.sender?._id,
+        receiverId: currentConversation?.members?.receiver?._id,
       });
 
       setAllMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -185,28 +183,28 @@ const ConsumerChatModule = () => {
       handleShowFailureToast(sendMessageError);
     }
   }, [sendMessageLoading, sendMessageError]);
-  const timeConverter = (timestamp) => {
-    const date = new Date(timestamp);
-    let hours = date.getHours();
-    const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? "PM" : "AM";
+  // const timeConverter = (timestamp) => {
+  //   const date = new Date(timestamp);
+  //   let hours = date.getHours();
+  //   const minutes = date.getMinutes();
+  //   const ampm = hours >= 12 ? "PM" : "AM";
 
-    // Convert hours to 12-hour format
-    hours = hours % 12;
-    hours = hours || 12; // The hour '0' should be '12'
+  //   // Convert hours to 12-hour format
+  //   hours = hours % 12;
+  //   hours = hours || 12; // The hour '0' should be '12'
 
-    // Pad minutes with leading zero if needed
-    const minutesFormatted = minutes < 10 ? `0${minutes}` : minutes;
+  //   // Pad minutes with leading zero if needed
+  //   const minutesFormatted = minutes < 10 ? `0${minutes}` : minutes;
 
-    return `${hours}:${minutesFormatted} ${ampm}`;
-  };
-  const handleEnterKeyBtn = (e) => {
-    if (messageToSend) {
-      if (e.key === "Enter") {
-        sendMessage();
-      }
-    }
-  };
+  //   return `${hours}:${minutesFormatted} ${ampm}`;
+  // };
+  // const handleEnterKeyBtn = (e) => {
+  //   if (messageToSend) {
+  //     if (e.key === "Enter") {
+  //       sendMessage();
+  //     }
+  //   }
+  // };
   useEffect(() => {
     scrollToEndMessage?.current?.scrollIntoView();
   }, [allMessages]);
@@ -268,7 +266,7 @@ const ConsumerChatModule = () => {
                           <div className="profile basis-[60%] lg:basis-[50%] xl:basis-[20%] flex justify-center items-center">
                             <img
                               src={
-                                conversation?.members?.sender
+                                conversation?.members?.receiver
                                   ?.serviceProviderAvatar
                               }
                               alt=""
@@ -278,13 +276,13 @@ const ConsumerChatModule = () => {
                           <div className="name basis-[60%] lg:basis-[50%] xl:basis-[80%]">
                             <h1 className="xl:text-lg lg:text-sm text-xs font-bold mx-2 mt-2">
                               {
-                                conversation?.members?.sender
+                                conversation?.members?.receiver
                                   ?.serviceProviderFullName
                               }
                             </h1>
                             <h1 className="message ml-2 truncate-text text-sm">
                               {checkOnlineConsumer(
-                                currentConversation?.members?.sender?._id
+                                conversation?.members?.receiver?._id
                               )
                                 ? "Online"
                                 : "Offline"}
@@ -306,7 +304,7 @@ const ConsumerChatModule = () => {
                         <div className="profile basis-[30%] lg:basis-[20%] xl:basis-[10%] flex justify-center relative">
                           <img
                             src={
-                              currentConversation?.members?.sender
+                              currentConversation?.members?.receiver
                                 ?.serviceProviderAvatar
                             }
                             alt=""
@@ -315,7 +313,7 @@ const ConsumerChatModule = () => {
                           <div
                             className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ml-4 w-3 h-3 rounded-full ${
                               checkOnlineConsumer(
-                                currentConversation?.members?.sender?._id
+                                currentConversation?.members?.receiver?._id
                               )
                                 ? "bg-green-500"
                                 : "bg-red-500"
@@ -325,13 +323,13 @@ const ConsumerChatModule = () => {
                         <div className="profile basis-[70%] lg:basis-[80%] xl:basis-[90%] ml-3">
                           <h1 className="font-semibold">
                             {
-                              currentConversation?.members?.sender
+                              currentConversation?.members?.receiver
                                 ?.serviceProviderFullName
                             }
                           </h1>
                           <h1 className="text-sm text-[#878787]">
                             {checkOnlineConsumer(
-                              currentConversation?.members?.sender?._id
+                              currentConversation?.members?.receiver?._id
                             )
                               ? "Online"
                               : "Offline"}
@@ -366,7 +364,7 @@ const ConsumerChatModule = () => {
                                   <div className="mb-4 flex pl-2 w-full">
                                     <img
                                       src={
-                                        message?.conversation?.members?.sender
+                                        message?.conversation?.members?.receiver
                                           ?.serviceProviderAvatar
                                       }
                                       alt=""

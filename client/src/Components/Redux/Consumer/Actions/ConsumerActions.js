@@ -9,7 +9,9 @@ const consumerLoginAction = (consumerData) => async (dispatch) => {
     dispatch({
       type: "CONSUMER_LOADING",
     });
-    const response = await axios.post("/api/v1/consumer/sign-in", consumerData).then();
+    const response = await axios
+      .post("/api/v1/consumer/sign-in", consumerData)
+      .then();
     dispatch({
       type: "CONSUMER_MESSAGE",
       payload: response?.data?.message,
@@ -382,6 +384,26 @@ const sendMessageAction = (data) => async (dispatch) => {
     });
   }
 };
+const createConversationAction = (data) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "CREATE_CONVERSATION_REQUEST",
+    });
+    const response = await axios.post(
+      "/api/v1/consumer/create-conversation",
+      data
+    );
+    dispatch({
+      type: "CREATE_CONVERSATION_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "CREATE_CONVERSATION_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
 export {
   clearErrors,
   consumerLoginAction,
@@ -404,4 +426,5 @@ export {
   loadConversationsAction,
   loadMessagesAction,
   sendMessageAction,
+  createConversationAction,
 };

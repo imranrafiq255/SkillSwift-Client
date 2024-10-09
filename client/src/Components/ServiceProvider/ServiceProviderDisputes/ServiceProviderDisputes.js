@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { handleShowSuccessToast } from "../../ToastMessages/ToastMessage.js";
 import { useSelector, useDispatch } from "react-redux";
@@ -6,6 +6,7 @@ import { loadDisputesAction } from "../../Redux/ServiceProvider/Actions/ServiceP
 import RingLoader from "../../Loader/RingLoader.js";
 import ServiceProviderHeader from "../ServiceProviderHeader/ServiceProviderHeader.jsx";
 import ServiceProviderFooter from "../ServiceProviderFooter/ServiceProviderFooter.js";
+
 const ServiceProviderDisputes = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -16,6 +17,10 @@ const ServiceProviderDisputes = () => {
   const { disputeLoader, disputes } = useSelector(
     (state) => state.loadDisputesReducer
   );
+
+  // State to track the hovered dispute
+  const [hoveredDispute, setHoveredDispute] = useState(null);
+
   useEffect(() => {
     if (!hasToastShown.current && toastMessage) {
       hasToastShown.current = true;
@@ -23,9 +28,44 @@ const ServiceProviderDisputes = () => {
       navigate(location.pathname, { state: { message: null } });
     }
   }, [location.pathname, toastMessage, hasToastShown, navigate]);
+
   useEffect(() => {
     dispatch(loadDisputesAction());
   }, [dispatch]);
+
+  const handleMouseEnter = (dispute) => {
+    setHoveredDispute(dispute);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredDispute(null);
+  };
+  const timeConvertorForRefundDeadline = (time) => {
+    const date = new Date(time);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate() + 10;
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    const formattedDate = `${year}-${month < 10 ? "0" : ""}${month}-${
+      day < 10 ? "0" : ""
+    }${day} ${hours}:${minutes}:${seconds}`;
+    return formattedDate;
+  };
+  const timeConvertorForRefundApproval = (time) => {
+    const date = new Date(time);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    const formattedDate = `${year}-${month < 10 ? "0" : ""}${month}-${
+      day < 10 ? "0" : ""
+    }${day} ${hours}:${minutes}:${seconds}`;
+    return formattedDate;
+  };
   return (
     <>
       <div>
@@ -45,7 +85,12 @@ const ServiceProviderDisputes = () => {
                   )}
                   {!disputeLoader && disputes?.length > 0 ? (
                     disputes?.map((dispute) => (
-                      <div className="bg-white rounded-lg shadow-md p-6 transition-transform duration-300 hover:scale-105 w-full lg:6/12 xl:w-4/12">
+                      <div
+                        key={dispute._id}
+                        className="relative bg-white rounded-lg shadow-md p-6 transition-transform duration-300 hover:scale-105 w-full lg:6/12 xl:w-4/12"
+                        onMouseEnter={() => handleMouseEnter(dispute)}
+                        onMouseLeave={handleMouseLeave}
+                      >
                         <h2 className="text-lg xl:text-xl font-semibold mb-4">
                           {dispute?.disputeTitle}
                         </h2>
@@ -86,7 +131,7 @@ const ServiceProviderDisputes = () => {
                           )}
                           {dispute?.disputeStatus === "rejected" && (
                             <div className="w-full bg-red-600 text-white py-4 mt-3 flex justify-center items-center">
-                              Pending
+                              Rejected
                             </div>
                           )}
                           {dispute?.disputeStatus === "resolved" && (
@@ -95,6 +140,40 @@ const ServiceProviderDisputes = () => {
                             </div>
                           )}
                         </div>
+
+                        {/* Dialog Box for hovered dispute */}
+                        {hoveredDispute === dispute &&
+                          dispute?.disputeResolution && (
+                            <div className="absolute left-0 top-0 bg-slate-500 text-white rounded-lg shadow-lg p-4 w-72 z-10">
+                              <p className="mb-2">
+                                <span className="font-medium">
+                                  Resolution Message:
+                                </span>{" "}
+                                {dispute?.disputeResolution}
+                              </p>
+                              <p className="">
+                                <span className="font-medium">
+                                  Refund Approval:
+                                </span>{" "}
+                                {timeConvertorForRefundApproval(
+                                  dispute?.updatedAt
+                                )}
+                              </p>
+                              <p className="">
+                                <span className="font-medium">
+                                  Refund Deadline:
+                                </span>{" "}
+                                {timeConvertorForRefundDeadline(
+                                  dispute?.updatedAt
+                                )}
+                              </p>
+                              <p className="">
+                                <span className="font-medium">Amount:</span>{" "}
+                                {"Rs " +
+                                  dispute?.order?.servicePost?.servicePostPrice}
+                              </p>
+                            </div>
+                          )}
                       </div>
                     ))
                   ) : (
