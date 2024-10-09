@@ -45,6 +45,7 @@ import ConsumerNotification from "../Consumer/ConsumerNotification/ConsumerNotif
 import ConsumerDisputePage from "../Consumer/ConsumerDisputePage/ConsumerDisputePage";
 import ConsumerServicePage from "../Consumer/ConsumerServicePage/ConsumerServicePage";
 import ConsumerChatModule from "../Consumer/ConsumerChatModule/ConsumerChatModule";
+import ServiceProviderDisputes from "../ServiceProvider/ServiceProviderDisputes/ServiceProviderDisputes";
 const AuthenticatedRoutes = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -66,6 +67,7 @@ const AuthenticatedRoutes = () => {
     "/service-provider-setting",
     "/service-provider-notification",
     "/service-provider-account-verification/your%20account%20is%20not%20verified",
+    "/service-provider-dispute",
   ];
   const consumerAuthenticatedRoutes = [
     "/consumer-upload-info",
@@ -398,6 +400,16 @@ const AuthenticatedRoutes = () => {
         element={
           isServiceProviderAuthenticated ? (
             <ServiceProviderNotification />
+          ) : (
+            <Navigate to={"/service-provider-sign-in"} />
+          )
+        }
+      />
+      <Route
+        path="/service-provider-dispute"
+        element={
+          isServiceProviderAuthenticated ? (
+            <ServiceProviderDisputes />
           ) : (
             <Navigate to={"/service-provider-sign-in"} />
           )

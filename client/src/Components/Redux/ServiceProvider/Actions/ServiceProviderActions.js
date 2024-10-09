@@ -563,6 +563,21 @@ const createConversationAction = (data) => async (dispatch) => {
     });
   }
 };
+const loadDisputesAction = () => async (dispatch) => {
+  try {
+    dispatch({ type: "LOAD_DISPUTES_REQUEST" });
+    const response = await axios.get("/api/v1/service-provider/load-disputes");
+    dispatch({
+      type: "LOAD_DISPUTES_SUCCESS",
+      payload: response.data.disputes,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_DISPUTES_FAILURE",
+      payload: error?.response?.data?.message,
+    });
+  }
+};
 export {
   clearErrors,
   serviceProviderSignInAction,
@@ -591,4 +606,5 @@ export {
   loadMessagesAction,
   sendMessageAction,
   createConversationAction,
+  loadDisputesAction,
 };

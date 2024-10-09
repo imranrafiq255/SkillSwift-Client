@@ -114,6 +114,15 @@ const ServiceProviderHeader = () => {
           >
             <Link to={"/service-provider-order"}>ORDERS</Link>
           </div>
+          <div
+            className={`${
+              location.pathname === "/service-provider-dispute"
+                ? " border-b-2 text-[#4e97fd] border-[#4e97fd] transition-all ease-linear duration-1000"
+                : ""
+            } nav-link cursor-pointer `}
+          >
+            <Link to={"/service-provider-dispute"}>DISPUTES</Link>
+          </div>
         </div>
       </div>
       {showing && (

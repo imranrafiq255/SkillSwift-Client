@@ -631,6 +631,28 @@ const createConversationReducer = createReducer(
       });
   }
 );
+const loadDisputesReducer = createReducer(
+  { disputeLoader: false, disputeError: null, disputes: null },
+  (builder) => {
+    builder
+      .addCase("LOAD_DISPUTES_REQUEST", (state) => {
+        state.disputeLoader = true;
+        state.disputeError = null;
+        state.disputes = null;
+      })
+      .addCase("LOAD_DISPUTES_SUCCESS", (state, action) => {
+        state.disputeLoader = false;
+        state.disputes = action.payload;
+      })
+      .addCase("LOAD_DISPUTES_FAILURE", (state, action) => {
+        state.disputeLoader = false;
+        state.disputeError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state, action) => {
+        state.disputeError = null;
+      });
+  }
+);
 export {
   serviceProviderSignInReducer,
   serviceProviderForgotPasswordReducer,
@@ -658,4 +680,5 @@ export {
   loadMessagesReducer,
   sendMessageReducer,
   createConversationReducer,
+  loadDisputesReducer,
 };

@@ -30,6 +30,7 @@ import {
   loadCompletedOrdersReducer,
   loadConversationsReducer,
   loadCurrentServiceProviderReducer,
+  loadDisputesReducer,
   loadMessagesReducer,
   loadNewNotificationsReducer,
   loadPendingOrdersReducer,
@@ -96,6 +97,7 @@ const store = configureStore({
     loadMessagesReducer: loadMessagesReducer,
     sendMessageReducer: sendMessageReducer,
     createConversationReducer: createConversationReducer,
+    loadDisputesReducer: loadDisputesReducer,
   },
 });
 
