@@ -3,7 +3,6 @@ import Navbar from "../ConsumerCommon/Navbar";
 import Footer from "../ConsumerCommon/Footer";
 import ContactSection from "../ConsumerCommon/ContactSection";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import {
   clearErrors,
   consumerAddRatingAction,
@@ -25,7 +24,6 @@ const ServiceHistoryPage = () => {
   const modalRef = useRef(null);
   const dispatch = useDispatch();
   const location = useLocation();
-  const navigate = useNavigate();
   const { loading, error, orders } = useSelector(
     (state) => state.loadOrdersReducer
   );
@@ -39,12 +37,6 @@ const ServiceHistoryPage = () => {
   }, [dispatch]);
   const handleCancel = (serviceId) => {
     dispatch(consumerRejectOrderAction(serviceId));
-  };
-  const handleBookAgain = (serviceId) => {
-    //get the service from this serviceId and send it in state
-    navigate("/consumer-service-page", {
-      state: { service: serviceId },
-    });
   };
 
   const handleReview = (serviceId) => {
@@ -121,7 +113,6 @@ const ServiceHistoryPage = () => {
       dispatch(loadOrdersAction());
     }
   }, [dispatch, ratingError, ratingLoading, ratingMessage]);
-  console.log(orders);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -134,7 +125,7 @@ const ServiceHistoryPage = () => {
 
         {/* Tab Navigation */}
         <div className="flex flex-wrap justify-center md:justify-start mb-6">
-          {["inProgress", "completed", "cancelled", "toReview"].map((tab) => (
+          {["inProgress", "completed", "cancelled"].map((tab) => (
             <div
               key={tab}
               className={`py-3 px-3 text-sm cursor-pointer transition-colors duration-200 
@@ -160,8 +151,6 @@ const ServiceHistoryPage = () => {
                 if (activeTab === "inProgress")
                   return order?.orderStatus === "pending";
                 if (activeTab === "completed")
-                  return order?.orderStatus === "completed";
-                if (activeTab === "toReview")
                   return order?.orderStatus === "completed";
                 if (activeTab === "cancelled")
                   return order?.orderStatus === "cancelled";
@@ -192,26 +181,24 @@ const ServiceHistoryPage = () => {
                       <LoaderCircles />
                     </div>
                   ) : (
-                    <button
-                      onClick={() => {
-                        if (activeTab === "inProgress") {
-                          handleCancel(order?._id);
-                        } else if (activeTab === "completed") {
-                          handleBookAgain(order?._id);
-                        } else if (activeTab === "toReview") {
-                          handleReview(order?.servicePost?._id);
-                        } else {
-                          handleBookAgain(order?._id);
-                        }
-                      }}
-                      className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
-                    >
-                      {activeTab === "inProgress"
-                        ? "Cancel"
-                        : activeTab === "toReview"
-                        ? "Review"
-                        : "Book Again"}
-                    </button>
+                    (activeTab !== "cancelled")  && (
+                      <button
+                        onClick={() => {
+                          if (activeTab === "inProgress") {
+                            handleCancel(order?._id);
+                          } else if (activeTab === "completed") {
+                            handleReview(order?._id);
+                          }
+                        }}
+                        className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
+                      >
+                        {activeTab === "inProgress"
+                          ? "Cancel"
+                          : activeTab === "completed"
+                          ? "Review"
+                          : ""}
+                      </button>
+                    )
                   )}
                 </div>
               ))}
@@ -223,8 +210,6 @@ const ServiceHistoryPage = () => {
               if (activeTab === "inProgress")
                 return order?.orderStatus === "inProgress";
               if (activeTab === "completed")
-                return order?.orderStatus === "completed";
-              if (activeTab === "toReview")
                 return order?.orderStatus === "completed";
               if (activeTab === "cancelled")
                 return order?.orderStatus === "cancelled";
@@ -247,26 +232,24 @@ const ServiceHistoryPage = () => {
                   Rs. {order?.servicePost?.servicePostPrice}
                 </p>
 
-                <button
-                  onClick={() => {
-                    if (activeTab === "inProgress") {
-                      handleCancel(order?._id);
-                    } else if (activeTab === "completed") {
-                      handleBookAgain(order?._id);
-                    } else if (activeTab === "toReview") {
-                      handleReview(order?._id);
-                    } else {
-                      handleBookAgain(order?._id);
-                    }
-                  }}
-                  className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
-                >
-                  {activeTab === "inProgress"
-                    ? "Cancel"
-                    : activeTab === "toReview"
-                    ? "Review"
-                    : "Book Again"}
-                </button>
+                {(activeTab !== "cancelled")  && (
+                  <button
+                    onClick={() => {
+                      if (activeTab === "inProgress") {
+                        handleCancel(order?._id);
+                      } else if (activeTab === "completed") {
+                        handleReview(order?._id);
+                      }
+                    }}
+                    className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
+                  >
+                    {activeTab === "inProgress"
+                      ? "Cancel"
+                      : activeTab === "completed"
+                      ? "Review"
+                      : ""}
+                  </button>
+                )}
               </div>
             ))}
         </div>

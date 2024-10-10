@@ -126,6 +126,7 @@ const ServicePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
+      {console.log(service)}
       {/* Header */}
       <Navbar />
       <Toaster />
