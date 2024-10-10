@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   acceptOrderAction,
   cancelOrderAction,
+  clearErrors,
   completeOrderAction,
   loadAcceptedOrdersAction,
   loadCancelledOrdersAction,
@@ -186,6 +187,7 @@ const ServiceProviderOrder = () => {
     ) {
       handleShowSuccessToast(cancelOrderMessage);
       setToastShown("cancelOrder");
+      dispatch(clearErrors());
       dispatch(loadPendingOrdersAction());
       dispatch(loadCompletedOrdersAction());
       dispatch(loadRejectedOrdersAction());

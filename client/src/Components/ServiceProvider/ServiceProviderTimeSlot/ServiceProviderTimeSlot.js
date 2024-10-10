@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearErrors,
+  loadCurrentServiceProviderAction,
   serviceProviderAddTimeSlotAction,
 } from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
 import {
@@ -16,6 +17,9 @@ import LoaderCircles from "../../Loader/LoaderCircles";
 const ServiceProviderTimeSlot = () => {
   const { loading, error, message } = useSelector(
     (state) => state.serviceProviderAddTimeSlotReducer
+  );
+  const { serviceProvider } = useSelector(
+    (state) => state?.loadCurrentServiceProviderReducer
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,23 +38,36 @@ const ServiceProviderTimeSlot = () => {
     onSubmit: (values) => {
       dispatch(clearErrors());
       dispatch(serviceProviderAddTimeSlotAction(values));
+      dispatch(clearErrors());
       formik.handleReset();
     },
   });
   useEffect(() => {
+    dispatch(clearErrors());
+    dispatch(loadCurrentServiceProviderAction());
+  }, [dispatch]);
+  const workingHoursToastMessageRef = useRef(false);
+  useEffect(() => {
     if (!loading) {
-      if (error) {
+      if (error && !workingHoursToastMessageRef.current) {
         handleShowFailureToast(error);
-        console.log(error);
-      } else if (message) {
-        console.log(message);
-        navigate(
-          "/service-provider-account-verification/your account is not verified",
-          { state: { message } }
-        );
+        workingHoursToastMessageRef.current = true;
+      } else if (message && !workingHoursToastMessageRef.current) {
+        if (serviceProvider) {
+          handleShowSuccessToast(message);
+          navigate("/service-provider-home", { state: { message } });
+          window.location.href = `/service-provider-home?message=${"You added time slot successfully."}`;
+          workingHoursToastMessageRef.current = true;
+        } else if (!serviceProvider) {
+          navigate(
+            "/service-provider-account-verification/your account is not verified",
+            { state: { message } }
+          );
+          workingHoursToastMessageRef.current = true;
+        }
       }
     }
-  }, [loading, message, error, navigate]);
+  }, [loading, message, error, navigate, serviceProvider]);
   useEffect(() => {
     if (toastMessage && !toastMessage.current) {
       handleShowSuccessToast(toastMessage);

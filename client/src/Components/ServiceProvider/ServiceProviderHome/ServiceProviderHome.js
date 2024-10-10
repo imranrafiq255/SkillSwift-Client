@@ -28,7 +28,6 @@ const ServiceProviderHome = () => {
         `/api/v1/service-provider/load-all-service-provider-posts?page=${1}&limit=6`
       );
       const { posts } = response.data;
-
       setPosts(posts.slice(0, 6));
       setLoadLoading(false);
     } catch (error) {
