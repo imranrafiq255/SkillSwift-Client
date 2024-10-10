@@ -18,6 +18,7 @@ import {
 import LoaderCircles from "../../Loader/LoaderCircles";
 import { useNavigate } from "react-router-dom";
 import { createConversationAction } from "../../Redux/Consumer/Actions/ConsumerActions";
+import axios from "axios";
 const ServicePage = () => {
   const [selectedSlot, setSelectedSlot] = useState("");
   const { loading, error, message } = useSelector(
@@ -91,6 +92,21 @@ const ServicePage = () => {
     navigate,
     orderBtnClicked,
   ]);
+  const [serviceProviderRating, setServiceProviderRating] = useState(0);
+  useEffect(() => {
+    const ratingHandler = async () => {
+      try {
+        const response = await axios.get(
+          `/api/v1/consumer/service-provider-rating/${service?.serviceProvider?._id}`
+        );
+        setServiceProviderRating(response?.data?.averageRating);
+      } catch (error) {
+        console.log(error?.response?.data?.message || "Network error");
+      }
+    };
+    ratingHandler();
+  }, [service?.serviceProvider?._id]);
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
@@ -137,7 +153,7 @@ const ServicePage = () => {
                         <FaStar
                           key={i}
                           className={
-                            i < ratingCalculator(service?.servicePostRatings)
+                            i < serviceProviderRating
                               ? "text-yellow-500"
                               : "text-gray-300"
                           }
@@ -145,9 +161,8 @@ const ServicePage = () => {
                       ))}
                     </div>
                     <span className="text-gray-600">
-                      ({ratingCalculator(service?.servicePostRatings) || 0} out
-                      of 5 based on {service?.servicePostRatings?.length}{" "}
-                      ratings)
+                      ({serviceProviderRating} out of 5 based on{" "}
+                      {service?.servicePostRatings?.length} ratings)
                     </span>
                   </div>
                 </div>

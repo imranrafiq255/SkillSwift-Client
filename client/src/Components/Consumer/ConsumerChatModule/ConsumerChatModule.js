@@ -438,7 +438,7 @@ const ConsumerChatModule = () => {
                               <img
                                 src={
                                   conversation?.members?.receiver
-                                    ?.consumerAvatar
+                                    ?.serviceProviderAvatar
                                 }
                                 alt=""
                                 className="w-[3rem] h-[3rem] rounded-full"
@@ -448,12 +448,12 @@ const ConsumerChatModule = () => {
                               <h1 className="xl:text-lg lg:text-sm text-xs font-bold mx-2 mt-4">
                                 {
                                   conversation?.members?.receiver
-                                    ?.consumerFullName
+                                    ?.serviceProviderFullName
                                 }
                               </h1>
                               <h1 className="message ml-2 truncate-text-2 text-sm">
                                 {checkOnlineConsumer(
-                                  currentConversation?.members?.sender?._id
+                                  currentConversation?.members?.receiver?._id
                                 )
                                   ? "Online"
                                   : "Offline"}

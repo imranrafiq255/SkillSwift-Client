@@ -45,8 +45,8 @@ const Navbar = () => {
   });
   const signOutHandler = async () => {
     try {
-      await axios.get("/api/v1/consumer/sign-out");
-      navigate("/consumer-sign-in");
+      const response = await axios.get("/api/v1/consumer/sign-out");
+      window.location.href = `/consumer-sign-in?message=${response?.data?.message}`;
     } catch (error) {
       handleShowFailureToast(error?.response?.data?.message);
     }
