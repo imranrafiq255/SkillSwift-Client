@@ -1,9 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import Navbar from "../ConsumerCommon/Navbar";
-import FAQsSection from "../ConsumerCommon/FAQsSection";
 import ContactSection from "../ConsumerCommon/ContactSection";
 import Footer from "../ConsumerCommon/Footer";
-import HeroSection from "./HeroSection";
 import ServicesSection from "./ServicesSection";
 import PopularServicesSection from "./PopularServicesSection";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -20,7 +18,6 @@ const ConsumerHome = () => {
     if (message && !hasShownToast.current) {
       handleShowSuccessToast(message);
       hasShownToast.current = true;
-      navigate(location.pathname, { replace: true, state: {} });
     }
   }, [message, navigate, location.pathname]);
 

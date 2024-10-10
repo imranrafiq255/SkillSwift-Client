@@ -12,7 +12,9 @@ import LoaderCircles from "../../Loader/LoaderCircles";
 import {
   clearErrors,
   consumerUploadInfoAction,
+  loadCurrentConsumerAction,
 } from "../../Redux/Consumer/Actions/ConsumerActions";
+
 // Validation Schema
 const validationSchema = Yup.object({
   consumerPhoneNumber: Yup.string()
@@ -35,6 +37,23 @@ const ConsumerUpdateInfo = () => {
   const { loading, error, message } = useSelector(
     (state) => state.consumerUploadInfoReducer
   );
+  const { consumer } = useSelector((state) => state.loadCurrentConsumerReducer);
+
+  useEffect(() => {
+    dispatch(loadCurrentConsumerAction());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (consumer) {
+      setImagePreview(consumer.consumerAvatar);
+      formik.setValues({
+        consumerPhoneNumber: consumer.consumerPhoneNumber || "",
+        consumerAddress: consumer.consumerAddress || "",
+        consumerAvatar: null,
+      });
+    }
+  }, [consumer]);
+
   const formik = useFormik({
     initialValues: {
       consumerPhoneNumber: "",
@@ -66,6 +85,7 @@ const ConsumerUpdateInfo = () => {
       navigate("/consumer-upload-info", { replace: true, state: {} });
     }
   }, [myMessage, navigate]);
+
   useEffect(() => {
     if (!loading) {
       if (error) {
@@ -77,6 +97,7 @@ const ConsumerUpdateInfo = () => {
       }
     }
   }, [loading, message, error, navigate]);
+
   return (
     <>
       <Toaster />
@@ -98,7 +119,7 @@ const ConsumerUpdateInfo = () => {
                   {imagePreview ? (
                     <img
                       alt=""
-                      className="w-64 h-64 rounded-full border-dashed border-2 border-gray-300 flex items-center justify-center relative"
+                      className="w-64 h-64 rounded-full border-dashed border-2 border-gray-300"
                       src={imagePreview}
                     />
                   ) : (
@@ -132,11 +153,12 @@ const ConsumerUpdateInfo = () => {
                   type="text"
                   id="consumerPhoneNumber"
                   name="consumerPhoneNumber"
-                  value={formik.values.phoneNumber}
+                  value={formik.values.consumerPhoneNumber}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   className={`w-full border-b-[0.5px] border-slate-400 focus:border-b-[2px] focus:border-slate-800 focus:transition-colors focus:duration-700 ease-in-out outline-none mt-2 h-11 text-xl ${
-                    formik.touched.phoneNumber && formik.errors.phoneNumber
+                    formik.touched.consumerPhoneNumber &&
+                    formik.errors.consumerPhoneNumber
                       ? "border-red-500"
                       : ""
                   }`}

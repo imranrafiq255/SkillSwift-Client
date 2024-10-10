@@ -39,11 +39,11 @@ const PopularServicesSection = () => {
               <div
                 key={index}
                 className="bg-white p-4 rounded-lg shadow-lg flex flex-col cursor-pointer hover:scale-105 transition-transform duration-700 ease-out"
-                onClick={() =>
+                onClick={() => {
                   navigate("/consumer-service-page", {
                     state: { service: service },
-                  })
-                }
+                  });
+                }}
               >
                 <img
                   src={service.servicePostImage}

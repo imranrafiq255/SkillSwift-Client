@@ -81,6 +81,7 @@ const AuthenticatedRoutes = () => {
     "/consumer-requested-services",
     "/consumer-chat-section",
     "/consumer-home",
+    "/consumer-update-info",
   ];
 
   useEffect(() => {
@@ -292,6 +293,19 @@ const AuthenticatedRoutes = () => {
         element={
           isConsumerAuthenticated ? (
             <ConsumerChatModule />
+          ) : (
+            <Navigate
+              to={"/consumer-sign-in"}
+              state={{ message: "Please sign in first" }}
+            />
+          )
+        }
+      />
+      <Route
+        path="/consumer-update-info"
+        element={
+          isConsumerAuthenticated ? (
+            <ConsumerUpdateInfo />
           ) : (
             <Navigate
               to={"/consumer-sign-in"}

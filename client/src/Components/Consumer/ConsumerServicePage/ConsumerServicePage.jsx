@@ -21,6 +21,7 @@ import LoaderCircles from "../../Loader/LoaderCircles";
 import { useNavigate } from "react-router-dom";
 import { createConversationAction } from "../../Redux/Consumer/Actions/ConsumerActions";
 import axios from "axios";
+
 const ServicePage = () => {
   const [selectedSlot, setSelectedSlot] = useState("");
   const { loading, error, message } = useSelector(
@@ -32,82 +33,84 @@ const ServicePage = () => {
   const location = useLocation();
   const service = location?.state?.service || null;
   const navigate = useNavigate();
-
   const { conversationLoading, conversationError, conversationMessage } =
     useSelector((state) => state.createConversationReducer);
   const { conversations } = useSelector(
     (state) => state.loadConsumerConversationsReducer
   );
+
   useEffect(() => {
     dispatch(clearErrors());
     dispatch(loadCurrentConsumerAction());
     dispatch(loadConversationsAction());
   }, [dispatch]);
-  useEffect(() => {
-    if (!loading && !toastMessageShow.current && message) {
-      toastMessageShow.current = true;
-      navigate("/consumer-service-history", { state: { message: message } });
-    } else if (!loading && !toastMessageShow.current && error) {
-      toastMessageShow.current = true;
-      handleShowFailureToast(error);
-    }
-  }, [loading, error, message, navigate]);
+
   const handleBookService = () => {
     const data = {
       orderDeliverySchedule: selectedSlot,
       servicePost: service?._id,
       serviceProvider: service?.serviceProvider?._id,
     };
+    dispatch(clearErrors());
     dispatch(consumerOrderServiceAction(data));
-    createConversation(data?.serviceProvider);
   };
+
+  useEffect(() => {
+    if (!loading && !toastMessageShow.current) {
+      if (message) {
+        toastMessageShow.current = true;
+        dispatch(clearErrors());
+        navigate("/consumer-service-history", { state: { message: message } });
+      } else if (error) {
+        handleShowFailureToast(error);
+        dispatch(clearErrors());
+      }
+    }
+  }, [loading, error, message, navigate, dispatch]);
+
+  const createOrNavigateToConversation = (serviceProviderId) => {
+    const existingConversation = conversations.find(
+      (conversation) => conversation.members.receiver._id === serviceProviderId
+    );
+
+    if (!existingConversation) {
+      const data = {
+        receiver: serviceProviderId,
+        receiverType: "ServiceProvider",
+      };
+      dispatch(createConversationAction(data));
+    } else {
+      navigate("/consumer-chat-section");
+    }
+  };
+
+  useEffect(() => {
+    if (!conversationLoading && conversationMessage && !orderBtnClicked) {
+      handleShowSuccessToast("You can now chat with this service provider");
+      navigate("/consumer-chat-section");
+      dispatch(clearErrors());
+    } else if (!conversationLoading && conversationError) {
+      handleShowFailureToast(conversationError);
+      dispatch(clearErrors());
+    }
+  }, [
+    conversationLoading,
+    conversationMessage,
+    conversationError,
+    orderBtnClicked,
+    navigate,
+    dispatch,
+  ]);
+
   const ratingCalculator = (ratings) => {
     let sum = 0;
     ratings?.forEach((rating) => (sum += rating?.rating));
     return Math.floor(sum / ratings?.length);
   };
-  const createConversation = (id) => {
-    const existedReceiver = conversations.find(
-      (conversation) => conversation.members.receiver._id === id
-    );
-    if (existedReceiver) {
-      navigate("/consumer-chat-section");
-      return;
-    }
-    const data = { receiver: id, receiverType: "ServiceProvider" };
-    dispatch(createConversationAction(data));
-  };
-  const conversationToastMessage = useRef(false);
-  useEffect(() => {
-    if (
-      !conversationLoading &&
-      conversationError &&
-      !conversationToastMessage.current
-    ) {
-      console.log(conversationError);
-      conversationToastMessage.current = true;
-    } else if (
-      !conversationLoading &&
-      conversationMessage &&
-      !conversationToastMessage.current
-    ) {
-      conversationToastMessage.current = true;
-      if (!orderBtnClicked) {
-        handleShowSuccessToast("You can now chat with this consumer");
-        setTimeout(() => {
-          navigate("/consumer-chat-section");
-        }, 500);
-      }
-    }
-  }, [
-    conversationError,
-    conversationMessage,
-    conversationLoading,
-    navigate,
-    orderBtnClicked,
-  ]);
+
   const [serviceProviderRating, setServiceProviderRating] = useState(0);
   const [totalRating, setTotalRating] = useState(0);
+
   useEffect(() => {
     const ratingHandler = async () => {
       try {
@@ -122,7 +125,11 @@ const ServicePage = () => {
     };
     ratingHandler();
   }, [service?.serviceProvider?._id]);
-  console.log(conversations);
+
+  useEffect(() => {
+    toastMessageShow.current = false;
+    setSelectedSlot("");
+  }, [service]);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -179,8 +186,8 @@ const ServicePage = () => {
                       ))}
                     </div>
                     <span className="text-gray-600">
-                      ({serviceProviderRating} out of 5 based on {totalRating}{" "}
-                      ratings)
+                      ({Math.round(serviceProviderRating * 10) / 10} out of 5
+                      based on {totalRating} ratings)
                     </span>
                   </div>
                 </div>
@@ -280,7 +287,9 @@ const ServicePage = () => {
                   <button
                     className="flex items-center justify-center bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300 w-full"
                     onClick={() =>
-                      createConversation(service?.serviceProvider?._id)
+                      createOrNavigateToConversation(
+                        service?.serviceProvider?._id
+                      )
                     }
                   >
                     <FaInfoCircle className="mr-2" /> Request More Info on Chat

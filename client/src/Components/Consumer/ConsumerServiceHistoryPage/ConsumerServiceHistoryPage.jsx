@@ -88,6 +88,7 @@ const ServiceHistoryPage = () => {
     if (!rejectLoading && rejectError && !rejectToastMessageRef.current) {
       handleShowFailureToast(rejectError);
       rejectToastMessageRef.current = true;
+      dispatch(clearErrors());
     } else if (
       !rejectLoading &&
       rejectMessage &&
@@ -95,6 +96,7 @@ const ServiceHistoryPage = () => {
     ) {
       rejectToastMessageRef.current = true;
       handleShowSuccessToast(rejectMessage);
+      dispatch(clearErrors());
       dispatch(loadOrdersAction());
     }
   }, [rejectMessage, rejectError, rejectLoading, dispatch]);
@@ -102,6 +104,7 @@ const ServiceHistoryPage = () => {
     if (!ratingLoading && ratingError && !ratingToastMessageRef.current) {
       handleShowFailureToast(ratingError);
       ratingToastMessageRef.current = true;
+      dispatch(clearErrors());
     } else if (
       !ratingLoading &&
       ratingMessage &&
@@ -110,6 +113,7 @@ const ServiceHistoryPage = () => {
       ratingToastMessageRef.current = true;
       handleShowSuccessToast(ratingMessage);
       setShowReviewModal(false);
+      dispatch(clearErrors());
       dispatch(loadOrdersAction());
     }
   }, [dispatch, ratingError, ratingLoading, ratingMessage]);

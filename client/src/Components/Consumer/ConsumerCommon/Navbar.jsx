@@ -329,7 +329,7 @@ const Navbar = () => {
         onClose={() => setShowProfileModal(false)}
         onEdit={() => {
           setShowProfileModal(false);
-          navigate("/consumer-upload-info");
+          navigate("/consumer-update-info");
         }}
         user={user}
         onSave={handleProfileSave}

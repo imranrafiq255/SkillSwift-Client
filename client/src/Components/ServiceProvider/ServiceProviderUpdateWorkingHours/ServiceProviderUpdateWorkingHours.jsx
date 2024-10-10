@@ -12,8 +12,9 @@ import {
   handleShowSuccessToast,
 } from "../../ToastMessages/ToastMessage";
 import { Toaster } from "react-hot-toast";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import LoaderCircles from "../../Loader/LoaderCircles";
+import axios from "axios";
 const ServiceProviderUpdateWorkingHours = () => {
   const { loading, error, message } = useSelector(
     (state) => state.serviceProviderAddTimeSlotReducer
@@ -22,7 +23,6 @@ const ServiceProviderUpdateWorkingHours = () => {
     (state) => state?.loadCurrentServiceProviderReducer
   );
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const location = useLocation();
   const toastMessage = location?.state?.message || null;
   const toastMessageRef = useRef(false);
@@ -36,6 +36,13 @@ const ServiceProviderUpdateWorkingHours = () => {
       time: Yup.string().required("Please select time"),
     }),
     onSubmit: (values) => {
+      const isExisted = serviceProvider?.serviceProviderWorkingHours?.find(
+        (time) =>
+          time.dayOfWeek === values?.dayOfWeek && time.time === values.time
+      );
+      if (isExisted) {
+        return handleShowFailureToast("You already added this time slot.");
+      }
       dispatch(clearErrors());
       dispatch(serviceProviderAddTimeSlotAction(values));
       dispatch(clearErrors());
@@ -46,28 +53,18 @@ const ServiceProviderUpdateWorkingHours = () => {
     dispatch(clearErrors());
     dispatch(loadCurrentServiceProviderAction());
   }, [dispatch]);
-  const workingHoursToastMessageRef = useRef(false);
   useEffect(() => {
     if (!loading) {
-      if (error && !workingHoursToastMessageRef.current) {
+      if (error) {
         handleShowFailureToast(error);
-        workingHoursToastMessageRef.current = true;
-      } else if (message && !workingHoursToastMessageRef.current) {
-        if (serviceProvider) {
-          handleShowSuccessToast(message);
-          navigate("/service-provider-home", { state: { message } });
-          window.location.href = `/service-provider-home?message=${"You added time slot successfully."}`;
-          workingHoursToastMessageRef.current = true;
-        } else if (!serviceProvider) {
-          navigate(
-            "/service-provider-account-verification/your account is not verified",
-            { state: { message } }
-          );
-          workingHoursToastMessageRef.current = true;
-        }
+        dispatch(clearErrors());
+      } else if (message) {
+        handleShowSuccessToast(message);
+        dispatch(loadCurrentServiceProviderAction());
+        dispatch(clearErrors());
       }
     }
-  }, [loading, message, error, navigate, serviceProvider]);
+  }, [loading, message, error, dispatch]);
   useEffect(() => {
     if (toastMessage && !toastMessage.current) {
       handleShowSuccessToast(toastMessage);
@@ -75,87 +72,19 @@ const ServiceProviderUpdateWorkingHours = () => {
     }
   }, [toastMessage, toastMessageRef]);
 
-  const workingHours = [
-    {
-      dayOfWeek: "Monday",
-      time: "10:00AM to 12:00PM",
-      _id: "6703a68c6a76c3463b35e936",
-    },
-    {
-      dayOfWeek: "Tuesday",
-      time: "10:00AM to 12:00PM",
-      _id: "67076cf9957393e283eb174f",
-    },
-    {
-      dayOfWeek: "Sunday",
-      time: "4:00PM to 6:00PM",
-      _id: "67076e42957393e283eb182b",
-    },
-    {
-      dayOfWeek: "Sunday",
-      time: "2:00PM to 4:00PM",
-      _id: "670770d10fa39ff80c148ab7",
-    },
-    {
-      dayOfWeek: "Friday",
-      time: "12:00PM to 2:00PM",
-      _id: "670774a70fa39ff80c148e73",
-    },
-    {
-      dayOfWeek: "Thursday",
-      time: "4:00PM to 6:00PM",
-      _id: "670775280fa39ff80c149152",
-    },
-    {
-      dayOfWeek: "Tuesday",
-      time: "8:00AM to 10:00AM",
-      _id: "670775870fa39ff80c14920b",
-    },
-    {
-      dayOfWeek: "Wednesday",
-      time: "10:00AM to 12:00PM",
-      _id: "670775c50fa39ff80c14943e",
-    },
-    {
-      dayOfWeek: "Saturday",
-      time: "10:00AM to 12:00PM",
-      _id: "670776320fa39ff80c1496e1",
-    },
-    {
-      dayOfWeek: "Sunday",
-      time: "2:00PM to 4:00PM",
-      _id: "670770d10fa39ff80c148ab7",
-    },
-    {
-      dayOfWeek: "Friday",
-      time: "12:00PM to 2:00PM",
-      _id: "670774a70fa39ff80c148e73",
-    },
-    {
-      dayOfWeek: "Thursday",
-      time: "4:00PM to 6:00PM",
-      _id: "670775280fa39ff80c149152",
-    },
-    {
-      dayOfWeek: "Tuesday",
-      time: "8:00AM to 10:00AM",
-      _id: "670775870fa39ff80c14920b",
-    },
-    {
-      dayOfWeek: "Wednesday",
-      time: "10:00AM to 12:00PM",
-      _id: "670775c50fa39ff80c14943e",
-    },
-    {
-      dayOfWeek: "Saturday",
-      time: "10:00AM to 12:00PM",
-      _id: "670776320fa39ff80c1496e1",
-    },
-  ];
-
-  const handleDelete = (id) => {
-    // Add logic here for handling deletion of the time slot with the given id.
-    alert("Deleting time slot with ID:", id);
+  const handleDelete = async (dayOfWeek, time) => {
+    try {
+      const response = await axios.delete(
+        "/api/v1/service-provider/delete-working-hours",
+        {
+          params: { dayOfWeek, time },
+        }
+      );
+      handleShowSuccessToast(response?.data?.message);
+      dispatch(loadCurrentServiceProviderAction());
+    } catch (error) {
+      handleShowFailureToast(error?.response?.data?.message || "Network error");
+    }
   };
 
   return (
@@ -256,8 +185,9 @@ const ServiceProviderUpdateWorkingHours = () => {
               Available time slots
             </h1>
             <div className="overflow-y-auto h-[80%]">
-              {workingHours.length > 0 ? (
-                workingHours.map((slot) => (
+              {serviceProvider &&
+              serviceProvider?.serviceProviderWorkingHours?.length > 0 ? (
+                serviceProvider?.serviceProviderWorkingHours.map((slot) => (
                   <div
                     key={slot._id}
                     className="flex justify-between items-center p-2 border-b border-gray-200"
@@ -267,7 +197,7 @@ const ServiceProviderUpdateWorkingHours = () => {
                       <p className="text-xs text-gray-600">{slot.time}</p>
                     </div>
                     <button
-                      onClick={() => handleDelete(slot._id)}
+                      onClick={() => handleDelete(slot?.dayOfWeek, slot?.time)}
                       className="text-xs text-red-500 hover:text-red-700"
                     >
                       Delete
