@@ -12,7 +12,9 @@ import {
 } from "../../ToastMessages/ToastMessage.js";
 import { Toaster } from "react-hot-toast";
 import {
+  clearErrors,
   consumerOrderServiceAction,
+  loadConversationsAction,
   loadCurrentConsumerAction,
 } from "../../Redux/Consumer/Actions/ConsumerActions.js";
 import LoaderCircles from "../../Loader/LoaderCircles";
@@ -33,8 +35,13 @@ const ServicePage = () => {
 
   const { conversationLoading, conversationError, conversationMessage } =
     useSelector((state) => state.createConversationReducer);
+  const { conversations } = useSelector(
+    (state) => state.loadConsumerConversationsReducer
+  );
   useEffect(() => {
+    dispatch(clearErrors());
     dispatch(loadCurrentConsumerAction());
+    dispatch(loadConversationsAction());
   }, [dispatch]);
   useEffect(() => {
     if (!loading && !toastMessageShow.current && message) {
@@ -60,6 +67,13 @@ const ServicePage = () => {
     return Math.floor(sum / ratings?.length);
   };
   const createConversation = (id) => {
+    const existedReceiver = conversations.find(
+      (conversation) => conversation.members.receiver._id === id
+    );
+    if (existedReceiver) {
+      navigate("/consumer-chat-section");
+      return;
+    }
     const data = { receiver: id, receiverType: "ServiceProvider" };
     dispatch(createConversationAction(data));
   };
@@ -93,6 +107,7 @@ const ServicePage = () => {
     orderBtnClicked,
   ]);
   const [serviceProviderRating, setServiceProviderRating] = useState(0);
+  const [totalRating, setTotalRating] = useState(0);
   useEffect(() => {
     const ratingHandler = async () => {
       try {
@@ -100,12 +115,14 @@ const ServicePage = () => {
           `/api/v1/consumer/service-provider-rating/${service?.serviceProvider?._id}`
         );
         setServiceProviderRating(response?.data?.averageRating);
+        setTotalRating(response?.data?.total);
       } catch (error) {
         console.log(error?.response?.data?.message || "Network error");
       }
     };
     ratingHandler();
   }, [service?.serviceProvider?._id]);
+  console.log(conversations);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -161,8 +178,8 @@ const ServicePage = () => {
                       ))}
                     </div>
                     <span className="text-gray-600">
-                      ({serviceProviderRating} out of 5 based on{" "}
-                      {service?.servicePostRatings?.length} ratings)
+                      ({serviceProviderRating} out of 5 based on {totalRating}{" "}
+                      ratings)
                     </span>
                   </div>
                 </div>
