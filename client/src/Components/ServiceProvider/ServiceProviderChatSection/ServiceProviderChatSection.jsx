@@ -295,7 +295,7 @@ const ServiceProviderChatSection = () => {
                             </h1>
                             <h1 className="message ml-2 truncate-text text-sm">
                               {checkOnlineServiceProvider(
-                                currentConversation?.members?.receiver?._id
+                                conversation?.members?.sender?._id
                               )
                                 ? "Online"
                                 : "Offline"}
@@ -326,7 +326,7 @@ const ServiceProviderChatSection = () => {
                           <div
                             className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ml-4 w-3 h-3 rounded-full ${
                               checkOnlineServiceProvider(
-                                currentConversation?.members?.receiver?._id
+                                currentConversation?.members?.sender?._id
                               )
                                 ? "bg-green-500"
                                 : "bg-red-500"
@@ -342,7 +342,7 @@ const ServiceProviderChatSection = () => {
                           </h1>
                           <h1 className="text-sm text-[#878787]">
                             {checkOnlineServiceProvider(
-                              currentConversation?.members?.receiver?._id
+                              currentConversation?.members?.sender?._id
                             )
                               ? "Online"
                               : "Offline"}
@@ -468,7 +468,7 @@ const ServiceProviderChatSection = () => {
                               </h1>
                               <h1 className="message ml-2 truncate-text-2 text-sm">
                                 {checkOnlineServiceProvider(
-                                  currentConversation?.members?.receiver?._id
+                                  conversation?.members?.sender?._id
                                 )
                                   ? "Online"
                                   : "Offline"}

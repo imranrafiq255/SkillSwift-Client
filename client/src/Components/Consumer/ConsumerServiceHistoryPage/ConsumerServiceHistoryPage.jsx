@@ -71,7 +71,6 @@ const ServiceHistoryPage = () => {
     };
   }, [showReviewModal]);
   const toastMessageShown = useRef(false);
-  const rejectToastMessageRef = useRef(false);
   useEffect(() => {
     if (!loading && error && !toastMessageShown.current) {
       console.log(error);
@@ -85,16 +84,10 @@ const ServiceHistoryPage = () => {
     }
   }, [navigateMessage, navigateToastMessageRef]);
   useEffect(() => {
-    if (!rejectLoading && rejectError && !rejectToastMessageRef.current) {
+    if (!rejectLoading && rejectError) {
       handleShowFailureToast(rejectError);
-      rejectToastMessageRef.current = true;
       dispatch(clearErrors());
-    } else if (
-      !rejectLoading &&
-      rejectMessage &&
-      !rejectToastMessageRef.current
-    ) {
-      rejectToastMessageRef.current = true;
+    } else if (!rejectLoading && rejectMessage) {
       handleShowSuccessToast(rejectMessage);
       dispatch(clearErrors());
       dispatch(loadOrdersAction());
@@ -185,7 +178,7 @@ const ServiceHistoryPage = () => {
                       <LoaderCircles />
                     </div>
                   ) : (
-                    (activeTab !== "cancelled")  && (
+                    activeTab !== "cancelled" && (
                       <button
                         onClick={() => {
                           if (activeTab === "inProgress") {
@@ -236,7 +229,7 @@ const ServiceHistoryPage = () => {
                   Rs. {order?.servicePost?.servicePostPrice}
                 </p>
 
-                {(activeTab !== "cancelled")  && (
+                {activeTab !== "cancelled" && (
                   <button
                     onClick={() => {
                       if (activeTab === "inProgress") {
