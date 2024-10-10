@@ -35,8 +35,8 @@ const ConsumerHome = () => {
         </div>
         </div> */}
       {/* <HeroSection /> */}
-      <ServicesSection />
       <PopularServicesSection />
+      <ServicesSection />
       {/* <FAQsSection /> */}
       <ContactSection />
       <Footer />

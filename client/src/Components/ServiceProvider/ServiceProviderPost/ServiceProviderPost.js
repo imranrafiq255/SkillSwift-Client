@@ -19,6 +19,7 @@ import {
   handleShowSuccessToast,
 } from "../../ToastMessages/ToastMessage";
 import LoaderCircles from "../../Loader/LoaderCircles";
+import { FaStar } from "react-icons/fa";
 
 const ServiceProviderPost = () => {
   const [postShowing, setPostShowing] = useState(true);
@@ -122,6 +123,13 @@ const ServiceProviderPost = () => {
     dispatch(deleteServicePostAction(deletePostId));
     setDeleteOptionShowing(false);
   };
+
+  const ratingCalculator = (ratings) => {
+    let sum = 0;
+    ratings?.forEach((rating) => (sum += rating?.rating));
+    return Math.floor(sum / ratings?.length);
+  };
+
   useEffect(() => {
     if (
       !deleteServicePostLoading &&
@@ -351,28 +359,45 @@ const ServiceProviderPost = () => {
                                 </h1>
                               </div>
                             </div>
-                            <div className="message px-4 py-1">
-                              <h1 className="text-white">
-                                {post.servicePostMessage}
-                              </h1>
+                            <div className="message px-4">
+                            <p className="text-white">
+                              {post?.servicePostMessage.length > 30
+                                ? `${post.servicePostMessage.slice(0, 30)}...`
+                                : post.servicePostMessage}
+                            </p>
                             </div>
-                            <div className="flex mt-5 justify-between">
-                              <h1 className="font-bold text-white px-4">
-                                {timeFormatter(post.createdAt)}
-                              </h1>
-                              <div className="flex flex-col justify-center items-center mb-8 bg-white mr-10 lg:p-2 p-1 rounded-xl lg:-mt-5 -mt-2">
-                                <div>
-                                  <img
-                                    src={require("../../../Assets/star.png")}
-                                    alt=""
-                                    className="lg:w-5 lg:h-5 w-3 h-3"
+                            <div className="flex-row mt-5 justify-between">
+                            {/* Rating Section */}
+                            <div className="ml-4">
+                              <div className="flex text-yellow-400 mb-2">
+                                {[...Array(5)].map((_, i) => (
+                                  <FaStar
+                                    key={i}
+                                    className={
+                                      i <
+                                      ratingCalculator(post?.servicePostRatings)
+                                        ? "text-yellow-500"
+                                        : "text-gray-300"
+                                    }
                                   />
-                                  <h1 className="text-xs mt-2 text-center">
-                                    {post.servicePostRatings.length}
-                                  </h1>
-                                </div>
+                                ))}
                               </div>
+                              <p className="text-white">
+                                {post?.servicePostRatings?.length > 0
+                                  ? `${
+                                      ratingCalculator(
+                                        post?.servicePostRatings
+                                      ) || 0
+                                    } out of 5 based on ${
+                                      post.servicePostRatings.length
+                                    } reviews`
+                                  : "No Reviews"}
+                              </p>
                             </div>
+                            <h1 className="font-bold text-white px-4 py-2">
+                              {timeFormatter(post?.createdAt)}
+                            </h1>
+                          </div>
                           </div>
                         </div>
                       </div>
