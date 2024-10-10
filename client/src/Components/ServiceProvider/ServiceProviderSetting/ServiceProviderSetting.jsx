@@ -71,11 +71,11 @@ const ServiceProviderSetting = () => {
             <div className="setting-options flex flex-col items-center w-full my-10 gap-5">
               <Link
                 className="w-[90%] lg:w-[70%] xl:w-[50%]"
-                to={"/service-provider-upload-info"}
+                to={"/service-provider-update-info"}
               >
                 <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
                   <div className="basis-[80%]">
-                    <h1 className="text-black text-center">UPLOAD INFO</h1>
+                    <h1 className="text-black text-center">UPDATE INFO</h1>
                   </div>
                   <div className="basis-[20%]">
                     <img
@@ -88,12 +88,12 @@ const ServiceProviderSetting = () => {
               </Link>
               <Link
                 className="w-[90%] lg:w-[70%] xl:w-[50%]"
-                to={"/service-provider-add-time"}
+                to={"/service-provider-update-working-hours"}
               >
                 <div className="option w-full h-14 flex bg-[#f0f0f0f0] shadow-lg rounded-lg items-center justify-around cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700 hover:bg-[#dcdbdbf0]">
                   <div className="basis-[80%]">
                     <h1 className="text-black text-center">
-                      ADD WORKING HOURS
+                      UPDATE WORKING HOURS
                     </h1>
                   </div>
                   <div className="basis-[20%]">

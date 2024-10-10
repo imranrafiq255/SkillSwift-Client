@@ -17,7 +17,6 @@ import Welcome from "../Welcome/Welcome";
 import ServiceProviderHome from "../ServiceProvider/ServiceProviderHome/ServiceProviderHome";
 import ServiceProviderSignIn from "../ServiceProvider/ServiceProviderSignIn/ServiceProviderSignIn";
 import ServiceProviderSignUp from "../ServiceProvider/ServiceProviderSignUp/ServiceProviderSignUp";
-import AdminHome from "../Admin/AdminHome/AdminHome";
 import SignIn from "../Consumer/ConsumerSignIn/ConsumerSignIn";
 import ForgotPassword from "../Consumer/ConsumerForgetPassword/ConsumerForgetPassword";
 import ResetPassword from "../Consumer/ConsumerResetPassword/ConsumerResetPassword";
@@ -46,6 +45,8 @@ import ConsumerDisputePage from "../Consumer/ConsumerDisputePage/ConsumerDispute
 import ConsumerServicePage from "../Consumer/ConsumerServicePage/ConsumerServicePage";
 import ConsumerChatModule from "../Consumer/ConsumerChatModule/ConsumerChatModule";
 import ServiceProviderDisputes from "../ServiceProvider/ServiceProviderDisputes/ServiceProviderDisputes";
+import ServiceProviderUpdateInfo from "../ServiceProvider/ServiceProviderUpdateInfo/ServiceProviderUpdateInfo";
+import ServiceProviderUpdateWorkingHours from "../ServiceProvider/ServiceProviderUpdateWorkingHours/ServiceProviderUpdateWorkingHours";
 const AuthenticatedRoutes = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -68,6 +69,8 @@ const AuthenticatedRoutes = () => {
     "/service-provider-notification",
     "/service-provider-account-verification/your%20account%20is%20not%20verified",
     "/service-provider-dispute",
+    "/service-provider-update-working-hours",
+    "/service-provider-update-info",
   ];
   const consumerAuthenticatedRoutes = [
     "/consumer-upload-info",
@@ -415,8 +418,27 @@ const AuthenticatedRoutes = () => {
           )
         }
       />
-      {/* Admin Route */}
-      <Route path="/admin-home" element={<AdminHome />} />
+
+      <Route
+        path="/service-provider-update-working-hours"
+        element={
+          isServiceProviderAuthenticated ? (
+            <ServiceProviderUpdateWorkingHours />
+          ) : (
+            <Navigate to={"/service-provider-sign-in"} />
+          )
+        }
+      />
+      <Route
+        path="/service-provider-update-info"
+        element={
+          isServiceProviderAuthenticated ? (
+            <ServiceProviderUpdateInfo />
+          ) : (
+            <Navigate to={"/service-provider-sign-in"} />
+          )
+        }
+      />
 
       {/* Fallback for Not Found */}
       <Route path="*" element={<NotFound />} />

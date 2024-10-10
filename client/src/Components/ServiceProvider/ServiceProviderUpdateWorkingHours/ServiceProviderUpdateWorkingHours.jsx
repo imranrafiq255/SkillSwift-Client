@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearErrors,
+  loadCurrentServiceProviderAction,
   serviceProviderAddTimeSlotAction,
 } from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
 import {
@@ -13,9 +14,12 @@ import {
 import { Toaster } from "react-hot-toast";
 import { useNavigate, useLocation } from "react-router-dom";
 import LoaderCircles from "../../Loader/LoaderCircles";
-const ServiceProviderTimeSlot = () => {
+const ServiceProviderUpdateWorkingHours = () => {
   const { loading, error, message } = useSelector(
     (state) => state.serviceProviderAddTimeSlotReducer
+  );
+  const { serviceProvider } = useSelector(
+    (state) => state?.loadCurrentServiceProviderReducer
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,29 +38,125 @@ const ServiceProviderTimeSlot = () => {
     onSubmit: (values) => {
       dispatch(clearErrors());
       dispatch(serviceProviderAddTimeSlotAction(values));
+      dispatch(clearErrors());
       formik.handleReset();
     },
   });
   useEffect(() => {
+    dispatch(clearErrors());
+    dispatch(loadCurrentServiceProviderAction());
+  }, [dispatch]);
+  const workingHoursToastMessageRef = useRef(false);
+  useEffect(() => {
     if (!loading) {
-      if (error) {
+      if (error && !workingHoursToastMessageRef.current) {
         handleShowFailureToast(error);
-        console.log(error);
-      } else if (message) {
-        console.log(message);
-        navigate(
-          "/service-provider-account-verification/your account is not verified",
-          { state: { message } }
-        );
+        workingHoursToastMessageRef.current = true;
+      } else if (message && !workingHoursToastMessageRef.current) {
+        if (serviceProvider) {
+          handleShowSuccessToast(message);
+          navigate("/service-provider-home", { state: { message } });
+          window.location.href = `/service-provider-home?message=${"You added time slot successfully."}`;
+          workingHoursToastMessageRef.current = true;
+        } else if (!serviceProvider) {
+          navigate(
+            "/service-provider-account-verification/your account is not verified",
+            { state: { message } }
+          );
+          workingHoursToastMessageRef.current = true;
+        }
       }
     }
-  }, [loading, message, error, navigate]);
+  }, [loading, message, error, navigate, serviceProvider]);
   useEffect(() => {
     if (toastMessage && !toastMessage.current) {
       handleShowSuccessToast(toastMessage);
       toastMessageRef.current = true;
     }
   }, [toastMessage, toastMessageRef]);
+
+  const workingHours = [
+    {
+      dayOfWeek: "Monday",
+      time: "10:00AM to 12:00PM",
+      _id: "6703a68c6a76c3463b35e936",
+    },
+    {
+      dayOfWeek: "Tuesday",
+      time: "10:00AM to 12:00PM",
+      _id: "67076cf9957393e283eb174f",
+    },
+    {
+      dayOfWeek: "Sunday",
+      time: "4:00PM to 6:00PM",
+      _id: "67076e42957393e283eb182b",
+    },
+    {
+      dayOfWeek: "Sunday",
+      time: "2:00PM to 4:00PM",
+      _id: "670770d10fa39ff80c148ab7",
+    },
+    {
+      dayOfWeek: "Friday",
+      time: "12:00PM to 2:00PM",
+      _id: "670774a70fa39ff80c148e73",
+    },
+    {
+      dayOfWeek: "Thursday",
+      time: "4:00PM to 6:00PM",
+      _id: "670775280fa39ff80c149152",
+    },
+    {
+      dayOfWeek: "Tuesday",
+      time: "8:00AM to 10:00AM",
+      _id: "670775870fa39ff80c14920b",
+    },
+    {
+      dayOfWeek: "Wednesday",
+      time: "10:00AM to 12:00PM",
+      _id: "670775c50fa39ff80c14943e",
+    },
+    {
+      dayOfWeek: "Saturday",
+      time: "10:00AM to 12:00PM",
+      _id: "670776320fa39ff80c1496e1",
+    },
+    {
+      dayOfWeek: "Sunday",
+      time: "2:00PM to 4:00PM",
+      _id: "670770d10fa39ff80c148ab7",
+    },
+    {
+      dayOfWeek: "Friday",
+      time: "12:00PM to 2:00PM",
+      _id: "670774a70fa39ff80c148e73",
+    },
+    {
+      dayOfWeek: "Thursday",
+      time: "4:00PM to 6:00PM",
+      _id: "670775280fa39ff80c149152",
+    },
+    {
+      dayOfWeek: "Tuesday",
+      time: "8:00AM to 10:00AM",
+      _id: "670775870fa39ff80c14920b",
+    },
+    {
+      dayOfWeek: "Wednesday",
+      time: "10:00AM to 12:00PM",
+      _id: "670775c50fa39ff80c14943e",
+    },
+    {
+      dayOfWeek: "Saturday",
+      time: "10:00AM to 12:00PM",
+      _id: "670776320fa39ff80c1496e1",
+    },
+  ];
+
+  const handleDelete = (id) => {
+    // Add logic here for handling deletion of the time slot with the given id.
+    alert("Deleting time slot with ID:", id);
+  };
 
   return (
     <>
@@ -67,7 +167,7 @@ const ServiceProviderTimeSlot = () => {
             <div className="line h-1 w-3 bg-[#4e97fd]"></div>
             <form onSubmit={formik.handleSubmit}>
               <div>
-                <h1 className="text-[#4e97fd] my-5 text-4xl font-bold">
+                <h1 className="text-[#4e97fd] text-4xl font-bold">
                   Add your time slots
                 </h1>
                 <div className="mt-10">
@@ -151,15 +251,38 @@ const ServiceProviderTimeSlot = () => {
           </div>
         </div>
         <div className="right-side hidden lg:w-6/12 h-full lg:flex justify-center items-center">
-          <img
-            src={require("../../../Assets/time-illustrattions.jpg")}
-            alt=""
-            className="w-full h-[80%]"
-          />
+          <div className="bg-white p-4 rounded-lg shadow-md mb-6 w-10/12 h-96">
+            <h1 className="text-[#4e97fd] my-3 text-3xl font-bold">
+              Available time slots
+            </h1>
+            <div className="overflow-y-auto h-[80%]">
+              {workingHours.length > 0 ? (
+                workingHours.map((slot) => (
+                  <div
+                    key={slot._id}
+                    className="flex justify-between items-center p-2 border-b border-gray-200"
+                  >
+                    <div>
+                      <p className="text-xs font-medium">{slot.dayOfWeek}</p>
+                      <p className="text-xs text-gray-600">{slot.time}</p>
+                    </div>
+                    <button
+                      onClick={() => handleDelete(slot._id)}
+                      className="text-xs text-red-500 hover:text-red-700"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500">No working slots available.</p>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </>
   );
 };
 
-export default ServiceProviderTimeSlot;
+export default ServiceProviderUpdateWorkingHours;
