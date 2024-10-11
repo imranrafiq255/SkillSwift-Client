@@ -5,7 +5,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { handleShowFailureToast } from "../../ToastMessages/ToastMessage";
 import LoaderCircles from "../../Loader/LoaderCircles";
-import { serviceProviderResetPasswordAction } from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
+import {
+  clearErrors,
+  serviceProviderResetPasswordAction,
+} from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
 import { Toaster } from "react-hot-toast";
 // Validation Schema
 const validationSchema = Yup.object({
@@ -55,15 +58,14 @@ const ServiceProviderResetPassword = () => {
   useEffect(() => {
     if (!loading) {
       if (error) {
-        console.log(error);
+        dispatch(clearErrors());
         handleShowFailureToast(error);
       } else if (message) {
-        console.log(message);
+        dispatch(clearErrors());
         navigate("/service-provider-sign-in", { state: { message } });
       }
     }
-  }, [message, error, navigate, loading]);
-  console.log(message);
+  }, [message, error, navigate, loading, dispatch]);
   return (
     <>
       <Toaster />

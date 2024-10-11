@@ -10,7 +10,7 @@ import {
   handleShowFailureToast,
   handleShowSuccessToast,
 } from "../../ToastMessages/ToastMessage";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoaderCircles from "../../Loader/LoaderCircles";
 import { Toaster } from "react-hot-toast";
 const ServiceProviderAddCNIC = () => {
@@ -22,8 +22,8 @@ const ServiceProviderAddCNIC = () => {
   const { loading, message, error } = useSelector(
     (state) => state.serviceProviderAddCNICReducer
   );
-  const location = useLocation();
-  const toastMessage = location?.state?.message || null;
+  const toastMessage =
+    new URLSearchParams(window.location.search).get("message") || null;
   const toastMessageRef = useRef(false);
   const navigate = useNavigate();
   const formik = useFormik({
@@ -48,11 +48,16 @@ const ServiceProviderAddCNIC = () => {
     if (!loading) {
       if (error) {
         handleShowFailureToast(error);
+        dispatch(clearErrors());
       } else if (message) {
+        dispatch(clearErrors());
         navigate("/service-provider-add-time", { state: { message } });
+        window.location.href = `//service-provider-add-time?message=${encodeURIComponent(
+          message
+        )}`;
       }
     }
-  }, [loading, error, navigate, message]);
+  }, [loading, error, navigate, message, dispatch]);
   useEffect(() => {
     if (toastMessage && !toastMessage.current) {
       handleShowSuccessToast(toastMessage);

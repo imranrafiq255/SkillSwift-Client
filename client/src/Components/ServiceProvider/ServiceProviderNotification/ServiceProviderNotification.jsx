@@ -1,8 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SkeletonNotificationLoader from "../../Loader/ServiceProviderLoaders/SkeletonNotificationLoader";
 import { useDispatch, useSelector } from "react-redux";
+import { FaBell } from "react-icons/fa";
 import {
+  clearErrors,
   loadNewNotificationsAction,
   readNotificationAction,
 } from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
@@ -22,27 +24,23 @@ const ServiceProviderNotification = () => {
     readNotificationMessage,
     readNotificationError,
   } = useSelector((state) => state.readNotificationReducer);
-  const toastMessage = useRef(false);
   useEffect(() => {
     dispatch(loadNewNotificationsAction());
   }, [dispatch]);
   useEffect(() => {
-    if (
-      !readNotificationLoader &&
-      readNotificationError &&
-      !toastMessage.current
-    ) {
+    if (!readNotificationLoader && readNotificationError) {
       handleShowFailureToast(readNotificationError);
-      toastMessage.current = true;
-    } else if (
-      !readNotificationLoader &&
-      readNotificationMessage &&
-      !toastMessage.current
-    ) {
+      dispatch(clearErrors());
+    } else if (!readNotificationLoader && readNotificationMessage) {
+      dispatch(clearErrors());
       handleShowSuccessToast(readNotificationMessage);
-      toastMessage.current = true;
     }
-  }, [readNotificationError, readNotificationMessage, readNotificationLoader]);
+  }, [
+    readNotificationError,
+    readNotificationMessage,
+    readNotificationLoader,
+    dispatch,
+  ]);
   const readNotificationHandler = (id) => {
     dispatch(readNotificationAction(id));
     dispatch(loadNewNotificationsAction());
@@ -112,8 +110,16 @@ const ServiceProviderNotification = () => {
             </div>
           ))
         ) : (
-          <div>
-            <h1>No notifications</h1>
+          <div className="flex flex-col items-center justify-center h-full text-center p-4">
+            <div className="bg-blue-100 p-6 rounded-full">
+              <FaBell className="text-blue-500 text-6xl" />
+            </div>
+            <h1 className="text-blue-600 text-2xl font-semibold mt-4">
+              No Notifcation Available
+            </h1>
+            <p className="text-blue-500 mt-2">
+              It looks like you have no notifications.
+            </p>
           </div>
         )}
       </div>

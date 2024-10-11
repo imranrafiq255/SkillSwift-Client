@@ -84,23 +84,20 @@ const ServiceProviderPost = () => {
   useEffect(() => {
     loadPosts();
   }, []);
-  const hasShownToast = useRef(false);
   useEffect(() => {
-    if (!loading && error && !hasShownToast.current) {
+    if (!loading && error) {
       handleShowFailureToast(error);
-      hasShownToast.current = true;
-    } else if (!loading && message && !hasShownToast.current) {
+      dispatch(clearErrors());
+    } else if (!loading && message) {
       loadPosts();
       handleShowSuccessToast(message);
+      dispatch(clearErrors());
       setPostShowing(true);
-      hasShownToast.current = true;
     }
-    return () => {
-      hasShownToast.current = false;
-    };
-  }, [loading, error, message]);
+  }, [loading, error, message, dispatch]);
 
   useEffect(() => {
+    dispatch(clearErrors());
     dispatch(loadCurrentServiceProviderAction());
   }, [dispatch]);
 
@@ -120,6 +117,7 @@ const ServiceProviderPost = () => {
   const [isDeleteOptionShowing, setDeleteOptionShowing] = useState(false);
   const [deletePostId, setDeletePostId] = useState("");
   const deletePostHandler = () => {
+    dispatch(clearErrors());
     dispatch(deleteServicePostAction(deletePostId));
     setDeleteOptionShowing(false);
   };
@@ -131,23 +129,20 @@ const ServiceProviderPost = () => {
   };
 
   useEffect(() => {
-    if (
-      !deleteServicePostLoading &&
-      deleteServicePostMessage &&
-      !deletePostToastMessage.current
-    ) {
+    if (!deleteServicePostLoading && deleteServicePostMessage) {
       loadPosts();
       handleShowSuccessToast(deleteServicePostMessage);
-      deletePostToastMessage.current = false;
+      dispatch(clearErrors());
     } else if (!deleteServicePostLoading && deleteServicePostError) {
       handleShowFailureToast(deleteServicePostError);
-      deletePostToastMessage.current = false;
+      dispatch(clearErrors());
     }
   }, [
     deleteServicePostLoading,
     deleteServicePostMessage,
     deleteServicePostError,
     deletePostToastMessage,
+    dispatch,
   ]);
   return (
     <>
@@ -360,44 +355,46 @@ const ServiceProviderPost = () => {
                               </div>
                             </div>
                             <div className="message px-4">
-                            <p className="text-white">
-                              {post?.servicePostMessage.length > 30
-                                ? `${post.servicePostMessage.slice(0, 30)}...`
-                                : post.servicePostMessage}
-                            </p>
-                            </div>
-                            <div className="flex-row mt-5 justify-between">
-                            {/* Rating Section */}
-                            <div className="ml-4">
-                              <div className="flex text-yellow-400 mb-2">
-                                {[...Array(5)].map((_, i) => (
-                                  <FaStar
-                                    key={i}
-                                    className={
-                                      i <
-                                      ratingCalculator(post?.servicePostRatings)
-                                        ? "text-yellow-500"
-                                        : "text-gray-300"
-                                    }
-                                  />
-                                ))}
-                              </div>
                               <p className="text-white">
-                                {post?.servicePostRatings?.length > 0
-                                  ? `${
-                                      ratingCalculator(
-                                        post?.servicePostRatings
-                                      ) || 0
-                                    } out of 5 based on ${
-                                      post.servicePostRatings.length
-                                    } reviews`
-                                  : "No Reviews"}
+                                {post?.servicePostMessage.length > 30
+                                  ? `${post.servicePostMessage.slice(0, 30)}...`
+                                  : post.servicePostMessage}
                               </p>
                             </div>
-                            <h1 className="font-bold text-white px-4 py-2">
-                              {timeFormatter(post?.createdAt)}
-                            </h1>
-                          </div>
+                            <div className="flex-row mt-5 justify-between">
+                              {/* Rating Section */}
+                              <div className="ml-4">
+                                <div className="flex text-yellow-400 mb-2">
+                                  {[...Array(5)].map((_, i) => (
+                                    <FaStar
+                                      key={i}
+                                      className={
+                                        i <
+                                        ratingCalculator(
+                                          post?.servicePostRatings
+                                        )
+                                          ? "text-yellow-500"
+                                          : "text-gray-300"
+                                      }
+                                    />
+                                  ))}
+                                </div>
+                                <p className="text-white">
+                                  {post?.servicePostRatings?.length > 0
+                                    ? `${
+                                        ratingCalculator(
+                                          post?.servicePostRatings
+                                        ) || 0
+                                      } out of 5 based on ${
+                                        post.servicePostRatings.length
+                                      } reviews`
+                                    : "No Reviews"}
+                                </p>
+                              </div>
+                              <h1 className="font-bold text-white px-4 py-2">
+                                {timeFormatter(post?.createdAt)}
+                              </h1>
+                            </div>
                           </div>
                         </div>
                       </div>

@@ -4,7 +4,10 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import "./ServiceProviderSignUp.css";
 import { useDispatch, useSelector } from "react-redux";
-import { serviceProviderSignUpAction } from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
+import {
+  clearErrors,
+  serviceProviderSignUpAction,
+} from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
 import {
   handleShowFailureToast,
   handleShowSuccessToast,
@@ -72,17 +75,18 @@ const ServiceProviderSignUp = () => {
   useEffect(() => {
     if (!loading) {
       if (error) {
-        console.log(error);
         handleShowFailureToast(error);
+        dispatch(clearErrors());
       } else if (message) {
-        console.log(message);
         handleShowSuccessToast(message);
-        navigate(`/service-provider-send-email/${message}`, {
-          state: { message },
-        });
+        dispatch(clearErrors());
+        window.location.href = `/service-provider-send-email/${message}?message=${encodeURIComponent(
+          message
+        )}`;
       }
     }
-  }, [loading, error, message, navigate]);
+  }, [loading, error, message, dispatch]);
+
   return (
     <>
       <Toaster />
