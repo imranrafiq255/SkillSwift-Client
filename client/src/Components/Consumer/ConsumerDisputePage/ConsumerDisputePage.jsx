@@ -9,7 +9,6 @@ import {
   loadAllDisputesAction,
   loadOrdersAction,
   loadRefundsAction,
-  refundAmountRequestAction,
 } from "../../Redux/Consumer/Actions/ConsumerActions";
 import {
   handleShowFailureToast,
@@ -24,8 +23,6 @@ const DisputePage = () => {
   const [selectedServiceId, setSelectedServiceId] = useState("");
   const [reason, setReason] = useState("");
   const [description, setDescription] = useState("");
-  const [details, setDetails] = useState("");
-  const [percentangeAmount, setPercentageAmount] = useState(0);
   const [errors, setErrors] = useState({});
   const modalRef = useRef(null);
   const dispatch = useDispatch();
@@ -47,13 +44,6 @@ const DisputePage = () => {
     setSelectedServiceId("");
     setReason("");
     setDescription("");
-    setErrors({});
-  };
-  const handleOpenRefundModal = () => {
-    setShowRefundModal(true);
-    setSelectedServiceId("");
-    setDetails("");
-    setPercentageAmount(0);
     setErrors({});
   };
 
@@ -127,34 +117,9 @@ const DisputePage = () => {
 
     dispatch(clearErrors());
     dispatch(fileDisputeAction(id, data));
+    handleCloseDisputeModal();
   };
 
-  const handleRefundSubmit = (e) => {
-    e.preventDefault();
-    const newErrors = {};
-
-    if (!selectedServiceId) newErrors.service = "Please select a service.";
-    if (!percentangeAmount) newErrors.amount = "Percentage is required.";
-    if (!details) newErrors.details = "Details are required.";
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    const order = completedOrders?.find(
-      (order) => order?._id.toString() === selectedServiceId.toString()
-    );
-
-    const refundData = {
-      refundRequestedAgainst: order?.serviceProvider?._id,
-      refundAmountPercentage: percentangeAmount,
-      refundDetails: details,
-      order: selectedServiceId,
-    };
-    dispatch(clearErrors());
-    dispatch(refundAmountRequestAction(refundData));
-  };
   const fileDisputeToastRef = useRef(false);
   useEffect(() => {
     if (
@@ -233,12 +198,6 @@ const DisputePage = () => {
           >
             Apply for Refund
           </button>
-          {/* <button
-            onClick={handleOpenRefundModal}
-            className="text-xs lg:text-lg mb-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
-          >
-            Apply for Partial Refund
-          </button> */}
         </div>
 
         <div className="flex flex-wrap justify-center md:justify-start mb-6">
@@ -383,15 +342,21 @@ const DisputePage = () => {
                 >
                   Reason
                 </label>
-                <input
-                  type="text"
-                  id="reason"
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value)}
-                  className={`border rounded-lg w-full p-2 ${
-                    errors.reason ? "border-red-500" : ""
-                  }`}
-                />
+                <select
+                  name="reason"
+                  value={reason} // Bind value to state
+                  onChange={(e) => setReason(e.target.value)} // Update state on change
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500"
+                >
+                  <option value="">Select reason</option>
+                  <option value="Service not delivered">
+                    Service not delivered
+                  </option>
+                  <option value="Poor service quality">
+                    Poor service quality
+                  </option>
+                  <option value="Other">Other</option>
+                </select>
                 {errors.reason && (
                   <p className="text-red-500 text-xs">{errors.reason}</p>
                 )}
@@ -407,6 +372,7 @@ const DisputePage = () => {
                   id="description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
+                  maxLength={256} // Limit to 256 characters
                   className={`border rounded-lg w-full p-2 ${
                     errors.description ? "border-red-500" : ""
                   }`}
@@ -430,110 +396,6 @@ const DisputePage = () => {
             </form>
             <button
               onClick={handleCloseDisputeModal}
-              className="mt-4 text-blue-600"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
-      {showRefundModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div
-            ref={modalRef}
-            className="bg-white p-4 rounded-lg shadow-lg max-w-sm w-full flex flex-col"
-          >
-            <h2 className="text-xl font-bold mb-4">File a Partial Refund</h2>
-            <form
-              onSubmit={handleRefundSubmit}
-              className="flex flex-col space-y-4"
-            >
-              <div>
-                <label
-                  htmlFor="service"
-                  className="block text-sm font-medium mb-1"
-                >
-                  Select Service
-                </label>
-                <select
-                  id="service"
-                  value={selectedServiceId}
-                  onChange={(e) => setSelectedServiceId(e.target.value)}
-                  className={`border rounded-lg w-full p-2 ${
-                    errors.service ? "border-red-500" : ""
-                  }`}
-                >
-                  <option value="">Select a service...</option>
-                  {!loading &&
-                    completedOrders.map((order) => (
-                      <option key={order?._id} value={order?._id}>
-                        {order?.servicePost?.serviceName}
-                      </option>
-                    ))}
-                </select>
-                {errors.service && (
-                  <p className="text-red-500 text-xs">{errors.service}</p>
-                )}
-              </div>
-              <div>
-                <label
-                  htmlFor="percentage"
-                  className="block text-sm font-medium mb-1"
-                >
-                  Select Percentage
-                </label>
-                <select
-                  id="percentage"
-                  value={percentangeAmount}
-                  onChange={(e) => setPercentageAmount(Number(e.target.value))} // Convert value to a number
-                  className={`border rounded-lg w-full p-2 ${
-                    errors.amount ? "border-red-500" : ""
-                  }`}
-                >
-                  <option value="">Select percentage...</option>
-                  <option value={25}>25%</option>
-                  <option value={50}>50%</option>
-                  <option value={75}>75%</option>
-                </select>
-                {errors.amount && (
-                  <p className="text-red-500 text-xs">{errors.amount}</p>
-                )}
-              </div>
-              <div>
-                <label
-                  htmlFor="details"
-                  className="block text-sm font-medium mb-1"
-                >
-                  Refund Details
-                </label>
-                <textarea
-                  id="details"
-                  value={details}
-                  onChange={(e) => setDetails(e.target.value)}
-                  className={`border rounded-lg w-full p-2 ${
-                    errors.details ? "border-red-500" : ""
-                  }`}
-                  placeholder="Enter refund details..."
-                />
-                {errors.details && (
-                  <p className="text-red-500 text-xs">{errors.details}</p>
-                )}
-              </div>
-              {refundRequestLoading ? (
-                <div className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300 flex justify-center items-center">
-                  <LoaderCircles />
-                </div>
-              ) : (
-                <button
-                  type="submit"
-                  className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
-                >
-                  Submit Request
-                </button>
-              )}
-            </form>
-            <button
-              onClick={handleCloseRefundModal}
               className="mt-4 text-blue-600"
             >
               Cancel
