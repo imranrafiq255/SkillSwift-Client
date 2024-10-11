@@ -56,6 +56,7 @@ const ServiceProviderOrder = () => {
 
   // Load all orders on initial mount
   useEffect(() => {
+    dispatch(clearErrors());
     dispatch(loadPendingOrdersAction());
     dispatch(loadCompletedOrdersAction());
     dispatch(loadRejectedOrdersAction());
@@ -64,13 +65,6 @@ const ServiceProviderOrder = () => {
   }, [dispatch]);
 
   // Helper function to check and set localStorage
-  const isToastShown = (key) => {
-    return localStorage.getItem(key) === "true";
-  };
-
-  const setToastShown = (key) => {
-    localStorage.setItem(key, "true");
-  };
 
   // Accept Order Handling
   const acceptOrder = (id) => {
@@ -78,20 +72,11 @@ const ServiceProviderOrder = () => {
   };
 
   useEffect(() => {
-    if (
-      !acceptOrderLoading &&
-      acceptOrderError &&
-      !isToastShown("acceptOrder")
-    ) {
+    if (!acceptOrderLoading && acceptOrderError) {
       handleShowFailureToast(acceptOrderError);
-      setToastShown("acceptOrder");
-    } else if (
-      !acceptOrderLoading &&
-      acceptOrderMessage &&
-      !isToastShown("acceptOrder")
-    ) {
+      dispatch(clearErrors());
+    } else if (!acceptOrderLoading && acceptOrderMessage) {
       handleShowSuccessToast(acceptOrderMessage);
-      setToastShown("acceptOrder");
       dispatch(clearErrors());
       dispatch(loadPendingOrdersAction());
       dispatch(loadCompletedOrdersAction());
@@ -113,20 +98,12 @@ const ServiceProviderOrder = () => {
   };
 
   useEffect(() => {
-    if (
-      !rejectOrderLoading &&
-      rejectOrderError &&
-      !isToastShown("rejectOrder")
-    ) {
+    if (!rejectOrderLoading && rejectOrderError) {
       handleShowFailureToast(rejectOrderError);
-      setToastShown("rejectOrder");
-    } else if (
-      !rejectOrderLoading &&
-      rejectOrderMessage &&
-      !isToastShown("rejectOrder")
-    ) {
+      dispatch(clearErrors());
+    } else if (!rejectOrderLoading && rejectOrderMessage) {
       handleShowSuccessToast(rejectOrderMessage);
-      setToastShown("rejectOrder");
+      dispatch(clearErrors());
       dispatch(loadPendingOrdersAction());
       dispatch(loadCompletedOrdersAction());
       dispatch(loadRejectedOrdersAction());
@@ -141,20 +118,12 @@ const ServiceProviderOrder = () => {
   };
 
   useEffect(() => {
-    if (
-      !completeOrderLoading &&
-      completeOrderError &&
-      !isToastShown("completeOrder")
-    ) {
+    if (!completeOrderLoading && completeOrderError) {
       handleShowFailureToast(completeOrderError);
-      setToastShown("completeOrder");
-    } else if (
-      !completeOrderLoading &&
-      completeOrderMessage &&
-      !isToastShown("completeOrder")
-    ) {
+      dispatch(clearErrors());
+    } else if (!completeOrderLoading && completeOrderMessage) {
       handleShowSuccessToast(completeOrderMessage);
-      setToastShown("completeOrder");
+      dispatch(clearErrors());
       dispatch(loadPendingOrdersAction());
       dispatch(loadCompletedOrdersAction());
       dispatch(loadRejectedOrdersAction());
@@ -170,24 +139,16 @@ const ServiceProviderOrder = () => {
 
   // Cancel Order Handling
   const cancelOrder = (id) => {
+    dispatch(clearErrors());
     dispatch(cancelOrderAction(id));
   };
 
   useEffect(() => {
-    if (
-      !cancelOrderLoading &&
-      cancelOrderError &&
-      !isToastShown("cancelOrder")
-    ) {
+    if (!cancelOrderLoading && cancelOrderError) {
       handleShowFailureToast(cancelOrderError);
-      setToastShown("cancelOrder");
-    } else if (
-      !cancelOrderLoading &&
-      cancelOrderMessage &&
-      !isToastShown("cancelOrder")
-    ) {
+      dispatch(clearErrors());
+    } else if (!cancelOrderLoading && cancelOrderMessage) {
       handleShowSuccessToast(cancelOrderMessage);
-      setToastShown("cancelOrder");
       dispatch(clearErrors());
       dispatch(loadPendingOrdersAction());
       dispatch(loadCompletedOrdersAction());
@@ -327,7 +288,15 @@ const ServiceProviderOrder = () => {
                                 Service message
                               </h1>
                             </div>
-                            <h1>{order?.servicePost?.servicePostMessage}</h1>
+                            <h1>
+                              {order?.servicePost?.servicePostMessage.length >
+                              30
+                                ? order?.servicePost?.servicePostMessage.slice(
+                                    0,
+                                    30
+                                  ) + "..."
+                                : order?.servicePost?.servicePostMessage}
+                            </h1>
                           </div>
                           <div className="flex gap-3 items-center schedule mt-4">
                             <div className="order-name bg-white inline-block py-2 px-4 rounded-lg">
@@ -458,7 +427,15 @@ const ServiceProviderOrder = () => {
                                 Service message
                               </h1>
                             </div>
-                            <h1>{order?.servicePost?.servicePostMessage}</h1>
+                            <h1>
+                              {order?.servicePost?.servicePostMessage.length >
+                              30
+                                ? order?.servicePost?.servicePostMessage.slice(
+                                    0,
+                                    30
+                                  ) + "..."
+                                : order?.servicePost?.servicePostMessage}
+                            </h1>
                           </div>
                           <div className="flex gap-3 items-center schedule mt-4">
                             <div className="order-name bg-white inline-block py-2 px-4 rounded-lg">
@@ -566,7 +543,15 @@ const ServiceProviderOrder = () => {
                                 Service message
                               </h1>
                             </div>
-                            <h1>{order?.servicePost?.servicePostMessage}</h1>
+                            <h1>
+                              {order?.servicePost?.servicePostMessage.length >
+                              30
+                                ? order?.servicePost?.servicePostMessage.slice(
+                                    0,
+                                    30
+                                  ) + "..."
+                                : order?.servicePost?.servicePostMessage}
+                            </h1>
                           </div>
                           <div className="flex gap-3 items-center schedule mt-4">
                             <div className="order-name bg-white inline-block py-2 px-4 rounded-lg">
@@ -694,7 +679,15 @@ const ServiceProviderOrder = () => {
                                 Service message
                               </h1>
                             </div>
-                            <h1>{order?.servicePost?.servicePostMessage}</h1>
+                            <h1>
+                              {order?.servicePost?.servicePostMessage.length >
+                              30
+                                ? order?.servicePost?.servicePostMessage.slice(
+                                    0,
+                                    30
+                                  ) + "..."
+                                : order?.servicePost?.servicePostMessage}
+                            </h1>
                           </div>
                           <div className="flex gap-3 items-center schedule mt-4">
                             <div className="order-name bg-white inline-block py-2 px-4 rounded-lg">
@@ -802,7 +795,15 @@ const ServiceProviderOrder = () => {
                                 Service message
                               </h1>
                             </div>
-                            <h1>{order?.servicePost?.servicePostMessage}</h1>
+                            <h1>
+                              {order?.servicePost?.servicePostMessage.length >
+                              30
+                                ? order?.servicePost?.servicePostMessage.slice(
+                                    0,
+                                    30
+                                  ) + "..."
+                                : order?.servicePost?.servicePostMessage}
+                            </h1>
                           </div>
                           <div className="flex gap-3 items-center schedule mt-4">
                             <div className="order-name bg-white inline-block py-2 px-4 rounded-lg">
