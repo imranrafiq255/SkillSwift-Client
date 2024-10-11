@@ -92,6 +92,7 @@ const ServiceProviderOrder = () => {
     ) {
       handleShowSuccessToast(acceptOrderMessage);
       setToastShown("acceptOrder");
+      dispatch(clearErrors());
       dispatch(loadPendingOrdersAction());
       dispatch(loadCompletedOrdersAction());
       dispatch(loadRejectedOrdersAction());

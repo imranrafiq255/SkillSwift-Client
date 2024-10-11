@@ -453,7 +453,7 @@ const ConsumerChatModule = () => {
                               </h1>
                               <h1 className="message ml-2 truncate-text-2 text-sm">
                                 {checkOnlineConsumer(
-                                  currentConversation?.members?.receiver?._id
+                                  conversation?.members?.receiver?._id
                                 )
                                   ? "Online"
                                   : "Offline"}
