@@ -142,24 +142,27 @@ const ServicePage = () => {
         <div className="flex flex-col md:flex-row gap-8">
           {/* Service Details */}
           <div className="md:w-2/3">
-            <div className="mb-6">
-              <img
-                src={service?.servicePostImage}
-                alt={service?.serviceName}
-                className="w-full h-64 object-fit rounded-lg"
-              />
+            <div className="flex flex-row mb-6 mx-1 gap-4">
+              <div className="flex-1">
+                <img
+                  src={service?.servicePostImage}
+                  alt={service?.serviceName}
+                  className="w-full h-80 object-cover rounded-lg"
+                />
+              </div>
+              <div className="flex-1 bg-white p-6 rounded-lg shadow-md">
+                <p className="text-2xl font-bold text-blue-600">
+                  Rs. {service?.servicePostPrice}
+                </p>
+                <h1 className="text-2xl font-bold my-2">
+                  {service?.serviceName}
+                </h1>
+                <p className="text-gray-700 my-4">
+                  {service?.servicePostMessage}
+                </p>
+              </div>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-              <p className="text-3xl font-bold text-blue-600">
-                Rs. {service?.servicePostPrice}
-              </p>
-              <h1 className="text-3xl font-bold mb-4 mt-4">
-                {service?.serviceName}
-              </h1>
-              <p className="text-gray-700 mb-4">
-                {service?.servicePostMessage}
-              </p>
-            </div>
+
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h2 className="text-xl font-semibold mb-4">Service Provider</h2>
               <div className="flex items-center mb-4">
