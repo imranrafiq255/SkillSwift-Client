@@ -41,7 +41,7 @@ const ConsumerSearchPage = ({ onClose }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {!loading && filteredServices && filteredServices.length > 0 ? (
             filteredServices.map((service, index) => (
-              <ServiceCard key={index} service={service} />
+              <ServiceCard key={index} service={service} onClose={onClose} />
             ))
           ) : (
             <p className="text-gray-600">No services match your search.</p>

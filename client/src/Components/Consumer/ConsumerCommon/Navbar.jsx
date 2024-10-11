@@ -240,7 +240,7 @@ const Navbar = () => {
           isOpen ? "block" : "hidden"
         } md:hidden mt-4 space-y-4 text-gray-700 font-semibold text-left`}
       >
-        <Link to="/home" className="flex items-center">
+        <Link to="/consumer-home" className="flex items-center">
           <FaHome className="w-5 h-5 mx-2" />
           Home
         </Link>

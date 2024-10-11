@@ -1,8 +1,8 @@
 import React from "react";
 import StarRating from "../ConsumerCommon/StarRating";
 import { useNavigate } from "react-router-dom";
-const ServiceCard = ({ service }) => {
 
+const ServiceCard = ({ service, onClose }) => {
   const ratingCalculator = (ratings) => {
     let sum = 0;
     ratings.forEach((rating) => (sum += rating.rating));
@@ -10,14 +10,18 @@ const ServiceCard = ({ service }) => {
   };
 
   const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (onClose) onClose(); // Call onClose if it exists
+    navigate("/consumer-service-page", {
+      state: { service: service },
+    });
+  };
+
   return (
     <div
       className="bg-white p-4 rounded-lg shadow-lg cursor-pointer"
-      onClick={() =>
-        navigate("/consumer-service-page", {
-          state: { service: service },
-        })
-      }
+      onClick={handleClick}
     >
       <img
         src={service.servicePostImage}
