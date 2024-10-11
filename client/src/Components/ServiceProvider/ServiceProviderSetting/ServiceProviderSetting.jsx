@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -11,7 +11,6 @@ import {
 const ServiceProviderSetting = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const serviceProviderErrorToastMessage = useRef(false);
   const { serviceProvider, serviceProviderLoading, serviceProviderError } =
     useSelector((state) => state.loadCurrentServiceProviderReducer);
   const signOutHandler = async () => {
@@ -27,18 +26,11 @@ const ServiceProviderSetting = () => {
     dispatch(loadCurrentServiceProviderAction());
   }, [dispatch]);
   useEffect(() => {
-    if (
-      !serviceProviderLoading &&
-      serviceProviderError &&
-      !serviceProviderErrorToastMessage.current
-    ) {
+    if (!serviceProviderLoading && serviceProviderError) {
       console.log(serviceProviderError);
+      dispatch(clearErrors());
     }
-  }, [
-    serviceProviderLoading,
-    serviceProviderError,
-    serviceProviderErrorToastMessage,
-  ]);
+  }, [serviceProviderLoading, serviceProviderError, dispatch]);
   return (
     <>
       <div className="setting-container">

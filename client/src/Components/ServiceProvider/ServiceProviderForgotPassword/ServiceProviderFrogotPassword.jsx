@@ -6,7 +6,10 @@ import { useEffect } from "react";
 import { handleShowFailureToast } from "../../ToastMessages/ToastMessage";
 import LoaderCircles from "../../Loader/LoaderCircles";
 import { Toaster } from "react-hot-toast";
-import { serviceProviderForgotPasswordAction } from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
+import {
+  clearErrors,
+  serviceProviderForgotPasswordAction,
+} from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
 
 // Validation schema
 const validationSchema = Yup.object({
@@ -35,14 +38,14 @@ const ForgotPassword = () => {
   useEffect(() => {
     if (!loading) {
       if (error) {
-        console.log(error);
         handleShowFailureToast(error);
+        dispatch(clearErrors());
       } else if (message) {
-        console.log(message);
+        dispatch(clearErrors());
         navigate("/service-provider-send-email", { state: { message } });
       }
     }
-  }, [message, loading, error, navigate]);
+  }, [message, loading, error, navigate, dispatch]);
   return (
     <>
       <Toaster />

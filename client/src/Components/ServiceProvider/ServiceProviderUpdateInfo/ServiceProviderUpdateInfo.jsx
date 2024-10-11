@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import LoaderCircles from "../../Loader/LoaderCircles";
 import {
+  clearErrors,
   loadCurrentServiceProviderAction,
   serviceProviderUploadInfoAction,
 } from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
@@ -88,13 +89,15 @@ const ServiceProviderUpdateInfo = () => {
     if (!loading) {
       if (error) {
         handleShowFailureToast(error);
+        dispatch(clearErrors());
       } else if (message) {
+        dispatch(clearErrors());
         navigate("/service-provider-home", {
           state: { message: message },
         });
       }
     }
-  }, [loading, message, error, navigate]);
+  }, [loading, message, error, navigate, dispatch]);
 
   return (
     <>

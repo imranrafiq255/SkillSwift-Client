@@ -1,19 +1,19 @@
 import React, { useEffect, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { handleShowSuccessToast } from "../../ToastMessages/ToastMessage";
 import { Toaster } from "react-hot-toast";
+
 const ServiceProviderSendEmail = () => {
-  const location = useLocation();
   const messageRef = useRef(false);
-  const navigate = useNavigate();
-  const message = location.state?.message || null;
+  const message =
+    new URLSearchParams(window.location.search).get("message") || null;
+
   useEffect(() => {
     if (message && !messageRef.current) {
       messageRef.current = true;
       handleShowSuccessToast(message);
-      navigate(location.pathname, { replace: true, state: {} });
     }
-  }, [message, navigate, location.pathname, messageRef]);
+  }, [message]);
+
   return (
     <>
       <Toaster />

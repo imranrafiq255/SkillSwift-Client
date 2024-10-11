@@ -66,7 +66,9 @@ const SignIn = () => {
       if (error) {
         console.log(error);
         handleShowFailureToast(error);
+        dispatch(clearErrors());
       } else if (message) {
+        dispatch(clearErrors());
         const loadServiceProvider = async () => {
           try {
             const response = await axios.get(

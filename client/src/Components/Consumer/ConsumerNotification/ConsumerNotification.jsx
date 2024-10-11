@@ -11,6 +11,7 @@ import {
   handleShowSuccessToast,
 } from "../../ToastMessages/ToastMessage";
 import { Toaster } from "react-hot-toast";
+import { FaBell } from "react-icons/fa";
 const ConsumerNotification = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -118,8 +119,16 @@ const ConsumerNotification = () => {
             </div>
           ))
         ) : (
-          <div>
-            <h1>No notifications</h1>
+          <div className="flex flex-col items-center justify-center h-full text-center p-4">
+            <div className="bg-blue-100 p-6 rounded-full">
+              <FaBell className="text-blue-500 text-6xl" />
+            </div>
+            <h1 className="text-blue-600 text-2xl font-semibold mt-4">
+              No Notifcation Available
+            </h1>
+            <p className="text-blue-500 mt-2">
+              It looks like you have no notifications.
+            </p>
           </div>
         )}
       </div>

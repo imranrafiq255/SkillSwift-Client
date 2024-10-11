@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
@@ -9,7 +9,10 @@ import {
 import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import LoaderCircles from "../../Loader/LoaderCircles";
-import { serviceProviderUploadInfoAction } from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
+import {
+  clearErrors,
+  serviceProviderUploadInfoAction,
+} from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
 // Validation Schema
 const validationSchema = Yup.object({
   serviceProviderPhoneNumber: Yup.string()
@@ -23,7 +26,6 @@ const validationSchema = Yup.object({
 });
 
 const ServiceProviderUploadInfo = () => {
-  const navigate = useNavigate();
   const fileInputRef = useRef(null);
   const [imagePreview, setImagePreview] = useState(null);
   const location = useLocation();
@@ -67,16 +69,17 @@ const ServiceProviderUploadInfo = () => {
   useEffect(() => {
     if (!loading) {
       if (error) {
-        console.log(error);
+        dispatch(clearErrors());
         handleShowFailureToast(error);
       } else if (message) {
-        console.log(message);
-        navigate("/service-provider-add-cnic", {
-          state: { message: message },
-        });
+        dispatch(clearErrors());
+        window.location.href = `/service-provider-add-cnic?message=${encodeURIComponent(
+          message
+        )}`;
       }
     }
-  }, [loading, message, error, navigate]);
+  }, [loading, message, error, dispatch]);
+
   return (
     <>
       <Toaster />

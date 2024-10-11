@@ -18,7 +18,6 @@ const ServiceProviderDisputes = () => {
     (state) => state.loadDisputesReducer
   );
 
-  // State to track the hovered dispute
   const [hoveredDispute, setHoveredDispute] = useState(null);
 
   useEffect(() => {

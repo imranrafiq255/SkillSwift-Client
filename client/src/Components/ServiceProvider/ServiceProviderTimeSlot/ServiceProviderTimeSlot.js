@@ -11,7 +11,7 @@ import {
   handleShowSuccessToast,
 } from "../../ToastMessages/ToastMessage";
 import { Toaster } from "react-hot-toast";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoaderCircles from "../../Loader/LoaderCircles";
 const ServiceProviderTimeSlot = () => {
   const { loading, error, message } = useSelector(
@@ -19,8 +19,8 @@ const ServiceProviderTimeSlot = () => {
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  const toastMessage = location?.state?.message || null;
+  const toastMessage =
+    new URLSearchParams(window.location.search).get("message") || null;
   const toastMessageRef = useRef(false);
   const formik = useFormik({
     initialValues: {
@@ -40,17 +40,17 @@ const ServiceProviderTimeSlot = () => {
   useEffect(() => {
     if (!loading) {
       if (error) {
+        dispatch(clearErrors());
         handleShowFailureToast(error);
-        console.log(error);
       } else if (message) {
-        console.log(message);
+        dispatch(clearErrors());
         navigate(
           "/service-provider-account-verification/your account is not verified",
           { state: { message } }
         );
       }
     }
-  }, [loading, message, error, navigate]);
+  }, [loading, message, error, navigate, dispatch]);
   useEffect(() => {
     if (toastMessage && !toastMessage.current) {
       handleShowSuccessToast(toastMessage);
