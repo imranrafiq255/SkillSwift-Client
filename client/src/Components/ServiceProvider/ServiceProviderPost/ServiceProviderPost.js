@@ -46,8 +46,8 @@ const ServiceProviderPost = () => {
       servicePostImage: null,
     },
     validationSchema: Yup.object({
-      serviceName: Yup.string().required("Post name is required"),
-      servicePostMessage: Yup.string().required("Post message is required"),
+      serviceName: Yup.string().max(20, 'Title must be 20 characters or less').required("Post name is required"),
+      servicePostMessage: Yup.string().max(256, 'Description must be 256 characters or less').required("Post message is required"),
       servicePostPrice: Yup.number()
         .required("Post price is required")
         .min(1, "Post price should be at least $1"),
