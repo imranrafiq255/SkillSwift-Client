@@ -47,6 +47,8 @@ import ConsumerChatModule from "../Consumer/ConsumerChatModule/ConsumerChatModul
 import ServiceProviderDisputes from "../ServiceProvider/ServiceProviderDisputes/ServiceProviderDisputes";
 import ServiceProviderUpdateInfo from "../ServiceProvider/ServiceProviderUpdateInfo/ServiceProviderUpdateInfo";
 import ServiceProviderUpdateWorkingHours from "../ServiceProvider/ServiceProviderUpdateWorkingHours/ServiceProviderUpdateWorkingHours";
+// import Temp from "../Temp/temp";
+import ServiceProviderCustomServices from "../ServiceProvider/ServiceProviderCustomServices/ServiceProviderCustomServices";
 const AuthenticatedRoutes = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -71,6 +73,7 @@ const AuthenticatedRoutes = () => {
     "/service-provider-dispute",
     "/service-provider-update-working-hours",
     "/service-provider-update-info",
+    "/service-provider-custom-services",
   ];
   const consumerAuthenticatedRoutes = [
     "/consumer-upload-info",
@@ -453,7 +456,18 @@ const AuthenticatedRoutes = () => {
           )
         }
       />
+      <Route
+        path="/service-provider-custom-services"
+        element={
+          isServiceProviderAuthenticated ? (
+            <ServiceProviderCustomServices />
+          ) : (
+            <Navigate to={"/service-provider-sign-in"} />
+          )
+        }
+      />
 
+      {/* <Route path="/temp" element={<Temp />} /> */}
       {/* Fallback for Not Found */}
       <Route path="*" element={<NotFound />} />
     </Routes>

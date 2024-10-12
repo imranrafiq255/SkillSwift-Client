@@ -25,8 +25,16 @@ import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { loadCurrentConsumerAction } from "../../Redux/Consumer/Actions/ConsumerActions";
 import Logo from "../../../Assets/skillswift_logo.svg";
+import JobListingForm from "./JobListingForm";
+import CustomServiceModal from "./CustomServiceModal";
 
 const Navbar = () => {
+
+  const [isCustomServiceModalOpen, setisCustomServiceModalOpen] = useState(false);
+
+  const openCustomServiceModal = () => setisCustomServiceModalOpen(true);
+  const   closeCustomServiceModal = () => setisCustomServiceModalOpen(false);
+
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -120,17 +128,6 @@ const Navbar = () => {
             </li>
             <li className="relative group">
               <Link
-                to={"/consumer-requested-services"}
-                className="flex items-center"
-              >
-                <FaClipboardList className="w-5 h-5" />
-                <span className="absolute left-1/2 transform -translate-x-1/2 top-full text-xs text-gray-700">
-                  Requests
-                </span>
-              </Link>
-            </li>
-            <li className="relative group">
-              <Link
                 to={"/consumer-service-history"}
                 className="flex items-center"
               >
@@ -168,16 +165,27 @@ const Navbar = () => {
               </span>
             </li>
             <li className="relative group">
+              <Link
+                to={"/consumer-requested-services"}
+                className="flex items-center"
+              >
+                <FaClipboardList className="w-5 h-5" />
+                <span className="absolute left-1/2 transform -translate-x-1/2 top-full text-xs text-gray-700">
+                  Requested
+                </span>
+              </Link>
+            </li>
+            <li className="relative group">
               <button
                 onClick={() => {
-                  alert("Custom Service");
+                  openCustomServiceModal();
                 }}
                 aria-label="Custom"
               >
                 <FaEdit className="w-5 h-5" />
               </button>
               <span className="absolute left-1/2 transform -translate-x-1/2 top-full text-xs text-gray-700 whitespace-nowrap">
-                Custom Request
+                New Request
               </span>
             </li>
           </ul>
@@ -255,10 +263,6 @@ const Navbar = () => {
           <FaEnvelope className="w-5 h-5 mx-2" />
           Messages
         </Link>
-        <Link to={"/consumer-requested-services"} className="flex items-center">
-          <FaClipboardList className="w-5 h-5 mx-2" />
-          Service Requests
-        </Link>
         <Link to={"/consumer-service-history"} className="flex items-center">
           <FaHistory className="w-5 h-5 mx-2" />
           Service History
@@ -299,13 +303,17 @@ const Navbar = () => {
         </button>
         <button
           onClick={() => {
-            alert("Custom Service");
+            openCustomServiceModal();
           }}
           className="flex items-center"
         >
           <FaEdit className="w-5 h-5 mx-2" />
-          Custom Request
+          New Request
         </button>
+        <Link to={"/consumer-requested-services"} className="flex items-center">
+          <FaClipboardList className="w-5 h-5 mx-2" />
+          Requested
+        </Link>
         <button
           onClick={() => setShowSearchModal(true)}
           className="flex items-center"
@@ -349,7 +357,10 @@ const Navbar = () => {
         address={user.address}
         onSave={handleAddressSave}
       />
-
+      {/* Custom Job Listing Modal */}
+      <CustomServiceModal isOpen={isCustomServiceModalOpen} onClose={  closeCustomServiceModal}>
+          <JobListingForm onCancel={  closeCustomServiceModal} />
+      </CustomServiceModal>
       {/* Search Modal */}
       {showSearchModal && (
         <div className="fixed inset-0 flex justify-center bg-black bg-opacity-90 z-50">

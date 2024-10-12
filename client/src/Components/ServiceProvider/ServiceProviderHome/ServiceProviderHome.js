@@ -55,17 +55,7 @@ const ServiceProviderHome = () => {
         <ServiceProviderHeader />
         <div className="under-header-container">
           <div className="line w-full h-[0.3px] bg-slate-700"></div>
-          <div className="welcome-text mt-8">
-            <h1 className="text-center text-lg lg:text-5xl font-bold">
-              WELCOME TO SERVICE PROVIDER
-            </h1>
-          </div>
           <div className="posts lg:w-10/12 w-11/12 m-auto mt-8">
-            <div className="border-2 border-slate-500 inline-block lg:px-8 px-4 lg:py-3 py-2">
-              <h1 className="lg:text-xl text-xs font-light uppercase">
-                Service Posts
-              </h1>
-            </div>
             <div className="service-posts w-full h-full flex flex-wrap mt-10">
               {loadLoading ? (
                 <div>
@@ -75,28 +65,27 @@ const ServiceProviderHome = () => {
                 ""
               )}
               {!loadLoading && posts?.length > 0 ? (
-                posts.map((post) => (
+                <div className="flex flex-wrap gap-4 justify-center items-center">
+                {posts.map((post) => (
                   <div key={post._id} className="lg:w-6/12 xl:w-4/12 w-full">
-                    <div className="card w-full h-full p-5">
+                    <div className="card rounded-lg border shadow-md w-full h-full p-5">
                       <div className="relative">
                         <img
                           src={post?.servicePostImage}
                           alt=""
                           className="w-full rounded-tl-lg rounded-tr-lg h-[250px]"
                         />
-                        <div className="w-full bg-slate-600 rounded-b-lg pb-4">
-                          <div className="flex justify-between items-center">
-                            <h1 className="text-white p-4 font-bold lg:text-xl text-lg">
+                        <div className="w-full bg-white rounded-b-lg pb-4">
+                          <div className="flex flex-col">
+                            <h1 className="text-black px-4 py-1 font-bold lg:text-xl text-lg">
                               {post?.serviceName}
                             </h1>
-                            <div className="bg-[#4e97fd] w-20 h-8 mr-5 flex justify-center items-center shadow-xl rounded-lg">
-                              <h1 className="text-white font-bold">
-                                Rs {post?.servicePostPrice}
-                              </h1>
-                            </div>
+                            <h1 className="text-black px-4 py-1 font-bold lg:text-xl text-lg">
+                              Rs {post?.servicePostPrice}
+                            </h1>
                           </div>
                           <div className="message px-4">
-                            <p className="text-white">
+                            <p className="text-gray-600">
                               {post?.servicePostMessage.length > 30
                                 ? `${post.servicePostMessage.slice(0, 30)}...`
                                 : post.servicePostMessage}
@@ -110,35 +99,30 @@ const ServiceProviderHome = () => {
                                   <FaStar
                                     key={i}
                                     className={
-                                      i <
-                                      ratingCalculator(post?.servicePostRatings)
+                                      i < ratingCalculator(post?.servicePostRatings)
                                         ? "text-yellow-500"
                                         : "text-gray-300"
                                     }
                                   />
                                 ))}
                               </div>
-                              <p className="text-white">
+                              <p className="text-gray-600">
                                 {post?.servicePostRatings?.length > 0
-                                  ? `${
-                                      ratingCalculator(
-                                        post?.servicePostRatings
-                                      ) || 0
-                                    } out of 5 based on ${
-                                      post.servicePostRatings.length
-                                    } reviews`
+                                  ? `${ratingCalculator(post?.servicePostRatings) || 0} out of 5 based on ${post.servicePostRatings.length} reviews`
                                   : "No Reviews"}
                               </p>
                             </div>
-                            <h1 className="font-bold text-white px-4 py-2">
-                              {timeFormatter(post?.createdAt)}
+                            <h1 className="font-bold text-gray-600 px-4 py-2">
+                              Listed on: {timeFormatter(post?.createdAt)}
                             </h1>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                ))
+                ))}
+              </div>
+              
               ) : (
                 <div>
                   <h1>No posts in database</h1>

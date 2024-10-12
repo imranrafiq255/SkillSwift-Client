@@ -17,7 +17,7 @@ import {
 import { Toaster } from "react-hot-toast";
 import LoaderCircles from "../../Loader/LoaderCircles";
 const ServiceHistoryPage = () => {
-  const [activeTab, setActiveTab] = useState("inProgress");
+  const [activeTab, setActiveTab] = useState("pending");
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [selectedServiceId, setSelectedServiceId] = useState(null);
   const [rating, setRating] = useState(1);
@@ -122,7 +122,7 @@ const ServiceHistoryPage = () => {
 
         {/* Tab Navigation */}
         <div className="flex flex-wrap justify-center md:justify-start mb-6">
-          {["inProgress", "completed", "cancelled"].map((tab) => (
+          {["pending", "inProgress", "completed", "cancelled"].map((tab) => (
             <div
               key={tab}
               className={`py-3 px-3 text-sm cursor-pointer transition-colors duration-200 
@@ -145,8 +145,10 @@ const ServiceHistoryPage = () => {
             orders &&
             orders
               ?.filter((order) => {
-                if (activeTab === "inProgress")
+                if (activeTab === "pending")
                   return order?.orderStatus === "pending";
+                if (activeTab === "inProgress")
+                  return order?.orderStatus === "accepted";
                 if (activeTab === "completed")
                   return order?.orderStatus === "completed";
                 if (activeTab === "cancelled")
@@ -178,10 +180,10 @@ const ServiceHistoryPage = () => {
                       <LoaderCircles />
                     </div>
                   ) : (
-                    activeTab !== "cancelled" && (
+                    (activeTab !== "cancelled" && activeTab !== "inProgress") && (
                       <button
                         onClick={() => {
-                          if (activeTab === "inProgress") {
+                          if (activeTab === "pending") {
                             handleCancel(order?._id);
                           } else if (activeTab === "completed") {
                             handleReview(order?._id);
@@ -189,7 +191,7 @@ const ServiceHistoryPage = () => {
                         }}
                         className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
                       >
-                        {activeTab === "inProgress"
+                        {activeTab === "pending"
                           ? "Cancel"
                           : activeTab === "completed"
                           ? "Review"
@@ -204,8 +206,10 @@ const ServiceHistoryPage = () => {
         <div className="md:hidden space-y-4">
           {orders
             ?.filter((order) => {
+              if (activeTab === "pending")
+                return order?.orderStatus === "pending";
               if (activeTab === "inProgress")
-                return order?.orderStatus === "inProgress";
+                return order?.orderStatus === "accepted";
               if (activeTab === "completed")
                 return order?.orderStatus === "completed";
               if (activeTab === "cancelled")
@@ -229,10 +233,10 @@ const ServiceHistoryPage = () => {
                   Rs. {order?.servicePost?.servicePostPrice}
                 </p>
 
-                {activeTab !== "cancelled" && (
+                {(activeTab !== "cancelled" && activeTab !== "inProgress") && (
                   <button
                     onClick={() => {
-                      if (activeTab === "inProgress") {
+                      if (activeTab === "pending") {
                         handleCancel(order?._id);
                       } else if (activeTab === "completed") {
                         handleReview(order?._id);
@@ -240,7 +244,7 @@ const ServiceHistoryPage = () => {
                     }}
                     className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
                   >
-                    {activeTab === "inProgress"
+                    {activeTab === "pending"
                       ? "Cancel"
                       : activeTab === "completed"
                       ? "Review"
