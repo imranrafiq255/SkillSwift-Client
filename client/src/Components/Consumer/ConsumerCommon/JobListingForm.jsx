@@ -1,39 +1,69 @@
-import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-
+import React, { useEffect } from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  clearErrors,
+  consumerAddCustomServiceAction,
+} from "../../Redux/Consumer/Actions/ConsumerActions";
+import {
+  handleShowFailureToast,
+  handleShowSuccessToast,
+} from "../../ToastMessages/ToastMessage";
+import { useNavigate } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import LoaderCircles from "../../Loader/LoaderCircles";
 const JobListingForm = ({ onCancel }) => {
-  const initialValues = {
-    serviceTitle: '',
-    serviceDescription: '',
-    serviceBudge: '',
-  };
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { addLoading, addError, addMessage } = useSelector(
+    (state) => state.consumerAddCustomServiceReducer
+  );
 
+  const initialValues = {
+    serviceTitle: "",
+    serviceDescription: "",
+    serviceBudget: "",
+  };
   const validationSchema = Yup.object({
     serviceTitle: Yup.string()
-      .min(3, 'Job title must be at least 3 characters')
-      .max(30, 'Job title must be less than or 20 characters')
-      .required('Job title is required'),
-      serviceDescription: Yup.string()
-      .min(10, 'serviceDescription must be at least 10 characters')
-      .max(256, 'serviceDescription must be less than or 256 characters')
-      .required('serviceDescription is required'),
-    serviceBudge: Yup.number()
-      .typeError('serviceBudge must be a number')
-      .positive('serviceBudge must be positive')
-      .min(1000, "serviceBudge can not be less 1000")
-      .required('serviceBudge is required'),
+      .min(3, "Job title must be at least 3 characters")
+      .max(30, "Job title must be less than or 20 characters")
+      .required("Job title is required"),
+    serviceDescription: Yup.string()
+      .min(10, "serviceDescription must be at least 10 characters")
+      .max(256, "serviceDescription must be less than or 256 characters")
+      .required("serviceDescription is required"),
+    serviceBudget: Yup.number()
+      .typeError("serviceBudget must be a number")
+      .positive("serviceBudget must be positive")
+      .min(1000, "serviceBudget can not be less 1000")
+      .required("serviceBudget is required"),
   });
 
   const onSubmit = (values, { resetForm }) => {
-    console.log('Form data', values);
+    dispatch(clearErrors());
+    dispatch(consumerAddCustomServiceAction(values));
     resetForm();
-    alert('Job listed successfully!');
-    onCancel();
   };
-
+  useEffect(() => {
+    if (!addLoading && addError) {
+      handleShowFailureToast(addError);
+      dispatch(clearErrors());
+      onCancel();
+    }
+    if (!addLoading && addMessage) {
+      dispatch(clearErrors());
+      navigate("/consumer-requested-services");
+      setTimeout(() => {
+        handleShowSuccessToast(addMessage);
+      }, 200);
+      onCancel();
+    }
+  }, [addError, addMessage, dispatch, navigate, addLoading, onCancel]);
   return (
     <div>
+      <Toaster />
       <h1 className="text-2xl font-bold mb-4">Post a Job</h1>
       <Formik
         initialValues={initialValues}
@@ -43,7 +73,10 @@ const JobListingForm = ({ onCancel }) => {
         {({ isSubmitting }) => (
           <Form className="space-y-4">
             <div>
-              <label htmlFor="serviceTitle" className="block text-sm font-medium">
+              <label
+                htmlFor="serviceTitle"
+                className="block text-sm font-medium"
+              >
                 Job Title
               </label>
               <Field
@@ -61,7 +94,10 @@ const JobListingForm = ({ onCancel }) => {
             </div>
 
             <div>
-              <label htmlFor="serviceDescription" className="block text-sm font-medium">
+              <label
+                htmlFor="serviceDescription"
+                className="block text-sm font-medium"
+              >
                 Short serviceDescription
               </label>
               <Field
@@ -80,18 +116,21 @@ const JobListingForm = ({ onCancel }) => {
             </div>
 
             <div>
-              <label htmlFor="serviceBudge" className="block text-sm font-medium">
-                serviceBudge
+              <label
+                htmlFor="serviceBudge"
+                className="block text-sm font-medium"
+              >
+                serviceBudget
               </label>
               <Field
                 type="number"
-                id="serviceBudge"
-                name="serviceBudge"
+                id="serviceBudget"
+                name="serviceBudget"
                 className="mt-1 p-2 w-full border rounded-md"
-                placeholder="Enter serviceBudge amount"
+                placeholder="Enter serviceBudget amount"
               />
               <ErrorMessage
-                name="serviceBudge"
+                name="serviceBudget"
                 component="div"
                 className="text-red-500 text-sm mt-1"
               />
@@ -105,13 +144,19 @@ const JobListingForm = ({ onCancel }) => {
               >
                 Cancel
               </button>
-              <button
-                type="submit"
-                className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Submitting...' : 'Submit'}
-              </button>
+              {addLoading ? (
+                <div className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition flex justify-center items-center">
+                  <LoaderCircles />
+                </div>
+              ) : (
+                <button
+                  type="submit"
+                  className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Submitting..." : "Submit"}
+                </button>
+              )}
             </div>
           </Form>
         )}

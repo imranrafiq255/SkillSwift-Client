@@ -451,7 +451,7 @@ const consumerLoadCustomServicesAction = () => async (dispatch) => {
     const response = await axios.get("/api/v1/consumer/load-custom-services");
     dispatch({
       type: "LOAD_CUSTOM_SERVICES_SUCCESS",
-      payload: response?.data?.services,
+      payload: response?.data?.customServices,
     });
   } catch (error) {
     dispatch({

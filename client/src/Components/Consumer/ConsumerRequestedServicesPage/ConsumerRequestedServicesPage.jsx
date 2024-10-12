@@ -4,16 +4,16 @@ import Footer from "../ConsumerCommon/Footer";
 import ServiceProviderList from "./ServiceProviderList";
 import ContactSection from "../ConsumerCommon/ContactSection";
 import JobCard from "./JobCard";
-
+import { useDispatch, useSelector } from "react-redux";
+import { consumerLoadCustomServicesAction } from "../../Redux/Consumer/Actions/ConsumerActions";
 const RequestedServicesPage = () => {
-  const customService = {
-    consumerName: "John Doe",
-    title: "Software Developer",
-    description: "Looking for a developer with experience in React.",
-    budget: "$4000",
-    location: "Remote",
-  };
-
+  const dispatch = useDispatch();
+  const { customService } = useSelector(
+    (state) => state.consumerLoadCustomServicesReducer
+  );
+  useEffect(() => {
+    dispatch(consumerLoadCustomServicesAction());
+  }, [dispatch]);
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Navbar */}
@@ -27,7 +27,11 @@ const RequestedServicesPage = () => {
           {" "}
           <div className="mt-10">
             {" "}
-            <JobCard job={customService} />
+            <JobCard
+              job={
+                customService && customService?.length > 0 && customService[0]
+              }
+            />
           </div>
         </div>
       </div>

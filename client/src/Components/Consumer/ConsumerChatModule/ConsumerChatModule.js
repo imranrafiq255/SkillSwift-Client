@@ -4,7 +4,6 @@ import "./ConsumerChatModule.css";
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  clearErrors,
   loadConversationsAction,
   loadCurrentConsumerAction,
   loadMessagesAction,
@@ -32,16 +31,13 @@ const ConsumerChatModule = () => {
   );
   const [currentConversation, setCurrentConversation] = useState(null);
   useEffect(() => {
-    dispatch(clearErrors());
     dispatch(loadCurrentConsumerAction());
   }, [dispatch]);
   useEffect(() => {
-    dispatch(clearErrors());
     dispatch(loadConversationsAction());
   }, [dispatch]);
   useEffect(() => {
     if (!conversationsLoading && conversationsError) {
-      dispatch(clearErrors());
       console.log(conversationsError);
     }
   }, [conversationsLoading, conversationsError, dispatch]);
@@ -158,7 +154,6 @@ const ConsumerChatModule = () => {
         conversationId: currentConversation?._id,
         message: messageToSend,
       };
-      dispatch(clearErrors());
       dispatch(sendMessageAction(data));
       setMessageToSend("");
     } else {

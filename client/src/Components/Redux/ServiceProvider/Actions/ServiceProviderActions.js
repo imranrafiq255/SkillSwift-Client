@@ -607,7 +607,7 @@ const serviceProviderLoadCustomServicesAction = () => async (dispatch) => {
     );
     dispatch({
       type: "LOAD_CUSTOM_SERVICES_SUCCESS",
-      payload: response?.data?.services,
+      payload: response?.data?.customServices,
     });
   } catch (error) {
     dispatch({
@@ -623,8 +623,10 @@ const serviceProviderMarkInterestedCustomServiceAction =
         type: "MARK_INTERESTED_CUSTOM_SERVICE_REQUEST",
       });
       const response = await axios.get(
-        `/api/v1/service-provider/mark-interested-custom-service/${id}`
+        `/api/v1/service-provider/mark-interseted-custom-service/${id}`
       );
+      console.log(response?.data);
+
       dispatch({
         type: "MARK_INTERESTED_CUSTOM_SERVICE_SUCCESS",
         payload: response?.data?.message,
@@ -636,6 +638,26 @@ const serviceProviderMarkInterestedCustomServiceAction =
       });
     }
   };
+
+const serviceProviderCustomServiceChatAction = (data) => async (dispatch) => {
+  try {
+    dispatch({ type: "CUSTOM_SERVICE_CHAT_REQUEST" });
+    const response = await axios.post(
+      "/api/v1/service-provider/create-custom-service-chat",
+      data
+    );
+    console.log("Response:", response);
+    dispatch({
+      type: "CUSTOM_SERVICE_CHAT_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "CUSTOM_SERVICE_CHAT_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
 export {
   clearErrors,
   serviceProviderSignInAction,
@@ -668,4 +690,5 @@ export {
   serviceProviderDeleteCustomServiceAction,
   serviceProviderLoadCustomServicesAction,
   serviceProviderMarkInterestedCustomServiceAction,
+  serviceProviderCustomServiceChatAction,
 };

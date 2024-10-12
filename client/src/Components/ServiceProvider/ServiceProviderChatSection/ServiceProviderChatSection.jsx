@@ -172,7 +172,6 @@ const ServiceProviderChatSection = () => {
         conversationId: currentConversation?._id,
         message: messageToSend,
       };
-      dispatch(clearErrors());
       dispatch(sendMessageAction(data));
       setMessageToSend("");
     } else {
@@ -182,7 +181,6 @@ const ServiceProviderChatSection = () => {
 
   useEffect(() => {
     if (currentConversation) {
-      dispatch(clearErrors());
       dispatch(loadMessagesAction(currentConversation?._id));
     }
   }, [dispatch, currentConversation]);
@@ -227,6 +225,7 @@ const ServiceProviderChatSection = () => {
   useEffect(() => {
     scrollToEndMessage?.current?.scrollIntoView();
   }, [allMessages]);
+
   return (
     <>
       <div className="chat-section-container">

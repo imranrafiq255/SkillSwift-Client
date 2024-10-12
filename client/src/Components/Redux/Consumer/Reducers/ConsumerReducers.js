@@ -581,17 +581,17 @@ const consumerDeleteCustomServiceReducer = createReducer(
   }
 );
 const consumerLoadCustomServicesReducer = createReducer(
-  { loadLoading: false, loadError: null, loadMessage: null },
+  { loadLoading: false, loadError: null, customService: null },
   (builder) => {
     builder
       .addCase("LOAD_CUSTOM_SERVICES_REQUEST", (state) => {
         state.loadLoading = true;
         state.loadError = null;
-        state.loadMessage = null;
+        state.customService = null;
       })
       .addCase("LOAD_CUSTOM_SERVICES_SUCCESS", (state, action) => {
         state.loadLoading = false;
-        state.loadMessage = action.payload;
+        state.customService = action.payload;
       })
       .addCase("LOAD_CUSTOM_SERVICES_FAILURE", (state, action) => {
         state.loadLoading = false;
@@ -599,7 +599,7 @@ const consumerLoadCustomServicesReducer = createReducer(
       })
       .addCase("CLEAR_ERRORS", (state) => {
         state.loadError = null;
-        state.loadMessage = null;
+        state.customService = null;
         state.loadLoading = false;
       });
   }

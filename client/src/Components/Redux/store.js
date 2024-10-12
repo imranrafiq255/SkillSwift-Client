@@ -45,6 +45,7 @@ import {
   serviceProviderAddCNICReducer,
   serviceProviderAddServicePostReducer,
   serviceProviderAddTimeSlotReducer,
+  serviceProviderCustomServiceChatReducer,
   serviceProviderDeleteCustomServiceReducer,
   serviceProviderForgotPasswordReducer,
   serviceProviderListedServicesReducer,
@@ -115,6 +116,8 @@ const store = configureStore({
       serviceProviderLoadCustomServicesReducer,
     serviceProviderMarkInterestedCustomServiceReducer:
       serviceProviderMarkInterestedCustomServiceReducer,
+    serviceProviderCustomServiceChatReducer:
+      serviceProviderCustomServiceChatReducer,
   },
 });
 

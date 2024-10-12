@@ -40,6 +40,8 @@ const ServiceHistoryPage = () => {
   };
 
   const handleReview = (serviceId) => {
+    console.log(serviceId);
+
     setSelectedServiceId(serviceId);
     setShowReviewModal(true);
   };
@@ -73,7 +75,6 @@ const ServiceHistoryPage = () => {
   const toastMessageShown = useRef(false);
   useEffect(() => {
     if (!loading && error && !toastMessageShown.current) {
-      console.log(error);
       toastMessageShown.current = true;
     }
   }, [loading, error, toastMessageShown]);
@@ -180,7 +181,8 @@ const ServiceHistoryPage = () => {
                       <LoaderCircles />
                     </div>
                   ) : (
-                    (activeTab !== "cancelled" && activeTab !== "inProgress") && (
+                    activeTab !== "cancelled" &&
+                    activeTab !== "inProgress" && (
                       <button
                         onClick={() => {
                           if (activeTab === "pending") {
@@ -233,7 +235,7 @@ const ServiceHistoryPage = () => {
                   Rs. {order?.servicePost?.servicePostPrice}
                 </p>
 
-                {(activeTab !== "cancelled" && activeTab !== "inProgress") && (
+                {activeTab !== "cancelled" && activeTab !== "inProgress" && (
                   <button
                     onClick={() => {
                       if (activeTab === "pending") {

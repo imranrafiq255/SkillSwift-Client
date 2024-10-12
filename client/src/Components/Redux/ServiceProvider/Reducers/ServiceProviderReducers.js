@@ -730,17 +730,17 @@ const serviceProviderDeleteCustomServiceReducer = createReducer(
   }
 );
 const serviceProviderLoadCustomServicesReducer = createReducer(
-  { loadLoading: false, loadError: null, loadMessage: null },
+  { loadLoading: false, loadError: null, customService: null },
   (builder) => {
     builder
       .addCase("LOAD_CUSTOM_SERVICES_REQUEST", (state) => {
         state.loadLoading = true;
         state.loadError = null;
-        state.loadMessage = null;
+        state.customService = null;
       })
       .addCase("LOAD_CUSTOM_SERVICES_SUCCESS", (state, action) => {
         state.loadLoading = false;
-        state.loadMessage = action.payload;
+        state.customService = action.payload;
       })
       .addCase("LOAD_CUSTOM_SERVICES_FAILURE", (state, action) => {
         state.loadLoading = false;
@@ -748,7 +748,7 @@ const serviceProviderLoadCustomServicesReducer = createReducer(
       })
       .addCase("CLEAR_ERRORS", (state) => {
         state.loadError = null;
-        state.loadMessage = null;
+        state.customService = null;
         state.loadLoading = false;
       });
   }
@@ -774,6 +774,30 @@ const serviceProviderMarkInterestedCustomServiceReducer = createReducer(
         state.interestedError = null;
         state.interestedMessage = null;
         state.interestedLoading = false;
+      });
+  }
+);
+const serviceProviderCustomServiceChatReducer = createReducer(
+  { chatLoading: false, chatError: null, chatMessage: null },
+  (builder) => {
+    builder
+      .addCase("CUSTOM_SERVICE_CHAT_REQUEST", (state) => {
+        state.chatLoading = true;
+        state.chatError = null;
+        state.chatMessage = null;
+      })
+      .addCase("CUSTOM_SERVICE_CHAT_SUCCESS", (state, action) => {
+        state.chatLoading = false;
+        state.chatMessage = action.payload;
+      })
+      .addCase("CUSTOM_SERVICE_CHAT_FAILURE", (state, action) => {
+        state.chatLoading = false;
+        state.chatError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.chatError = null;
+        state.chatMessage = null;
+        state.chatLoading = false;
       });
   }
 );
@@ -808,4 +832,5 @@ export {
   serviceProviderDeleteCustomServiceReducer,
   serviceProviderLoadCustomServicesReducer,
   serviceProviderMarkInterestedCustomServiceReducer,
+  serviceProviderCustomServiceChatReducer,
 };
