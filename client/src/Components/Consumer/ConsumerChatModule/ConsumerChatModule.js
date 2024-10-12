@@ -41,9 +41,10 @@ const ConsumerChatModule = () => {
   }, [dispatch]);
   useEffect(() => {
     if (!conversationsLoading && conversationsError) {
+      dispatch(clearErrors());
       console.log(conversationsError);
     }
-  }, [conversationsLoading, conversationsError]);
+  }, [conversationsLoading, conversationsError, dispatch]);
   useEffect(() => {
     if (!conversationsLoading && conversations) {
       setCurrentConversation(conversations[0]);
@@ -166,11 +167,11 @@ const ConsumerChatModule = () => {
   };
 
   useEffect(() => {
-    if (currentConversation) {
-      dispatch(clearErrors());
-      dispatch(loadMessagesAction(currentConversation?._id));
+    if (!conversationsLoading && conversations?.length > 0) {
+      setCurrentConversation(conversations[0]);
     }
-  }, [dispatch, currentConversation]);
+  }, [conversationsLoading, conversations]);
+
   useEffect(() => {
     if (!loadMessagesLoading && loadMessagesError) {
       console.log(loadMessagesError);
@@ -183,31 +184,10 @@ const ConsumerChatModule = () => {
       handleShowFailureToast(sendMessageError);
     }
   }, [sendMessageLoading, sendMessageError]);
-  // const timeConverter = (timestamp) => {
-  //   const date = new Date(timestamp);
-  //   let hours = date.getHours();
-  //   const minutes = date.getMinutes();
-  //   const ampm = hours >= 12 ? "PM" : "AM";
-
-  //   // Convert hours to 12-hour format
-  //   hours = hours % 12;
-  //   hours = hours || 12; // The hour '0' should be '12'
-
-  //   // Pad minutes with leading zero if needed
-  //   const minutesFormatted = minutes < 10 ? `0${minutes}` : minutes;
-
-  //   return `${hours}:${minutesFormatted} ${ampm}`;
-  // };
-  // const handleEnterKeyBtn = (e) => {
-  //   if (messageToSend) {
-  //     if (e.key === "Enter") {
-  //       sendMessage();
-  //     }
-  //   }
-  // };
   useEffect(() => {
     scrollToEndMessage?.current?.scrollIntoView();
   }, [allMessages]);
+  console.log(conversations);
 
   return (
     <>
