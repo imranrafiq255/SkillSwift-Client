@@ -34,7 +34,7 @@ const ServiceProviderList = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="space-y-4">
-        {!loadLoading && customService && (
+        {!loadLoading && customService[0]?.serviceProviders?.length > 0 && (
           <>
             {customService[0]?.serviceProviders?.length > 0 ? (
               customService[0]?.serviceProviders.map((provider, index) => (

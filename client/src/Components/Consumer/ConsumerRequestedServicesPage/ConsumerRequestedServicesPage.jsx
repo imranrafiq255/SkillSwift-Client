@@ -28,11 +28,10 @@ const RequestedServicesPage = () => {
         {/* Navbar */}
         <Navbar />
 
-        {customService?.length > 0 ? (
+        {customService && customService.length > 0 && customService[0] ? (
           <div className="flex flex-row">
-            {console.log(customService)}
             <div className="w-1/2">
-              {/* This makes ServiceProviderList take half the width */}
+            {console.log("infinite")}
               <ServiceProviderList />
             </div>
             <div className="w-1/2 flex justify-center items-start">
