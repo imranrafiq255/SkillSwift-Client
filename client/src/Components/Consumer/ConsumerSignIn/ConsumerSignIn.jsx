@@ -4,7 +4,10 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import "./ConsumerSignIn.css";
 import { useDispatch, useSelector } from "react-redux";
-import { consumerLoginAction } from "../../Redux/Consumer/Actions/ConsumerActions";
+import {
+  clearErrors,
+  consumerLoginAction,
+} from "../../Redux/Consumer/Actions/ConsumerActions";
 import LoaderCircles from "../../Loader/LoaderCircles";
 import { Toaster } from "react-hot-toast";
 import {
@@ -60,12 +63,14 @@ const SignIn = () => {
       if (error) {
         console.log(error);
         handleShowFailureToast(error);
+        dispatch(clearErrors());
       } else if (message) {
         console.log(message);
+        dispatch(clearErrors());
         navigate("/consumer-home", { state: { message: message } });
       }
     }
-  }, [loading, message, error, navigate]);
+  }, [loading, message, error, navigate, dispatch]);
   useEffect(() => {
     if (toastMessage && !toastMessageRef.current) {
       handleShowSuccessToast(toastMessage);
