@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import SkeletonNotificationLoader from "../../Loader/ServiceProviderLoaders/SkeletonNotificationLoader";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -12,8 +11,11 @@ import {
 } from "../../ToastMessages/ToastMessage";
 import { Toaster } from "react-hot-toast";
 import { FaBell } from "react-icons/fa";
+import Navbar from "../ConsumerCommon/Navbar.jsx";
+import ContactSection from "../ConsumerCommon/ContactSection.jsx";
+import Footer from "../ConsumerCommon/Footer.jsx";
+
 const ConsumerNotification = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loadNotificationLoader, notifications } = useSelector(
     (state) => state.loadNewNotificationsReducer
@@ -52,22 +54,9 @@ const ConsumerNotification = () => {
   return (
     <>
       <Toaster />
-      <div className="notification-container">
-        <div className="top-border h-20 w-full bg-[#dadada] flex justify-center items-center">
-          <div className="lg:w-[80%] xl:w-[60%] flex items-center gap-14 xl:gap-5 lg:gap-10">
-            <img
-              src={require("../../../Assets/left-arrow.png")}
-              alt=""
-              className="w-6 h-6 lg:w-7 lg:h-7 xl:w-10 xl:h-10 cursor-pointer"
-              onClick={() => navigate(-1)}
-            />
-            <h1 className="text-lg lg:text-lg xl:text-2xl font-bold text-[#4e97fd] uppercase">
-              Consumer Notification
-            </h1>
-          </div>
-        </div>
+      <Navbar />
+      <div className="notification-container min-h-screen">
         <div className="notification-message ml-10 my-4">
-          <h1 className="font-bold text-2xl">Notifications</h1>
         </div>
         {loadNotificationLoader &&
           Array.from({ length: 5 }).map((_, index) => (
@@ -132,6 +121,8 @@ const ConsumerNotification = () => {
           </div>
         )}
       </div>
+      <ContactSection />
+      <Footer />
     </>
   );
 };

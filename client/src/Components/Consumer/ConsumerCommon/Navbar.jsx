@@ -24,6 +24,7 @@ import {
 import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { loadCurrentConsumerAction } from "../../Redux/Consumer/Actions/ConsumerActions";
+import Logo from "../../../Assets/skillswift_logo.svg";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -91,7 +92,13 @@ const Navbar = () => {
       <Toaster />
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <div className="text-blue-700 font-semibold text-xl">SkillSwift</div>
+          <div className="flex mr-4 justify-end items-center">
+            <img
+              src={Logo}
+              alt="Logo"
+              className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16"
+            />
+          </div>
 
           {/* Menu for desktop */}
           <ul className="hidden md:flex space-x-14 text-gray-700 font-semibold">
