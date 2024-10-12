@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import SkeletonNotificationLoader from "../../Loader/ServiceProviderLoaders/SkeletonNotificationLoader";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  clearErrors,
   loadNewNotificationsAction,
   readNotificationAction,
 } from "../../Redux/Consumer/Actions/ConsumerActions.js";
@@ -37,6 +38,8 @@ const ConsumerNotification = () => {
     ) {
       handleShowFailureToast(readNotificationError);
       toastMessage.current = true;
+      dispatch(clearErrors());
+      dispatch(loadNewNotificationsAction());
     } else if (
       !readNotificationLoader &&
       readNotificationMessage &&
@@ -44,8 +47,15 @@ const ConsumerNotification = () => {
     ) {
       handleShowSuccessToast(readNotificationMessage);
       toastMessage.current = true;
+      dispatch(clearErrors());
+      dispatch(loadNewNotificationsAction());
     }
-  }, [readNotificationError, readNotificationMessage, readNotificationLoader]);
+  }, [
+    readNotificationError,
+    readNotificationMessage,
+    readNotificationLoader,
+    dispatch,
+  ]);
   const readNotificationHandler = (id) => {
     dispatch(readNotificationAction(id));
     dispatch(loadNewNotificationsAction());
@@ -56,8 +66,7 @@ const ConsumerNotification = () => {
       <Toaster />
       <Navbar />
       <div className="notification-container min-h-screen">
-        <div className="notification-message ml-10 my-4">
-        </div>
+        <div className="notification-message ml-10 my-4"></div>
         {loadNotificationLoader &&
           Array.from({ length: 5 }).map((_, index) => (
             <SkeletonNotificationLoader key={index} />

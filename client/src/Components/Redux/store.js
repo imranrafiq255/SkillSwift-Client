@@ -1,8 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import {
+  consumerAddCustomServiceReducer,
   consumerAddRatingReducer,
   consumerCreateConversationReducer,
+  consumerDeleteCustomServiceReducer,
   consumerForgotPasswordLinkReducer,
+  consumerLoadCustomServicesReducer,
   consumerLoginReducer,
   consumerOrderServiceReducer,
   consumerRejectOrderReducer,
@@ -42,8 +45,11 @@ import {
   serviceProviderAddCNICReducer,
   serviceProviderAddServicePostReducer,
   serviceProviderAddTimeSlotReducer,
+  serviceProviderDeleteCustomServiceReducer,
   serviceProviderForgotPasswordReducer,
   serviceProviderListedServicesReducer,
+  serviceProviderLoadCustomServicesReducer,
+  serviceProviderMarkInterestedCustomServiceReducer,
   serviceProviderResetPasswordReducer,
   serviceProviderSignInReducer,
   serviceProviderSignUpReducer,
@@ -72,6 +78,9 @@ const store = configureStore({
     loadConsumerMessagesReducer: loadConsumerMessagesReducer,
     sendConsumerMessageReducer: sendConsumerMessageReducer,
     consumerCreateConversationReducer: consumerCreateConversationReducer,
+    consumerLoadCustomServicesReducer: consumerLoadCustomServicesReducer,
+    consumerAddCustomServiceReducer: consumerAddCustomServiceReducer,
+    consumerDeleteCustomServiceReducer: consumerDeleteCustomServiceReducer,
     // service provider reducers
     serviceProviderSignInReducer: serviceProviderSignInReducer,
     serviceProviderForgotPasswordReducer: serviceProviderForgotPasswordReducer,
@@ -100,6 +109,12 @@ const store = configureStore({
     sendMessageReducer: sendMessageReducer,
     createConversationReducer: createConversationReducer,
     loadDisputesReducer: loadDisputesReducer,
+    serviceProviderDeleteCustomServiceReducer:
+      serviceProviderDeleteCustomServiceReducer,
+    serviceProviderLoadCustomServicesReducer:
+      serviceProviderLoadCustomServicesReducer,
+    serviceProviderMarkInterestedCustomServiceReducer:
+      serviceProviderMarkInterestedCustomServiceReducer,
   },
 });
 

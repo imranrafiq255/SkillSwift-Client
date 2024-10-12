@@ -705,6 +705,78 @@ const loadDisputesReducer = createReducer(
       });
   }
 );
+const serviceProviderDeleteCustomServiceReducer = createReducer(
+  { deleteLoading: false, deleteError: null, deleteMessage: null },
+  (builder) => {
+    builder
+      .addCase("DELETE_CUSTOM_SERVICE_REQUEST", (state) => {
+        state.deleteLoading = true;
+        state.deleteError = null;
+        state.deleteMessage = null;
+      })
+      .addCase("DELETE_CUSTOM_SERVICE_SUCCESS", (state, action) => {
+        state.deleteLoading = false;
+        state.deleteMessage = action.payload;
+      })
+      .addCase("DELETE_CUSTOM_SERVICE_FAILURE", (state, action) => {
+        state.deleteLoading = false;
+        state.deleteError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.deleteError = null;
+        state.deleteMessage = null;
+        state.deleteLoading = false;
+      });
+  }
+);
+const serviceProviderLoadCustomServicesReducer = createReducer(
+  { loadLoading: false, loadError: null, loadMessage: null },
+  (builder) => {
+    builder
+      .addCase("LOAD_CUSTOM_SERVICES_REQUEST", (state) => {
+        state.loadLoading = true;
+        state.loadError = null;
+        state.loadMessage = null;
+      })
+      .addCase("LOAD_CUSTOM_SERVICES_SUCCESS", (state, action) => {
+        state.loadLoading = false;
+        state.loadMessage = action.payload;
+      })
+      .addCase("LOAD_CUSTOM_SERVICES_FAILURE", (state, action) => {
+        state.loadLoading = false;
+        state.loadError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.loadError = null;
+        state.loadMessage = null;
+        state.loadLoading = false;
+      });
+  }
+);
+const serviceProviderMarkInterestedCustomServiceReducer = createReducer(
+  { interestedLoading: false, interestedError: null, interestedMessage: null },
+  (builder) => {
+    builder
+      .addCase("MARK_INTERESTED_CUSTOM_SERVICE_REQUEST", (state) => {
+        state.interestedLoading = true;
+        state.interestedError = null;
+        state.interestedMessage = null;
+      })
+      .addCase("MARK_INTERESTED_CUSTOM_SERVICE_SUCCESS", (state, action) => {
+        state.interestedLoading = false;
+        state.interestedMessage = action.payload;
+      })
+      .addCase("MARK_INTERESTED_CUSTOM_SERVICE_FAILURE", (state, action) => {
+        state.interestedLoading = false;
+        state.interestedError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.interestedError = null;
+        state.interestedMessage = null;
+        state.interestedLoading = false;
+      });
+  }
+);
 export {
   serviceProviderSignInReducer,
   serviceProviderForgotPasswordReducer,
@@ -733,4 +805,7 @@ export {
   sendMessageReducer,
   createConversationReducer,
   loadDisputesReducer,
+  serviceProviderDeleteCustomServiceReducer,
+  serviceProviderLoadCustomServicesReducer,
+  serviceProviderMarkInterestedCustomServiceReducer,
 };

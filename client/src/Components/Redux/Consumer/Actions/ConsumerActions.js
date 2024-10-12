@@ -404,6 +404,62 @@ const createConversationAction = (data) => async (dispatch) => {
     });
   }
 };
+const consumerAddCustomServiceAction = (data) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "ADD_CUSTOM_SERVICE_REQUEST",
+    });
+    const response = await axios.post(
+      "/api/v1/consumer/add-custom-service",
+      data
+    );
+    dispatch({
+      type: "ADD_CUSTOM_SERVICE_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "ADD_CUSTOM_SERVICE_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
+const consumerDeleteCustomServiceAction = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "DELETE_CUSTOM_SERVICE_REQUEST",
+    });
+    const response = await axios.delete(
+      `/api/v1/consumer/delete-custom-service/${id}`
+    );
+    dispatch({
+      type: "DELETE_CUSTOM_SERVICE_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "DELETE_CUSTOM_SERVICE_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
+const consumerLoadCustomServicesAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LOAD_CUSTOM_SERVICES_REQUEST",
+    });
+    const response = await axios.get("/api/v1/consumer/load-custom-services");
+    dispatch({
+      type: "LOAD_CUSTOM_SERVICES_SUCCESS",
+      payload: response?.data?.services,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_CUSTOM_SERVICES_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
 export {
   clearErrors,
   consumerLoginAction,
@@ -427,4 +483,7 @@ export {
   loadMessagesAction,
   sendMessageAction,
   createConversationAction,
+  consumerAddCustomServiceAction,
+  consumerDeleteCustomServiceAction,
+  consumerLoadCustomServicesAction,
 };

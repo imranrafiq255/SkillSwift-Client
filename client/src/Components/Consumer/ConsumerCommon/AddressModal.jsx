@@ -3,13 +3,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadCurrentConsumerAction } from "../../Redux/Consumer/Actions/ConsumerActions";
 
 const AddressModal = ({ isOpen, onClose, address, onSave }) => {
-  const [newAddress, setNewAddress] = useState(address);
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const { consumer } = useSelector((state) => state.loadCurrentConsumerReducer);
+  const [newAddress, setNewAddress] = useState("");
+
   useEffect(() => {
     dispatch(loadCurrentConsumerAction());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (consumer) {
+      setNewAddress(consumer.consumerAddress || "");
+      setError("");
+    }
+  }, [consumer]);
 
   const handleChange = (e) => {
     setNewAddress(e.target.value);
@@ -38,7 +46,7 @@ const AddressModal = ({ isOpen, onClose, address, onSave }) => {
           <label className="block font-semibold mb-1">Address</label>
           <input
             type="text"
-            value={consumer?.consumerAddress}
+            value={newAddress}
             onChange={handleChange}
             className="border p-2 w-full rounded"
           />

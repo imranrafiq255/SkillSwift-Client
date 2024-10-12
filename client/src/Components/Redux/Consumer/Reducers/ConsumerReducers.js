@@ -532,6 +532,78 @@ const consumerCreateConversationReducer = createReducer(
       });
   }
 );
+const consumerAddCustomServiceReducer = createReducer(
+  { addLoading: false, addError: null, addMessage: null },
+  (builder) => {
+    builder
+      .addCase("ADD_CUSTOM_SERVICE_REQUEST", (state) => {
+        state.addLoading = true;
+        state.addError = null;
+        state.addMessage = null;
+      })
+      .addCase("ADD_CUSTOM_SERVICE_SUCCESS", (state, action) => {
+        state.addLoading = false;
+        state.addMessage = action.payload;
+      })
+      .addCase("ADD_CUSTOM_SERVICE_FAILURE", (state, action) => {
+        state.addLoading = false;
+        state.addError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.addError = null;
+        state.addMessage = null;
+        state.addLoading = false;
+      });
+  }
+);
+const consumerDeleteCustomServiceReducer = createReducer(
+  { deleteLoading: false, deleteError: null, deleteMessage: null },
+  (builder) => {
+    builder
+      .addCase("DELETE_CUSTOM_SERVICE_REQUEST", (state) => {
+        state.deleteLoading = true;
+        state.deleteError = null;
+        state.deleteMessage = null;
+      })
+      .addCase("DELETE_CUSTOM_SERVICE_SUCCESS", (state, action) => {
+        state.deleteLoading = false;
+        state.deleteMessage = action.payload;
+      })
+      .addCase("DELETE_CUSTOM_SERVICE_FAILURE", (state, action) => {
+        state.deleteLoading = false;
+        state.deleteError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.deleteError = null;
+        state.deleteMessage = null;
+        state.deleteLoading = false;
+      });
+  }
+);
+const consumerLoadCustomServicesReducer = createReducer(
+  { loadLoading: false, loadError: null, loadMessage: null },
+  (builder) => {
+    builder
+      .addCase("LOAD_CUSTOM_SERVICES_REQUEST", (state) => {
+        state.loadLoading = true;
+        state.loadError = null;
+        state.loadMessage = null;
+      })
+      .addCase("LOAD_CUSTOM_SERVICES_SUCCESS", (state, action) => {
+        state.loadLoading = false;
+        state.loadMessage = action.payload;
+      })
+      .addCase("LOAD_CUSTOM_SERVICES_FAILURE", (state, action) => {
+        state.loadLoading = false;
+        state.loadError = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.loadError = null;
+        state.loadMessage = null;
+        state.loadLoading = false;
+      });
+  }
+);
 export {
   consumerLoginReducer,
   consumerForgotPasswordLinkReducer,
@@ -554,4 +626,7 @@ export {
   loadConsumerMessagesReducer,
   sendConsumerMessageReducer,
   consumerCreateConversationReducer,
+  consumerAddCustomServiceReducer,
+  consumerDeleteCustomServiceReducer,
+  consumerLoadCustomServicesReducer,
 };

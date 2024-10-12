@@ -578,7 +578,64 @@ const loadDisputesAction = () => async (dispatch) => {
     });
   }
 };
-
+const serviceProviderDeleteCustomServiceAction = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "DELETE_CUSTOM_SERVICE_REQUEST",
+    });
+    const response = await axios.delete(
+      `/api/v1/service-provider/delete-custom-service/${id}`
+    );
+    dispatch({
+      type: "DELETE_CUSTOM_SERVICE_SUCCESS",
+      payload: response?.data?.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "DELETE_CUSTOM_SERVICE_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
+const serviceProviderLoadCustomServicesAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "LOAD_CUSTOM_SERVICES_REQUEST",
+    });
+    const response = await axios.get(
+      "/api/v1/service-provider/load-custom-services"
+    );
+    dispatch({
+      type: "LOAD_CUSTOM_SERVICES_SUCCESS",
+      payload: response?.data?.services,
+    });
+  } catch (error) {
+    dispatch({
+      type: "LOAD_CUSTOM_SERVICES_FAILURE",
+      payload: error?.response?.data?.message || "Network error",
+    });
+  }
+};
+const serviceProviderMarkInterestedCustomServiceAction =
+  (id) => async (dispatch) => {
+    try {
+      dispatch({
+        type: "MARK_INTERESTED_CUSTOM_SERVICE_REQUEST",
+      });
+      const response = await axios.get(
+        `/api/v1/service-provider/mark-interested-custom-service/${id}`
+      );
+      dispatch({
+        type: "MARK_INTERESTED_CUSTOM_SERVICE_SUCCESS",
+        payload: response?.data?.message,
+      });
+    } catch (error) {
+      dispatch({
+        type: "MARK_INTERESTED_CUSTOM_SERVICE_FAILURE",
+        payload: error?.response?.data?.message || "Network error",
+      });
+    }
+  };
 export {
   clearErrors,
   serviceProviderSignInAction,
@@ -608,4 +665,7 @@ export {
   sendMessageAction,
   createConversationAction,
   loadDisputesAction,
+  serviceProviderDeleteCustomServiceAction,
+  serviceProviderLoadCustomServicesAction,
+  serviceProviderMarkInterestedCustomServiceAction,
 };
