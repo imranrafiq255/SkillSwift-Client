@@ -19,7 +19,7 @@ const ConsumerHome = () => {
       handleShowSuccessToast(message);
       hasShownToast.current = true;
     }
-  }, [message, navigate, location.pathname]);
+  }, [message, navigate]);
 
   return (
     <>
