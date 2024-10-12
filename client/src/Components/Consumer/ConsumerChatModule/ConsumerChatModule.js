@@ -187,6 +187,12 @@ const ConsumerChatModule = () => {
   useEffect(() => {
     scrollToEndMessage?.current?.scrollIntoView();
   }, [allMessages]);
+  useEffect(() => {
+    if (currentConversation?._id) {
+      dispatch(loadMessagesAction(currentConversation?._id));
+    }
+  }, [currentConversation, dispatch]);
+
   console.log(conversations);
 
   return (
