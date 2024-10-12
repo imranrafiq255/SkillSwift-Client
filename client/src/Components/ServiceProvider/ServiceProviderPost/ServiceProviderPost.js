@@ -19,7 +19,7 @@ import {
   handleShowSuccessToast,
 } from "../../ToastMessages/ToastMessage";
 import LoaderCircles from "../../Loader/LoaderCircles";
-import { FaStar } from "react-icons/fa";
+import ServicePostCard from "./ServicePostCard";
 
 const ServiceProviderPost = () => {
   const [postShowing, setPostShowing] = useState(true);
@@ -47,14 +47,14 @@ const ServiceProviderPost = () => {
     },
     validationSchema: Yup.object({
       serviceName: Yup.string()
-        .max(20, "Title must be 20 characters or less")
+        .max(30, "Title must be 30 characters or less")
         .required("Post name is required"),
       servicePostMessage: Yup.string()
         .max(256, "Description must be 256 characters or less")
         .required("Post message is required"),
       servicePostPrice: Yup.number()
         .required("Post price is required")
-        .min(1, "Post price should be at least $1"),
+        .min(500, "Post price should be at least 500"),
       servicePostImage: Yup.mixed().required("Post image is required"),
     }),
     onSubmit: (values) => {
@@ -323,96 +323,16 @@ const ServiceProviderPost = () => {
                     <SkeletonPostLoader key={index} />
                   ))
                 ) : posts && posts.length > 0 ? (
-                  <div className="flex flex-wrap gap-4 justify-center items-center">
-                    {" "}
-                    {/* Added flex-wrap and gap-4 */}
+                  <div className="service-posts w-full flex flex-wrap gap-6 justify-center mt-10">
                     {posts.map((post) => (
-                      <div key={post.id} className="lg:w-6/12 xl:w-4/12 w-full">
-                        <div className="card w-full h-full p-5 shadow-md">
-                          {" "}
-                          {/* Added shadow-md class */}
-                          <div className="relative">
-                            <div className="absolute top-2 right-2">
-                              <div
-                                className="w-10 h-10 bg-[#dadada] rounded-full flex justify-center items-center cursor-pointer hover:scale-105 transition-transform ease-in-out duration-700"
-                                onClick={() => {
-                                  setDeleteOptionShowing(
-                                    !isDeleteOptionShowing
-                                  );
-                                  setDeletePostId(post._id);
-                                }}
-                              >
-                                <img
-                                  src={require("../../../Assets/delete.png")}
-                                  alt=""
-                                  className="h-5 w-5"
-                                />
-                              </div>
-                            </div>
-                            <img
-                              src={post.servicePostImage}
-                              alt=""
-                              className="w-full rounded-tl-lg rounded-tr-lg h-[250px]"
-                            />
-                            <div className="w-full bg-white rounded-b-lg">
-                              <div className="flex flex-col">
-                                <h1 className="text-black px-4 py-1 font-bold lg:text-xl text-lg">
-                                  {post?.serviceName}
-                                </h1>
-                                <h1 className="text-black px-4 py-1 font-bold lg:text-xl text-lg">
-                                  {" "}
-                                  {/* Fixed typo 'text-balck' */}
-                                  Rs {post?.servicePostPrice}
-                                </h1>
-                              </div>
-                              <div className="message px-4">
-                                <p className="text-gray-600">
-                                  {post?.servicePostMessage.length > 30
-                                    ? `${post.servicePostMessage.slice(
-                                        0,
-                                        30
-                                      )}...`
-                                    : post.servicePostMessage}
-                                </p>
-                              </div>
-                              <div className="flex-row mt-5 justify-between">
-                                {/* Rating Section */}
-                                <div className="ml-4">
-                                  <div className="flex text-yellow-400 mb-2">
-                                    {[...Array(5)].map((_, i) => (
-                                      <FaStar
-                                        key={i}
-                                        className={
-                                          i <
-                                          ratingCalculator(
-                                            post?.servicePostRatings
-                                          )
-                                            ? "text-yellow-500"
-                                            : "text-gray-300"
-                                        }
-                                      />
-                                    ))}
-                                  </div>
-                                  <p className="text-gray-600">
-                                    {post?.servicePostRatings?.length > 0
-                                      ? `${
-                                          ratingCalculator(
-                                            post?.servicePostRatings
-                                          ) || 0
-                                        } out of 5 based on ${
-                                          post.servicePostRatings.length
-                                        } reviews`
-                                      : "No Reviews"}
-                                  </p>
-                                </div>
-                                <h1 className="font-bold text-gray-600 px-4 py-2">
-                                  Listed on: {timeFormatter(post?.createdAt)}
-                                </h1>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <ServicePostCard
+                        key={post.id}
+                        post={post}
+                        setDeleteOptionShowing={setDeleteOptionShowing}
+                        setDeletePostId={setDeletePostId}
+                        timeFormatter={timeFormatter}
+                        ratingCalculator={ratingCalculator}
+                      />
                     ))}
                   </div>
                 ) : (

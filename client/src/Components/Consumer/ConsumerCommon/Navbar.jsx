@@ -10,7 +10,6 @@ import {
   FaHistory,
   FaExclamationCircle,
   FaSignOutAlt,
-  FaEdit,
 } from "react-icons/fa";
 import ProfileModal from "./ProfileModal";
 import AddressModal from "./AddressModal";
@@ -25,15 +24,8 @@ import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { loadCurrentConsumerAction } from "../../Redux/Consumer/Actions/ConsumerActions";
 import Logo from "../../../Assets/skillswift_logo.svg";
-import JobListingForm from "./JobListingForm";
-import CustomServiceModal from "./CustomServiceModal";
 
 const Navbar = () => {
-
-  const [isCustomServiceModalOpen, setisCustomServiceModalOpen] = useState(false);
-
-  const openCustomServiceModal = () => setisCustomServiceModalOpen(true);
-  const   closeCustomServiceModal = () => setisCustomServiceModalOpen(false);
 
   const navigate = useNavigate();
 
@@ -170,23 +162,10 @@ const Navbar = () => {
                 className="flex items-center"
               >
                 <FaClipboardList className="w-5 h-5" />
-                <span className="absolute left-1/2 transform -translate-x-1/2 top-full text-xs text-gray-700">
-                  Requested
-                </span>
-              </Link>
-            </li>
-            <li className="relative group">
-              <button
-                onClick={() => {
-                  openCustomServiceModal();
-                }}
-                aria-label="Custom"
-              >
-                <FaEdit className="w-5 h-5" />
-              </button>
-              <span className="absolute left-1/2 transform -translate-x-1/2 top-full text-xs text-gray-700 whitespace-nowrap">
-                New Request
+                <span className="absolute left-1/2 transform -translate-x-1/2 top-full text-xs text-gray-700 whitespace-nowrap">
+                Custom Request
               </span>
+              </Link>
             </li>
           </ul>
         </div>
@@ -301,18 +280,9 @@ const Navbar = () => {
           <FaUser className="w-5 h-5 mx-2" />
           Profile
         </button>
-        <button
-          onClick={() => {
-            openCustomServiceModal();
-          }}
-          className="flex items-center"
-        >
-          <FaEdit className="w-5 h-5 mx-2" />
-          New Request
-        </button>
         <Link to={"/consumer-requested-services"} className="flex items-center">
           <FaClipboardList className="w-5 h-5 mx-2" />
-          Requested
+          Custom Requests
         </Link>
         <button
           onClick={() => setShowSearchModal(true)}
@@ -357,10 +327,6 @@ const Navbar = () => {
         address={user.address}
         onSave={handleAddressSave}
       />
-      {/* Custom Job Listing Modal */}
-      <CustomServiceModal isOpen={isCustomServiceModalOpen} onClose={  closeCustomServiceModal}>
-          <JobListingForm onCancel={  closeCustomServiceModal} />
-      </CustomServiceModal>
       {/* Search Modal */}
       {showSearchModal && (
         <div className="fixed inset-0 flex justify-center bg-black bg-opacity-90 z-50">

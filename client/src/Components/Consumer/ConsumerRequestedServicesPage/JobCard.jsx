@@ -39,7 +39,9 @@ const JobCard = ({ job }) => {
     }
   }, [deleteLoading, deleteMessage, deleteError, dispatch, isSellerFound]);
   return (
-    <div className="w-full max-w-xs rounded-lg border shadow-md p-4 bg-white flex flex-col items-center space-y-4">
+    <>
+    {job?
+      (<div className="w-full max-w-xs rounded-lg border shadow-md p-4 bg-white flex flex-col items-center space-y-4">
       <Toaster />
       <div className="text-base text-gray-700 space-y-2">
         {" "}
@@ -48,13 +50,10 @@ const JobCard = ({ job }) => {
           <strong>Job Title:</strong> {job?.serviceTitle}
         </p>
         <p>
-          <strong>Description:</strong> {job?.serviceDescription}
-        </p>
-        <p>
           <strong>Budget:</strong> {job?.serviceBudget}
         </p>
         <p>
-          <strong>Location:</strong> {job?.consumer?.consumerAddress}
+          <strong>Description:</strong> {job?.serviceDescription}
         </p>
       </div>
       <div className="flex flex-col space-y-2 w-full">
@@ -88,7 +87,13 @@ const JobCard = ({ job }) => {
           </button>
         )}
       </div>
-    </div>
+    </div>):(
+      <div className="text-center text-gray-700 font-semibold">
+        Post a new Custom Service
+      </div>
+    ) 
+    }
+    </>
   );
 };
 

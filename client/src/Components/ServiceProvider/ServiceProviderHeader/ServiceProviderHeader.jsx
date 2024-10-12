@@ -98,15 +98,6 @@ const ServiceProviderHeader = () => {
           </div>
           <div
             className={`${
-              location.pathname === "/service-provider-custom-services"
-                ? " border-b-2 text-[#4e97fd] border-[#4e97fd] transition-all ease-linear duration-1000"
-                : ""
-            } nav-link cursor-pointer `}
-          >
-            <Link to={"/service-provider-custom-services"}>CUSTOM REQUESTS</Link>
-          </div>
-          <div
-            className={`${
               location.pathname === "/service-provider-post"
                 ? " border-b-2 text-[#4e97fd] border-[#4e97fd] transition-all ease-linear duration-1000"
                 : ""
@@ -131,6 +122,18 @@ const ServiceProviderHeader = () => {
             } nav-link cursor-pointer `}
           >
             <Link to={"/service-provider-dispute"}>DISPUTES</Link>
+          </div>
+
+          <div
+            className={`${
+              location.pathname === "/service-provider-custom-services"
+                ? "border-b-2 text-[#4e97fd] border-[#4e97fd] transition-all ease-linear duration-1000"
+                : "border-b-2 text-red-500 border-red-500 transition-all ease-linear duration-1000"
+            } nav-link cursor-pointer animate-blink`}
+          >
+            <Link to={"/service-provider-custom-services"}>
+              CUSTOM REQUESTS
+            </Link>
           </div>
         </div>
       </div>

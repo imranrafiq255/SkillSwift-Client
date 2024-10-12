@@ -74,6 +74,7 @@ const JobCard = ({ service }) => {
 
   return (
     <div className="w-80 rounded-lg border shadow-md p-4 bg-white flex flex-col items-center space-y-2">
+      {console.log(service.consumer)}
       <Toaster />
       <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center">
         <img
@@ -82,19 +83,19 @@ const JobCard = ({ service }) => {
           className="text-gray-500 text-2xl w-12 h-12 rounded-full"
         />
       </div>
-      <h2 className="text-lg font-bold">{service?.consumer?.consumerName}</h2>
-      <div className="text-sm text-gray-700 space-y-1">
+      <h2 className="text-lg font-bold">{service?.consumer?.consumerFullName}</h2>
+      <div className="text-sm text-gray-700 space-y-1 pb-5">
         <p>
           <strong>Job Title:</strong> {service?.serviceTitle}
-        </p>
-        <p>
-          <strong>Description:</strong> {service?.serviceDescription}
         </p>
         <p>
           <strong>Budget:</strong> {service?.serviceBudget}
         </p>
         <p>
           <strong>Location:</strong> {service?.consumer?.consumerAddress}
+        </p>
+        <p>
+          <strong>Description:</strong> {service?.serviceDescription}
         </p>
       </div>
       {interestedLoading ? (
@@ -103,7 +104,7 @@ const JobCard = ({ service }) => {
         </div>
       ) : chatMessage || isFound ? (
         <button
-          className="bg-green-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-green-600 transition"
+          className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-600 transition"
           onClick={() =>
             (window.location.href = "/service-provider-chat-section")
           }

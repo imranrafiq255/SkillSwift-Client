@@ -26,7 +26,6 @@ import NotFound from "../NotFound/NotFound";
 import ConsumerVerifyEmail from "../Consumer/ConsumerVerifyEmail/ConsumerVerifyEmail";
 import ConsumerRequestedServicesPage from "../Consumer/ConsumerRequestedServicesPage/ConsumerRequestedServicesPage";
 import ConsumerServiceHistoryPage from "../Consumer/ConsumerServiceHistoryPage/ConsumerServiceHistoryPage";
-
 import ServiceProviderResetPassword from "../ServiceProvider/ServiceProviderResetPassword/ServiceProviderResetPassword";
 import ServiceProviderSendEmail from "../ServiceProvider/ServiceProviderSendEmail/ServiceProviderSendEmail";
 import ServiceProviderForgotPassword from "../ServiceProvider/ServiceProviderForgotPassword/ServiceProviderFrogotPassword";

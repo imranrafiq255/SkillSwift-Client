@@ -13,7 +13,6 @@ const CustomServiceList = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-2xl font-bold text-center mb-6">Job Listings</h1>
       <div className="flex flex-wrap gap-4 justify-center items-center">
         {!loadLoading &&
           customService &&
