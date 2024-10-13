@@ -602,13 +602,17 @@ const serviceProviderLoadCustomServicesAction = () => async (dispatch) => {
     dispatch({
       type: "LOAD_CUSTOM_SERVICES_REQUEST",
     });
+
     const response = await axios.get(
       "/api/v1/service-provider/load-custom-services"
     );
+
     dispatch({
       type: "LOAD_CUSTOM_SERVICES_SUCCESS",
       payload: response?.data?.customServices,
     });
+
+    console.log("LOAD_CUSTOM_SERVICES_SUCCESS" + response);
   } catch (error) {
     dispatch({
       type: "LOAD_CUSTOM_SERVICES_FAILURE",
@@ -616,6 +620,7 @@ const serviceProviderLoadCustomServicesAction = () => async (dispatch) => {
     });
   }
 };
+
 const serviceProviderMarkInterestedCustomServiceAction =
   (id) => async (dispatch) => {
     try {
@@ -646,7 +651,7 @@ const serviceProviderCustomServiceChatAction = (data) => async (dispatch) => {
       "/api/v1/service-provider/create-custom-service-chat",
       data
     );
-    console.log("Response:", response);
+    // console.log("Response:", response);
     dispatch({
       type: "CUSTOM_SERVICE_CHAT_SUCCESS",
       payload: response?.data?.message,

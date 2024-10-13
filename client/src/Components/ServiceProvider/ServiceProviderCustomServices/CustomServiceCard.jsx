@@ -13,7 +13,7 @@ import {
 import LoaderCircles from "../../Loader/LoaderCircles";
 import { Toaster } from "react-hot-toast";
 
-const JobCard = ({ service }) => {
+const JobCard = ({ service, handleRefresh }) => {
   const dispatch = useDispatch();
   const { interestedLoading, interestedError, interestedMessage } = useSelector(
     (state) => state.serviceProviderMarkInterestedCustomServiceReducer
@@ -36,6 +36,7 @@ const JobCard = ({ service }) => {
       dispatch(clearErrors());
     } else if (!interestedLoading && interestedMessage) {
       handleShowSuccessToast(interestedMessage);
+      handleRefresh();
       dispatch(clearErrors());
       const data = {
         consumer: service?.consumer?._id,
@@ -69,12 +70,9 @@ const JobCard = ({ service }) => {
           (provider) => provider?._id === serviceProvider?._id
         )
       : null;
-  console.log(chatMessage);
-  console.log(chatError);
 
   return (
     <div className="w-80 rounded-lg border shadow-md p-4 bg-white flex flex-col items-center space-y-2">
-      {console.log(service.consumer)}
       <Toaster />
       <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center">
         <img
@@ -100,6 +98,7 @@ const JobCard = ({ service }) => {
           <strong>Description:</strong> {service?.serviceDescription}
         </p>
       </div>
+      {/* the logic for this conditional rendering is cauing issue for button not being changed, the api fetches the data succesfully */}
       {interestedLoading ? (
         <div className="bg-green-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-green-600 transition flex justify-center items-center">
           <LoaderCircles />

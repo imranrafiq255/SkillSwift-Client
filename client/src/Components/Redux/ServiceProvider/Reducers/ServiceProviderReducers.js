@@ -741,6 +741,7 @@ const serviceProviderLoadCustomServicesReducer = createReducer(
       .addCase("LOAD_CUSTOM_SERVICES_SUCCESS", (state, action) => {
         state.loadLoading = false;
         state.customService = action.payload;
+        console.log("Updated services:", action.payload);
       })
       .addCase("LOAD_CUSTOM_SERVICES_FAILURE", (state, action) => {
         state.loadLoading = false;
