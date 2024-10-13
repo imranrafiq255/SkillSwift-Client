@@ -13,7 +13,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import LoaderCircles from "../../Loader/LoaderCircles";
-const JobListingForm = ({ onCancel }) => {
+
+const JobListingForm = ({ onCancel, toggleRefresh }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { addLoading, addError, addMessage } = useSelector(
@@ -25,27 +26,28 @@ const JobListingForm = ({ onCancel }) => {
     serviceDescription: "",
     serviceBudget: "",
   };
+
   const validationSchema = Yup.object({
     serviceTitle: Yup.string()
       .min(3, "Job title must be at least 3 characters")
-      .max(30, "Job title must be less than or 20 characters")
+      .max(30, "Job title must be less than or 30 characters")
       .required("Job title is required"),
     serviceDescription: Yup.string()
-      .min(10, "serviceDescription must be at least 10 characters")
-      .max(256, "serviceDescription must be less than or 256 characters")
-      .required("serviceDescription is required"),
+      .min(10, "Description must be at least 10 characters")
+      .max(256, "Description must be less than or 256 characters")
+      .required("Description is required"),
     serviceBudget: Yup.number()
-      .typeError("serviceBudget must be a number")
-      .positive("serviceBudget must be positive")
-      .min(1000, "serviceBudget can not be less 1000")
-      .required("serviceBudget is required"),
+      .typeError("Budget must be a number")
+      .positive("Budget must be positive")
+      .min(1000, "Budget cannot be less than 1000")
+      .required("Budget is required"),
   });
 
   const onSubmit = (values, { resetForm }) => {
     dispatch(clearErrors());
     dispatch(consumerAddCustomServiceAction(values));
-    resetForm();
   };
+
   useEffect(() => {
     if (!addLoading && addError) {
       handleShowFailureToast(addError);
@@ -53,14 +55,13 @@ const JobListingForm = ({ onCancel }) => {
       onCancel();
     }
     if (!addLoading && addMessage) {
+      handleShowSuccessToast(addMessage);
+      toggleRefresh();
       dispatch(clearErrors());
-      navigate("/consumer-requested-services");
-      setTimeout(() => {
-        handleShowSuccessToast(addMessage);
-      }, 200);
       onCancel();
     }
-  }, [addError, addMessage, dispatch, navigate, addLoading, onCancel]);
+  }, [addError, addMessage, dispatch, navigate, addLoading, onCancel, toggleRefresh]);
+
   return (
     <div>
       <Toaster />
@@ -70,13 +71,10 @@ const JobListingForm = ({ onCancel }) => {
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, resetForm }) => (
           <Form className="space-y-4">
             <div>
-              <label
-                htmlFor="serviceTitle"
-                className="block text-sm font-medium"
-              >
+              <label htmlFor="serviceTitle" className="block text-sm font-medium">
                 Job Title
               </label>
               <Field
@@ -94,11 +92,8 @@ const JobListingForm = ({ onCancel }) => {
             </div>
 
             <div>
-              <label
-                htmlFor="serviceDescription"
-                className="block text-sm font-medium"
-              >
-                Short serviceDescription
+              <label htmlFor="serviceDescription" className="block text-sm font-medium">
+                Short Description
               </label>
               <Field
                 as="textarea"
@@ -106,7 +101,7 @@ const JobListingForm = ({ onCancel }) => {
                 name="serviceDescription"
                 rows="3"
                 className="mt-1 p-2 w-full border rounded-md"
-                placeholder="Enter a brief serviceDescription"
+                placeholder="Enter a brief description"
               />
               <ErrorMessage
                 name="serviceDescription"
@@ -116,18 +111,15 @@ const JobListingForm = ({ onCancel }) => {
             </div>
 
             <div>
-              <label
-                htmlFor="serviceBudge"
-                className="block text-sm font-medium"
-              >
-                serviceBudget
+              <label htmlFor="serviceBudget" className="block text-sm font-medium">
+                Budget
               </label>
               <Field
                 type="number"
                 id="serviceBudget"
                 name="serviceBudget"
                 className="mt-1 p-2 w-full border rounded-md"
-                placeholder="Enter serviceBudget amount"
+                placeholder="Enter Budget amount"
               />
               <ErrorMessage
                 name="serviceBudget"
@@ -139,13 +131,16 @@ const JobListingForm = ({ onCancel }) => {
             <div className="flex justify-end space-x-2">
               <button
                 type="button"
-                onClick={onCancel}
+                onClick={() => {
+                  resetForm();
+                  onCancel();
+                }}
                 className="bg-gray-300 text-black py-2 px-4 rounded-md hover:bg-gray-400 transition"
               >
                 Cancel
               </button>
               {addLoading ? (
-                <div className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition flex justify-center items-center">
+                <div className="bg-blue-500 text-white py-2 px-4 rounded-md flex justify-center items-center">
                   <LoaderCircles />
                 </div>
               ) : (

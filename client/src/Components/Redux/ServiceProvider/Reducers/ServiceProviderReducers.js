@@ -736,7 +736,7 @@ const serviceProviderLoadCustomServicesReducer = createReducer(
       .addCase("LOAD_CUSTOM_SERVICES_REQUEST", (state) => {
         state.loadLoading = true;
         state.loadError = null;
-        state.customService = null;
+        // Keep the existing customService list while loading to prevent flashing empty state
       })
       .addCase("LOAD_CUSTOM_SERVICES_SUCCESS", (state, action) => {
         state.loadLoading = false;
@@ -748,11 +748,12 @@ const serviceProviderLoadCustomServicesReducer = createReducer(
       })
       .addCase("CLEAR_ERRORS", (state) => {
         state.loadError = null;
-        state.customService = null;
         state.loadLoading = false;
+        // Keep customService unchanged to preserve the data
       });
   }
 );
+
 const serviceProviderMarkInterestedCustomServiceReducer = createReducer(
   { interestedLoading: false, interestedError: null, interestedMessage: null },
   (builder) => {

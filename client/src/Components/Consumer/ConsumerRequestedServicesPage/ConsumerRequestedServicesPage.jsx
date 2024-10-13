@@ -15,13 +15,20 @@ const RequestedServicesPage = () => {
   const closeCustomServiceModal = () => setisCustomServiceModalOpen(false);
   const [isCustomServiceModalOpen, setisCustomServiceModalOpen] =
     useState(false);
+
+  const [refresh, setRefresh] = useState(0);
+
+  const toggleRefresh = () => {
+    setRefresh((prevRefresh) => !prevRefresh);
+  };
+
   const dispatch = useDispatch();
   const { customService } = useSelector(
     (state) => state.consumerLoadCustomServicesReducer
   );
   useEffect(() => {
     dispatch(consumerLoadCustomServicesAction());
-  }, [dispatch]);
+  }, [dispatch, refresh]);
   return (
     <>
       <div className="min-h-screen bg-gray-100">
@@ -31,10 +38,9 @@ const RequestedServicesPage = () => {
         {customService && customService.length > 0 && customService[0] ? (
           <div className="flex flex-row">
             <div className="w-1/2">
-              {console.log("infinite")}
               <ServiceProviderList />
             </div>
-            <div className="w-1/2 flex justify-center items-start">
+            <div className="w-1/2 flex justify-center items-start bg-white">
               <div className="mt-10">
                 <JobCard
                   job={
@@ -42,6 +48,7 @@ const RequestedServicesPage = () => {
                     customService.length > 0 &&
                     customService[0]
                   }
+                  toggleRefresh = {toggleRefresh}
                 />
               </div>
             </div>
@@ -53,7 +60,7 @@ const RequestedServicesPage = () => {
               isOpen={isCustomServiceModalOpen}
               onClose={closeCustomServiceModal}
             >
-              <JobListingForm onCancel={closeCustomServiceModal} />
+              <JobListingForm onCancel={closeCustomServiceModal} toggleRefresh = {toggleRefresh} />
             </CustomServiceModal>
 
             <div className="absolute top-4 left-4">

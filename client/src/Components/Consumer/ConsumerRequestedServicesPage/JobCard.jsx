@@ -10,7 +10,7 @@ import {
 } from "../../ToastMessages/ToastMessage";
 import LoaderCircles from "../../Loader/LoaderCircles";
 import { Toaster } from "react-hot-toast";
-const JobCard = ({ job }) => {
+const JobCard = ({ job, toggleRefresh }) => {
   const dispatch = useDispatch();
   const { deleteLoading, deleteError, deleteMessage } = useSelector(
     (state) => state?.consumerDeleteCustomServiceReducer
@@ -18,12 +18,14 @@ const JobCard = ({ job }) => {
   const deleteCustomService = (id) => {
     if (id) {
       dispatch(consumerDeleteCustomServiceAction(id));
+      toggleRefresh();
     }
   };
   const [isSellerFound, setSellerFound] = useState(false);
   const deleteCustomServiceWithSellerFound = (id) => {
     if (id) {
       dispatch(consumerDeleteCustomServiceAction(id));
+      toggleRefresh();
     }
   };
   useEffect(() => {
