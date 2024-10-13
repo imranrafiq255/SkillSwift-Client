@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
 import ServiceProviderCard from "./ServiceProviderCard";
 import { useDispatch, useSelector } from "react-redux";
-import { consumerLoadCustomServicesAction } from "../../Redux/Consumer/Actions/ConsumerActions";
+import {
+  clearErrors,
+  consumerLoadCustomServicesAction,
+} from "../../Redux/Consumer/Actions/ConsumerActions";
 import { FaRegHourglass } from "react-icons/fa";
 const ServiceProviderList = () => {
   const dispatch = useDispatch();
@@ -9,6 +12,7 @@ const ServiceProviderList = () => {
     (state) => state.consumerLoadCustomServicesReducer
   );
   useEffect(() => {
+    dispatch(clearErrors());
     dispatch(consumerLoadCustomServicesAction());
   }, [dispatch]);
   // const providers = [
