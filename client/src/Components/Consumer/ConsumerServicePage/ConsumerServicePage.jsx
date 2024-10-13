@@ -21,6 +21,7 @@ import LoaderCircles from "../../Loader/LoaderCircles";
 import { useNavigate } from "react-router-dom";
 import { createConversationAction } from "../../Redux/Consumer/Actions/ConsumerActions";
 import axios from "axios";
+import StarRating from "../ConsumerCommon/StarRating";
 
 const ServicePage = () => {
   const [selectedSlot, setSelectedSlot] = useState("");
@@ -103,9 +104,12 @@ const ServicePage = () => {
   ]);
 
   const ratingCalculator = (ratings) => {
+    if (!ratings || ratings.length === 0) return 0; // Return 0 if there are no ratings
+
     let sum = 0;
-    ratings?.forEach((rating) => (sum += rating?.rating));
-    return Math.floor(sum / ratings?.length);
+    ratings.forEach((rating) => (sum += rating?.rating));
+    const average = sum / ratings.length;
+    return parseFloat(average.toFixed(1)); // Round to 1 decimal place
   };
 
   const [serviceProviderRating, setServiceProviderRating] = useState(0);
@@ -257,19 +261,11 @@ const ServicePage = () => {
             {/* Rating Section */}
             <div className="bg-white p-6 rounded-lg shadow-md mb-6">
               <h2 className="text-xl font-semibold mb-4">Rating</h2>
-              <div className="flex text-yellow-400 mb-2">
-                {[...Array(5)].map((_, i) => (
-                  <FaStar
-                    key={i}
-                    className={
-                      i < ratingCalculator(service?.servicePostRatings)
-                        ? "text-yellow-500"
-                        : "text-gray-300"
-                    }
-                  />
-                ))}
-              </div>
-              <p className="text-gray-600">
+              <StarRating
+                rating={ratingCalculator(service.servicePostRatings) || 0}
+                donotShowNumber
+              />
+              <p className="text-gray-600 mt-2">
                 {ratingCalculator(service?.servicePostRatings) || 0} out of 5
                 based on {service?.servicePostRatings?.length} reviews
               </p>

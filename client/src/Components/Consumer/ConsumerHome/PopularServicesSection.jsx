@@ -4,38 +4,54 @@ import { useSelector, useDispatch } from "react-redux";
 import { loadPopularPostsAction } from "../../Redux/Consumer/Actions/ConsumerActions";
 import SkeletonRecentPostLoader from "../../Loader/ConsumerLoaders/SkeletonRecentPostLoader";
 import { useNavigate } from "react-router-dom";
+
 const PopularServicesSection = () => {
   const dispatch = useDispatch();
   const { loading, posts } = useSelector(
     (state) => state.loadPopularPostsReducer
   );
   const navigate = useNavigate();
+
   useEffect(() => {
     dispatch(loadPopularPostsAction());
   }, [dispatch]);
+
   const ratingCalculator = (ratings) => {
+    if (!ratings || ratings.length === 0) return 0; // Prevent division by zero
     let sum = 0;
     ratings.forEach((rating) => (sum += rating.rating));
-
     return sum / ratings.length;
   };
+
+  // Sorting function according to specified criteria
+  const sortServices = (services) => {
+    return services.slice().sort((a, b) => {
+      const aAvgRating = ratingCalculator(a.servicePostRatings);
+      const bAvgRating = ratingCalculator(b.servicePostRatings);
+      const aTotalRatings = a.servicePostRatings.length;
+      const bTotalRatings = b.servicePostRatings.length;
+
+      // Sort by total number of ratings first (descending)
+      if (bTotalRatings !== aTotalRatings) {
+        return bTotalRatings - aTotalRatings; // More ratings come first
+      }
+
+      // If total ratings are equal, sort by average rating (descending)
+      return bAvgRating - aAvgRating; // Higher average comes first
+    });
+  };
+
   return (
     <section className="py-16 bg-gray-100">
       <h2 className="text-center text-3xl font-bold mb-8">Popular Services</h2>
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {loading ? (
-            <div>
-              {Array.from({ length: 3 }).map((_, index) => (
-                <div key={index}>
-                  <div className="w-full h-24 bg-gray-200 rounded-lg">
-                    <SkeletonRecentPostLoader />
-                  </div>
-                </div>
-              ))}
-            </div>
+            Array.from({ length: 4 }).map((_, index) => (
+              <SkeletonRecentPostLoader key={index} />
+            ))
           ) : posts && posts.length > 0 ? (
-            posts.map((service, index) => (
+            sortServices(posts).map((service, index) => (
               <div
                 key={index}
                 className="bg-white p-4 rounded-lg shadow-lg flex flex-col cursor-pointer hover:scale-105 transition-transform duration-700 ease-out"
@@ -66,7 +82,7 @@ const PopularServicesSection = () => {
             ))
           ) : (
             <div>
-              <h1>No post into database</h1>
+              <h1>No posts in the database</h1>
             </div>
           )}
         </div>

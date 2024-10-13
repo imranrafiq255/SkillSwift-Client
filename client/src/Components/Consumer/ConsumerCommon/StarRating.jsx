@@ -1,6 +1,6 @@
 import React from "react";
 
-const StarRating = ({ rating }) => {
+const StarRating = ({ rating, donotShowNumber }) => {
   const maxRating = 5;
 
   // Function to render full, half, and empty stars
@@ -8,8 +8,18 @@ const StarRating = ({ rating }) => {
     const stars = [];
 
     for (let i = 0; i < maxRating; i++) {
-      const starType =
-        rating >= i + 1 ? "full" : rating >= i + 0.5 ? "half" : "empty";
+      let starType;
+
+      if (rating >= i + 1) {
+        // Full star condition
+        starType = "full";
+      } else if (rating >= i + 0.5) {
+        // Half star condition
+        starType = "half";
+      } else {
+        // Empty star condition
+        starType = "empty";
+      }
 
       stars.push(starType);
     }
@@ -25,23 +35,23 @@ const StarRating = ({ rating }) => {
           className="w-4 h-4 text-yellow-500"
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
-          viewBox="0 0 20 20"
+          viewBox="0 0 24 24" // Changed viewBox to fit the new shape
         >
           {type === "full" && (
-            <path d="M10 15l-5.715 3 1.091-6.356L0 6.5l6.355-.926L10 0l3.645 5.574L20 6.5l-5.376 5.144L10 15z" />
+            <path d="M12 .587l3.668 7.431 8.184 1.186-5.913 5.646 1.396 8.175L12 18.896l-7.335 3.859 1.396-8.175-5.913-5.646 8.184-1.186z" />
           )}
           {type === "half" && (
             <g>
-              <path d="M10 15l-5.715 3 1.091-6.356L0 6.5l6.355-.926L10 0l3.645 5.574L20 6.5l-5.376 5.144L10 15z" />
+              <path d="M12 .587l3.668 7.431 8.184 1.186-5.913 5.646 1.396 8.175L12 18.896l-7.335 3.859 1.396-8.175-5.913-5.646 8.184-1.186z" />
               <path
-                d="M10 15l-5.715 3 1.091-6.356L0 6.5l6.355-.926L10 0l3.645 5.574L20 6.5l-5.376 5.144L10 15z"
+                d="M12 .587l3.668 7.431 8.184 1.186-5.913 5.646 1.396 8.175L12 18.896l-7.335 3.859 1.396-8.175-5.913-5.646 8.184-1.186z"
                 fill="white"
               />
             </g>
           )}
           {type === "empty" && (
             <path
-              d="M10 15l-5.715 3 1.091-6.356L0 6.5l6.355-.926L10 0l3.645 5.574L20 6.5l-5.376 5.144L10 15z"
+              d="M12 .587l3.668 7.431 8.184 1.186-5.913 5.646 1.396 8.175L12 18.896l-7.335 3.859 1.396-8.175-5.913-5.646 8.184-1.186z"
               stroke="currentColor"
               strokeWidth="1.5"
               fill="none"
@@ -49,7 +59,10 @@ const StarRating = ({ rating }) => {
           )}
         </svg>
       ))}
-      <p className="text-gray-700 ml-2">{rating.toFixed(1)}</p>
+      {/* Conditionally render the rating number */}
+      {!donotShowNumber && (
+        <p className="text-gray-700 ml-2">{rating.toFixed(1)}</p>
+      )}
     </div>
   );
 };

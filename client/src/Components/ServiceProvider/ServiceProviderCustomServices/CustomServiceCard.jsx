@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   serviceProviderMarkInterestedCustomServiceAction,
@@ -15,6 +15,9 @@ import { Toaster } from "react-hot-toast";
 
 const JobCard = ({ service, handleRefresh }) => {
   const dispatch = useDispatch();
+  const [isInterestedAction, setIsInterestedAction] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const { interestedLoading, interestedError, interestedMessage } = useSelector(
     (state) => state.serviceProviderMarkInterestedCustomServiceReducer
   );
@@ -24,25 +27,33 @@ const JobCard = ({ service, handleRefresh }) => {
   const { serviceProvider } = useSelector(
     (state) => state.loadCurrentServiceProviderReducer
   );
+
   const handleMarkInterested = () => {
     if (service?._id) {
+      setLoading(true);
       dispatch(serviceProviderMarkInterestedCustomServiceAction(service?._id));
+      setIsInterestedAction(true);
     }
   };
 
   useEffect(() => {
-    if (!interestedLoading && interestedError) {
-      handleShowFailureToast(interestedError);
-      dispatch(clearErrors());
-    } else if (!interestedLoading && interestedMessage) {
-      handleShowSuccessToast(interestedMessage);
-      dispatch(clearErrors());
-      handleRefresh();
-      const data = {
-        consumer: service?.consumer?._id,
-        receiverType: "ServiceProvider",
-      };
-      dispatch(serviceProviderCustomServiceChatAction(data));
+    if (isInterestedAction && !interestedLoading) {
+      if (interestedError) {
+        handleShowFailureToast(interestedError);
+        dispatch(clearErrors());
+        setLoading(false);
+      } else if (interestedMessage) {
+        handleShowSuccessToast(interestedMessage);
+        dispatch(clearErrors());
+        handleRefresh();
+        const data = {
+          consumer: service?.consumer?._id,
+          receiverType: "ServiceProvider",
+        };
+        dispatch(serviceProviderCustomServiceChatAction(data));
+        setLoading(false);
+      }
+      setIsInterestedAction(false);
     }
   }, [
     dispatch,
@@ -51,6 +62,7 @@ const JobCard = ({ service, handleRefresh }) => {
     interestedLoading,
     service?.consumer?._id,
     handleRefresh,
+    isInterestedAction,
   ]);
 
   useEffect(() => {
@@ -62,9 +74,11 @@ const JobCard = ({ service, handleRefresh }) => {
       dispatch(clearErrors());
     }
   }, [dispatch, chatLoading, chatError, chatMessage]);
+
   useEffect(() => {
     dispatch(loadCurrentServiceProviderAction());
   }, [dispatch]);
+
   const isFound =
     service?.serviceProviders?.length > 0
       ? service?.serviceProviders?.find(
@@ -99,8 +113,7 @@ const JobCard = ({ service, handleRefresh }) => {
           <strong>Description:</strong> {service?.serviceDescription}
         </p>
       </div>
-      {/* the logic for this conditional rendering is cauing issue for button not being changed, the api fetches the data succesfully */}
-      {interestedLoading ? (
+      {loading ? ( // Show loading state for this button only
         <div className="bg-green-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-green-600 transition flex justify-center items-center">
           <LoaderCircles />
         </div>

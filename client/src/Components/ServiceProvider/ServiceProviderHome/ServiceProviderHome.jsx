@@ -6,8 +6,9 @@ import ServiceProviderHeader from "../ServiceProviderHeader/ServiceProviderHeade
 import "react-loading-skeleton/dist/skeleton.css";
 import ServiceProviderFooter from "../ServiceProviderFooter/ServiceProviderFooter";
 import axios from "axios";
-import RingLoader from "../../Loader/RingLoader";
-import ServiceCard from "./ServiceCard"; // Import the new component
+import ServiceCard from "./ServiceCard";
+import SkeletonLoader from "./SkeletonLoader";
+import { FaFolderOpen } from "react-icons/fa";
 
 const ServiceProviderHome = () => {
   const location = useLocation();
@@ -66,12 +67,11 @@ const ServiceProviderHome = () => {
             <div className="service-posts w-full flex flex-wrap gap-6 justify-center mt-10">
               {loadLoading ? (
                 <div>
-                  <RingLoader />
+                  <SkeletonLoader />
+                  <SkeletonLoader />
+                  <SkeletonLoader />
                 </div>
-              ) : (
-                ""
-              )}
-              {!loadLoading && posts?.length > 0 ? (
+              ) : posts?.length > 0 ? (
                 posts.map((post) => (
                   <ServiceCard
                     key={post._id}
@@ -81,8 +81,16 @@ const ServiceProviderHome = () => {
                   />
                 ))
               ) : (
-                <div>
-                  <h1>No posts in database</h1>
+                <div className="flex flex-col items-center justify-center h-full text-center p-4">
+                  <div className="bg-blue-100 p-6 rounded-full">
+                    <FaFolderOpen className="text-blue-500 text-6xl" />
+                  </div>
+                  <h1 className="text-blue-600 text-2xl font-semibold mt-4">
+                    No Posts Available
+                  </h1>
+                  <p className="text-blue-500 mt-2">
+                    Post a Service now to market your SKills with SKillSwift.
+                  </p>
                 </div>
               )}
             </div>

@@ -165,24 +165,24 @@ const consumerUploadInfoReducer = createReducer(
   }
 );
 const loadPopularPostsReducer = createReducer(
-  { loading: false, error: null, posts: null },
+  { loading: false, error: null, posts: [] },
   (builder) => {
-    builder.addCase("LOAD_POPULAR_POSTS", (state) => {
-      state.loading = true;
-    });
-    builder.addCase("LOAD_POPULAR_POSTS_SUCCESS", (state, action) => {
-      state.loading = false;
-      state.posts = action.payload;
-    });
-    builder.addCase("LOAD_POPULAR_POSTS_FAILURE", (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    });
-    builder.addCase("CLEAR_ERRORS", (state) => {
-      state.error = null;
-      state.message = null;
-      state.loading = false;
-    });
+    builder
+      .addCase("LOAD_POPULAR_POSTS_REQUEST", (state) => {
+        state.loading = true;
+      })
+      .addCase("LOAD_POPULAR_POSTS_SUCCESS", (state, action) => {
+        state.loading = false;
+        state.posts = action.payload;
+      })
+      .addCase("LOAD_POPULAR_POSTS_FAILURE", (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase("CLEAR_ERRORS", (state) => {
+        state.error = null;
+        state.loading = false;
+      });
   }
 );
 const loadConsumerNewNotificationsReducer = createReducer(
