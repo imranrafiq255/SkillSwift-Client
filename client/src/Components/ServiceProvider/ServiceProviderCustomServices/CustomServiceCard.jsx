@@ -36,8 +36,8 @@ const JobCard = ({ service, handleRefresh }) => {
       dispatch(clearErrors());
     } else if (!interestedLoading && interestedMessage) {
       handleShowSuccessToast(interestedMessage);
-      handleRefresh();
       dispatch(clearErrors());
+      handleRefresh();
       const data = {
         consumer: service?.consumer?._id,
         receiverType: "ServiceProvider",
@@ -50,6 +50,7 @@ const JobCard = ({ service, handleRefresh }) => {
     interestedMessage,
     interestedLoading,
     service?.consumer?._id,
+    handleRefresh,
   ]);
 
   useEffect(() => {
