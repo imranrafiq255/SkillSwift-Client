@@ -12,6 +12,7 @@ import {
 import RingLoader from "../../Loader/RingLoader";
 import Navbar from "../ConsumerCommon/Navbar.jsx";
 import { handleShowFailureToast } from "../../ToastMessages/ToastMessage";
+import { useLocation } from "react-router-dom";
 const ConsumerChatModule = () => {
   const [chatSectionShowing, setChatSectionShowing] = useState(false);
   const dispatch = useDispatch();
@@ -20,6 +21,9 @@ const ConsumerChatModule = () => {
   const [activeConsumers, setActiveConsumers] = useState([]);
   const [allMessages, setAllMessages] = useState([]);
   const scrollToEndMessage = useRef(null);
+  const location = useLocation();
+  const id = new URLSearchParams(location.search).get("id") || null;
+
   const { consumer } = useSelector((state) => state.loadCurrentConsumerReducer);
   const { conversationsLoading, conversations, conversationsError } =
     useSelector((state) => state.loadConsumerConversationsReducer);
@@ -163,9 +167,18 @@ const ConsumerChatModule = () => {
 
   useEffect(() => {
     if (!conversationsLoading && conversations?.length > 0) {
-      setCurrentConversation(conversations[0]);
+      if (!id) {
+        setCurrentConversation(conversations[0]);
+      } else {
+        const foundConversation = conversations.find(
+          (conversation) => conversation.members.receiver._id === id
+        );
+        if (foundConversation) {
+          setCurrentConversation(foundConversation);
+        }
+      }
     }
-  }, [conversationsLoading, conversations]);
+  }, [conversationsLoading, conversations, id]);
 
   useEffect(() => {
     if (!loadMessagesLoading && loadMessagesError) {

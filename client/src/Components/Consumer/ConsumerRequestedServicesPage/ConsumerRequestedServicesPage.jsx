@@ -21,7 +21,7 @@ const RequestedServicesPage = () => {
   );
   useEffect(() => {
     dispatch(consumerLoadCustomServicesAction());
-  }, [closeCustomServiceModal]);
+  }, [dispatch]);
   return (
     <>
       <div className="min-h-screen bg-gray-100">
@@ -31,7 +31,7 @@ const RequestedServicesPage = () => {
         {customService && customService.length > 0 && customService[0] ? (
           <div className="flex flex-row">
             <div className="w-1/2">
-            {console.log("infinite")}
+              {console.log("infinite")}
               <ServiceProviderList />
             </div>
             <div className="w-1/2 flex justify-center items-start">

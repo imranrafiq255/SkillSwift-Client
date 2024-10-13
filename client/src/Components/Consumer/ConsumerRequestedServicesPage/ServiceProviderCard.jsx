@@ -43,7 +43,9 @@ const ServiceProviderCard = ({ provider }) => {
       </div>
       <button
         className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-600 transition"
-        onClick={() => (window.location.href = "/consumer-chat-section")}
+        onClick={() =>
+          (window.location.href = `/consumer-chat-section?id=${provider?._id}`)
+        }
       >
         Chat
       </button>

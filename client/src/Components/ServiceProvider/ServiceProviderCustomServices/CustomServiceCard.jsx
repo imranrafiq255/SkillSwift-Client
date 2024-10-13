@@ -83,7 +83,9 @@ const JobCard = ({ service }) => {
           className="text-gray-500 text-2xl w-12 h-12 rounded-full"
         />
       </div>
-      <h2 className="text-lg font-bold">{service?.consumer?.consumerFullName}</h2>
+      <h2 className="text-lg font-bold">
+        {service?.consumer?.consumerFullName}
+      </h2>
       <div className="text-sm text-gray-700 space-y-1 pb-5">
         <p>
           <strong>Job Title:</strong> {service?.serviceTitle}
@@ -106,7 +108,7 @@ const JobCard = ({ service }) => {
         <button
           className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-600 transition"
           onClick={() =>
-            (window.location.href = "/service-provider-chat-section")
+            (window.location.href = `/service-provider-chat-section?id=${service?.consumer?._id}`)
           }
         >
           Open Chat

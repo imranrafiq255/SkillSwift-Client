@@ -12,11 +12,14 @@ import {
 } from "../../Redux/ServiceProvider/Actions/ServiceProviderActions";
 import RingLoader from "../../Loader/RingLoader";
 import { handleShowFailureToast } from "../../ToastMessages/ToastMessage";
+import { useLocation } from "react-router-dom";
 const ServiceProviderChatSection = () => {
   const [chatSectionShowing, setChatSectionShowing] = useState(false);
   const dispatch = useDispatch();
   const [socket, setSocket] = useState(null);
   const [messageToSend, setMessageToSend] = useState("");
+  const location = useLocation();
+  const id = new URLSearchParams(location.search).get("id") || null;
   const [activeServiceProviders, setActiveServiceProviders] = useState([]);
   const [allMessages, setAllMessages] = useState([]);
   const scrollToEndMessage = useRef(null);
@@ -46,10 +49,19 @@ const ServiceProviderChatSection = () => {
     }
   }, [conversationsLoading, conversationsError]);
   useEffect(() => {
-    if (!conversationsLoading && conversations) {
-      setCurrentConversation(conversations[0]);
+    if (!conversationsLoading && conversations?.length > 0) {
+      if (!id) {
+        setCurrentConversation(conversations[0]);
+      } else {
+        const foundConversation = conversations.find(
+          (conversation) => conversation.members.sender._id === id
+        );
+        if (foundConversation) {
+          setCurrentConversation(foundConversation);
+        }
+      }
     }
-  }, [conversationsLoading, conversations]);
+  }, [conversationsLoading, conversations, id]);
 
   useEffect(() => {
     const socket1 = io("http://localhost:8081");
