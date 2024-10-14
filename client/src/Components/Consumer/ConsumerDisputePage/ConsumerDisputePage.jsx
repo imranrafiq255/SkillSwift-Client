@@ -122,13 +122,9 @@ const DisputePage = () => {
 
   const fileDisputeToastRef = useRef(false);
   useEffect(() => {
-    if (
-      !fileDisputeLoading &&
-      fileDisputeError &&
-      !fileDisputeToastRef.current
-    ) {
+    if (!fileDisputeLoading && fileDisputeError) {
       handleShowFailureToast(fileDisputeError);
-      fileDisputeToastRef.current = true;
+      dispatch(clearErrors());
       handleCloseDisputeModal();
     } else if (
       !fileDisputeLoading &&
@@ -137,38 +133,32 @@ const DisputePage = () => {
     ) {
       handleShowSuccessToast(fileDisputeMessage);
       handleCloseDisputeModal();
-      fileDisputeToastRef.current = true;
+      dispatch(clearErrors());
+      dispatch(loadAllDisputesAction());
     }
-  }, [
-    fileDisputeLoading,
-    fileDisputeError,
-    fileDisputeToastRef,
-    fileDisputeMessage,
-  ]);
+  }, [fileDisputeLoading, fileDisputeError, fileDisputeMessage, dispatch]);
   useEffect(() => {
     dispatch(clearErrors());
     dispatch(loadRefundsAction());
   }, [dispatch]);
-  const refundRequestToastRef = useRef(false);
   useEffect(() => {
-    if (
-      !refundRequestToastRef.current &&
-      refundRequestError &&
-      !refundRequestLoading
-    ) {
-      refundRequestToastRef.current = true;
+    if (refundRequestError && !refundRequestLoading) {
       handleShowFailureToast(refundRequestError);
+      dispatch(clearErrors());
+      dispatch(loadAllDisputesAction());
       handleCloseRefundModal();
-    } else if (
-      !refundRequestToastRef.current &&
-      refundRequestMessage &&
-      !refundRequestLoading
-    ) {
-      refundRequestToastRef.current = true;
+    } else if (refundRequestMessage && !refundRequestLoading) {
       handleShowSuccessToast(refundRequestMessage);
+      dispatch(clearErrors());
+      dispatch(loadRefundsAction());
       handleCloseRefundModal();
     }
-  }, [refundRequestMessage, refundRequestLoading, refundRequestError]);
+  }, [
+    refundRequestMessage,
+    refundRequestLoading,
+    refundRequestError,
+    dispatch,
+  ]);
   useEffect(() => {
     if (!loading && error) {
       console.log(error);

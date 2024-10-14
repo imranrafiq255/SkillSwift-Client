@@ -27,12 +27,18 @@ const ServiceHistoryPage = () => {
   const { loading, error, orders } = useSelector(
     (state) => state.loadOrdersReducer
   );
-  const navigateMessage = location?.state?.message || null;
+  let navigateMessage =
+    new URLSearchParams(location.search).get("message") || "";
+  if (navigateMessage) {
+    navigateMessage = decodeURIComponent(navigateMessage);
+  }
+
   const navigateToastMessageRef = useRef(false);
   const { rejectLoading, rejectError, rejectMessage } = useSelector(
     (state) => state.consumerRejectOrderReducer
   );
   useEffect(() => {
+    dispatch(clearErrors());
     dispatch(loadOrdersAction());
   }, [dispatch]);
   const handleCancel = (serviceId) => {
@@ -40,15 +46,12 @@ const ServiceHistoryPage = () => {
   };
 
   const handleReview = (serviceId) => {
-    console.log(serviceId);
-
     setSelectedServiceId(serviceId);
     setShowReviewModal(true);
   };
   const { ratingLoading, ratingError, ratingMessage } = useSelector(
     (state) => state.consumerAddRatingReducer
   );
-  const ratingToastMessageRef = useRef(false);
   const submitReview = () => {
     dispatch(clearErrors());
     dispatch(
@@ -82,8 +85,12 @@ const ServiceHistoryPage = () => {
     if (navigateMessage && !navigateToastMessageRef.current) {
       navigateToastMessageRef.current = true;
       handleShowSuccessToast(navigateMessage);
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.delete("message");
+      window.history.replaceState({}, "", newUrl);
     }
   }, [navigateMessage, navigateToastMessageRef]);
+
   useEffect(() => {
     if (!rejectLoading && rejectError) {
       handleShowFailureToast(rejectError);
@@ -95,16 +102,10 @@ const ServiceHistoryPage = () => {
     }
   }, [rejectMessage, rejectError, rejectLoading, dispatch]);
   useEffect(() => {
-    if (!ratingLoading && ratingError && !ratingToastMessageRef.current) {
+    if (!ratingLoading && ratingError) {
       handleShowFailureToast(ratingError);
-      ratingToastMessageRef.current = true;
       dispatch(clearErrors());
-    } else if (
-      !ratingLoading &&
-      ratingMessage &&
-      !ratingToastMessageRef.current
-    ) {
-      ratingToastMessageRef.current = true;
+    } else if (!ratingLoading && ratingMessage) {
       handleShowSuccessToast(ratingMessage);
       setShowReviewModal(false);
       dispatch(clearErrors());

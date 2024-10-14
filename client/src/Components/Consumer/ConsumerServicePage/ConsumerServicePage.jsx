@@ -57,11 +57,12 @@ const ServicePage = () => {
   };
 
   useEffect(() => {
-    if (!loading && !toastMessageShow.current) {
+    if (!loading) {
       if (message) {
-        toastMessageShow.current = true;
         dispatch(clearErrors());
-        navigate("/consumer-service-history", { state: { message: message } });
+        window.location.href = `/consumer-service-history?message=${encodeURIComponent(
+          message
+        )}`;
       } else if (error) {
         handleShowFailureToast(error);
         dispatch(clearErrors());
