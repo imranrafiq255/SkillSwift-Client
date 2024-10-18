@@ -16,6 +16,8 @@ import {
 } from "../../ToastMessages/ToastMessage";
 import { Toaster } from "react-hot-toast";
 import LoaderCircles from "../../Loader/LoaderCircles";
+import { useNavigate } from "react-router-dom";
+
 const ServiceHistoryPage = () => {
   const [activeTab, setActiveTab] = useState("pending");
   const [showReviewModal, setShowReviewModal] = useState(false);
@@ -24,6 +26,8 @@ const ServiceHistoryPage = () => {
   const modalRef = useRef(null);
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
+
   const { loading, error, orders } = useSelector(
     (state) => state.loadOrdersReducer
   );
@@ -113,8 +117,46 @@ const ServiceHistoryPage = () => {
     }
   }, [dispatch, ratingError, ratingLoading, ratingMessage]);
 
+  const buildServiceObject = (orderObject) => {
+    const serviceObject = {
+      _id: orderObject.servicePost._id,
+      serviceName: orderObject.servicePost.serviceName,
+      servicePostMessage: orderObject.servicePost.servicePostMessage,
+      servicePostPrice: orderObject.servicePost.servicePostPrice,
+      servicePostImage: orderObject.servicePost.servicePostImage,
+      servicePostRatings: orderObject.servicePost.servicePostRatings,
+      createdAt: orderObject.servicePost.createdAt,
+      updatedAt: orderObject.servicePost.updatedAt,
+      __v: orderObject.servicePost.__v,
+      serviceProvider: {
+        _id: orderObject.serviceProvider._id,
+        serviceProviderFullName:
+          orderObject.serviceProvider.serviceProviderFullName,
+        serviceProviderEmail: orderObject.serviceProvider.serviceProviderEmail,
+        isEmailVerified: orderObject.serviceProvider.isEmailVerified,
+        serviceProviderCNICImages:
+          orderObject.serviceProvider.serviceProviderCNICImages,
+        isAccountVerified: orderObject.serviceProvider.isAccountVerified,
+        serviceProviderWorkingHours:
+          orderObject.serviceProvider.serviceProviderWorkingHours,
+        createdAt: orderObject.serviceProvider.createdAt,
+        updatedAt: orderObject.serviceProvider.updatedAt,
+        __v: orderObject.serviceProvider.__v,
+        serviceProviderAddress:
+          orderObject.serviceProvider.serviceProviderAddress,
+        serviceProviderAvatar:
+          orderObject.serviceProvider.serviceProviderAvatar,
+        serviceProviderPhoneNumber:
+          orderObject.serviceProvider.serviceProviderPhoneNumber,
+      },
+    };
+
+    return serviceObject;
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
+      {console.log(orders)}
       {/* Navbar */}
       <Navbar />
       <Toaster />
@@ -141,7 +183,7 @@ const ServiceHistoryPage = () => {
           ))}
         </div>
 
-        {/* Services List */}
+        {/* Services List Desktop */}
         <div className="hidden md:grid grid-cols-1 gap-6">
           {!loading &&
             orders &&
@@ -162,7 +204,15 @@ const ServiceHistoryPage = () => {
                   key={order?._id}
                   className="bg-white p-4 rounded-lg shadow-md flex items-center justify-between"
                 >
-                  <div className="flex items-center">
+                  <div
+                    className="flex items-center"
+                    onClick={() => {
+                      window.scrollTo(0, 0);
+                      navigate("/consumer-service-page", {
+                        state: { service: buildServiceObject(order) },
+                      });
+                    }}
+                  >
                     <img
                       src={order?.servicePost?.servicePostImage}
                       alt={order?.servicePost?.serviceName}
@@ -182,30 +232,41 @@ const ServiceHistoryPage = () => {
                       <LoaderCircles />
                     </div>
                   ) : (
-                    activeTab !== "cancelled" &&
-                    activeTab !== "inProgress" && (
-                      <button
-                        onClick={() => {
-                          if (activeTab === "pending") {
-                            handleCancel(order?._id);
-                          } else if (activeTab === "completed") {
-                            handleReview(order?._id);
-                          }
-                        }}
-                        className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
-                      >
-                        {activeTab === "pending"
-                          ? "Cancel"
-                          : activeTab === "completed"
-                          ? "Review"
-                          : ""}
-                      </button>
-                    )
+                    <>
+                      {activeTab === "inProgress" && (
+                        <button
+                          onClick={() => navigate("/consumer-chat-section")}
+                          className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
+                        >
+                          Chat
+                        </button>
+                      )}
+                      {activeTab !== "cancelled" &&
+                        activeTab !== "inProgress" && (
+                          <button
+                            onClick={() => {
+                              if (activeTab === "pending") {
+                                handleCancel(order?._id);
+                              } else if (activeTab === "completed") {
+                                handleReview(order?._id);
+                              }
+                            }}
+                            className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
+                          >
+                            {activeTab === "pending"
+                              ? "Cancel"
+                              : activeTab === "completed"
+                              ? "Review"
+                              : ""}
+                          </button>
+                        )}
+                    </>
                   )}
                 </div>
               ))}
         </div>
 
+        {/* Services List Mobile */}
         <div className="md:hidden space-y-4">
           {orders
             ?.filter((order) => {
@@ -223,6 +284,12 @@ const ServiceHistoryPage = () => {
               <div
                 key={order?._id}
                 className="bg-white p-4 rounded-lg shadow-md flex flex-col"
+                onClick={() => {
+                  window.scrollTo(0, 0);
+                  navigate("/consumer-service-page", {
+                    state: { service: buildServiceObject(order) },
+                  });
+                }}
               >
                 <img
                   src={order?.servicePost?.servicePostImage}
@@ -236,6 +303,14 @@ const ServiceHistoryPage = () => {
                   Rs. {order?.servicePost?.servicePostPrice}
                 </p>
 
+                {activeTab === "inProgress" && (
+                  <button
+                    onClick={() => navigate("/consumer-chat-section")}
+                    className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
+                  >
+                    Chat
+                  </button>
+                )}
                 {activeTab !== "cancelled" && activeTab !== "inProgress" && (
                   <button
                     onClick={() => {

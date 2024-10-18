@@ -75,6 +75,7 @@ const ServicesSection = () => {
   };
   return (
     <section className="py-16">
+      {/* {console.log(recentPosts)} */}
       <h2 className="text-center text-3xl font-bold mb-8">
         Recent Services Ads
       </h2>
@@ -89,13 +90,12 @@ const ServicesSection = () => {
               <div
                 key={index}
                 className="bg-white p-4 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-transform duration-700 ease-out"
-                onClick={() =>{
+                onClick={() => {
                   window.scrollTo(0, 0);
                   navigate("/consumer-service-page", {
                     state: { service: service },
-                  })
-                }
-                }
+                  });
+                }}
               >
                 <img
                   src={service.servicePostImage}

@@ -136,9 +136,10 @@ const ServicePage = () => {
     setSelectedSlot("");
   }, [service]);
 
+  const myService = service;
+
   return (
     <div className="min-h-screen bg-gray-100">
-      {console.log(service)}
       {/* Header */}
       <Navbar />
       <Toaster />
@@ -147,7 +148,7 @@ const ServicePage = () => {
         <div className="flex flex-col md:flex-row gap-8">
           {/* Service Details */}
           <div className="md:w-2/3">
-            <div className="flex flex-row mb-6 mx-1 gap-4">
+            <div className="flex flex-col lg:flex-row mb-6 mx-1 gap-4">
               <div className="flex-1">
                 <img
                   src={service?.servicePostImage}
@@ -168,7 +169,16 @@ const ServicePage = () => {
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-md">
+            <div
+              className="bg-white p-6 rounded-lg shadow-md"
+              onClick={() => {
+                console.log(service); // Check if myService is defined
+                navigate("/consumer-service-provider-profile", {
+                  state: service,  // Pass service directly, not wrapped in an object
+                });
+                
+              }}
+            >
               <h2 className="text-xl font-semibold mb-4">Service Provider</h2>
               <div className="flex items-center mb-4">
                 <img
@@ -276,9 +286,6 @@ const ServicePage = () => {
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h2 className="text-xl font-semibold mb-4">Actions</h2>
               <div className="space-y-4">
-                {/* <button className="flex items-center justify-center bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300 w-full">
-                  <FaHeart className="mr-2" /> Add to Wishlist
-                </button> */}
                 {conversationLoading ? (
                   <div className="flex items-center justify-center bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300 w-full">
                     <LoaderCircles />

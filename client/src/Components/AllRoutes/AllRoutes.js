@@ -46,8 +46,10 @@ import ConsumerChatModule from "../Consumer/ConsumerChatModule/ConsumerChatModul
 import ServiceProviderDisputes from "../ServiceProvider/ServiceProviderDisputes/ServiceProviderDisputes";
 import ServiceProviderUpdateInfo from "../ServiceProvider/ServiceProviderUpdateInfo/ServiceProviderUpdateInfo";
 import ServiceProviderUpdateWorkingHours from "../ServiceProvider/ServiceProviderUpdateWorkingHours/ServiceProviderUpdateWorkingHours";
-// import Temp from "../Temp/temp";
 import ServiceProviderCustomServices from "../ServiceProvider/ServiceProviderCustomServices/ServiceProviderCustomServices";
+import ServiceProviderProfile from "../Consumer/ServiceProviderProfile/ServiceProviderProfile";
+// import Temp from "../Temp/temp";
+
 const AuthenticatedRoutes = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -84,6 +86,7 @@ const AuthenticatedRoutes = () => {
     "/consumer-chat-section",
     "/consumer-home",
     "/consumer-update-info",
+    "/consumer-service-provider-profile",
   ];
 
   useEffect(() => {
@@ -308,6 +311,19 @@ const AuthenticatedRoutes = () => {
         element={
           isConsumerAuthenticated ? (
             <ConsumerUpdateInfo />
+          ) : (
+            <Navigate
+              to={"/consumer-sign-in"}
+              state={{ message: "Please sign in first" }}
+            />
+          )
+        }
+      />
+      <Route
+        path="/consumer-service-provider-profile"
+        element={
+          isConsumerAuthenticated ? (
+            <ServiceProviderProfile />
           ) : (
             <Navigate
               to={"/consumer-sign-in"}
