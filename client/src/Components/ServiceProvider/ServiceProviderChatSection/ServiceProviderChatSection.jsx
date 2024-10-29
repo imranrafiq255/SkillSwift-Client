@@ -208,32 +208,6 @@ const ServiceProviderChatSection = () => {
       handleShowFailureToast(sendMessageError);
     }
   }, [sendMessageLoading, sendMessageError]);
-  // const timeConverter = (time) => {
-  //   const a = new Date(time);
-  //   const now = new Date();
-  //   const diff = now.getTime() - a.getTime();
-  //   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  //   const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  //   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  //   const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-  //   if (days > 0) {
-  //     return days === 1 ? `${days} day ago` : `${days} days ago`;
-  //   } else if (hours > 0) {
-  //     return `${hours} hours ago`;
-  //   } else if (minutes > 0) {
-  //     return `${minutes} minutes ago`;
-  //   } else if (seconds > 0) {
-  //     return `${seconds} seconds ago`;
-  //   }
-  // };
-  // const handleEnterKeyBtn = (e) => {
-  //   if (messageToSend) {
-  //     if (e.key === "Enter") {
-  //       sendMessage();
-  //     }
-  //   }
-  // };
   useEffect(() => {
     scrollToEndMessage?.current?.scrollIntoView();
   }, [allMessages]);
@@ -276,7 +250,11 @@ const ServiceProviderChatSection = () => {
               </div>
               <div className="w-full flex gap-4 mt-4 relative">
                 <div className="left-chat-section w-4/12 border-2 border-slate-300 rounded-lg lg:block hidden">
-                  <div className="chat-container flex flex-col items-center py-5">
+                  <div className="chat-container flex flex-col items-center py-2">
+                    <h1 className="text-slate-600 text-2xl font-extralight my-4">
+                      Chats with Consumers
+                    </h1>
+                    <div className="bg-slate-300 h-[0.5px] w-full mb-2"></div>
                     {conversationsLoading ? (
                       <div className="flex justify-center">
                         <h1 className="text-lg">Loading...</h1>
@@ -307,9 +285,11 @@ const ServiceProviderChatSection = () => {
                             <h1 className="message ml-2 truncate-text text-sm">
                               {checkOnlineServiceProvider(
                                 conversation?.members?.sender?._id
-                              )
-                                ? "Online"
-                                : "Offline"}
+                              ) ? (
+                                <h1 className="text-green-600">Online</h1>
+                              ) : (
+                                "Offline"
+                              )}
                             </h1>
                           </div>
                         </div>

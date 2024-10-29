@@ -10,7 +10,6 @@ const ServiceProviderCard = ({ provider }) => {
         const response = await axios.get(
           `/api/v1/consumer/service-provider-rating/${provider?._id}`
         );
-        console.log(response.data);
 
         setServiceProviderRating(response?.data?.averageRating);
         setTotalRating(response?.data?.total);
@@ -20,7 +19,6 @@ const ServiceProviderCard = ({ provider }) => {
     };
     ratingHandler();
   }, [provider?._id]);
-  console.log(totalRating);
   return (
     <div className="w-full max-w-lg flex items-center justify-between p-4 bg-white shadow-md rounded-full border space-x-4">
       <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">

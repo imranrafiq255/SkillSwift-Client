@@ -82,14 +82,14 @@ const ServicePage = () => {
       };
       dispatch(createConversationAction(data));
     } else {
-      navigate("/consumer-chat-section");
+      window.location.href = `/consumer-chat-section?id=${service?.serviceProvider?._id}`;
     }
   };
 
   useEffect(() => {
     if (!conversationLoading && conversationMessage && !orderBtnClicked) {
       handleShowSuccessToast("You can now chat with this service provider");
-      navigate("/consumer-chat-section");
+      window.location.href = `/consumer-chat-section?id=${service?.serviceProvider?._id}`;
       dispatch(clearErrors());
     } else if (!conversationLoading && conversationError) {
       handleShowFailureToast(conversationError);
@@ -100,17 +100,17 @@ const ServicePage = () => {
     conversationMessage,
     conversationError,
     orderBtnClicked,
-    navigate,
     dispatch,
+    service?.serviceProvider?._id,
   ]);
 
   const ratingCalculator = (ratings) => {
-    if (!ratings || ratings.length === 0) return 0; // Return 0 if there are no ratings
+    if (!ratings || ratings.length === 0) return 0;
 
     let sum = 0;
     ratings.forEach((rating) => (sum += rating?.rating));
     const average = sum / ratings.length;
-    return parseFloat(average.toFixed(1)); // Round to 1 decimal place
+    return parseFloat(average.toFixed(1));
   };
 
   const [serviceProviderRating, setServiceProviderRating] = useState(0);
